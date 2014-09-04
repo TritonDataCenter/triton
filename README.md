@@ -14,3 +14,10 @@ SmartDataCenter is a complete cloud management solution for server and network
 virtualization, operations management and customer self-service. It is the
 software that runs the Joyent Public Cloud and can be used to provide public,
 private, and hybrid clouds on customer premises.
+
+## License
+
+SmartDataCenter is licensed under the
+[Mozilla Public License, v. 2.0](http://mozilla.org/MPL/2.0/). It uses
+[SmartOS](http://smartos.org), which is its own project and
+[licensed separately](http://smartos.org/cddl/).
