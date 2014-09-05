@@ -240,7 +240,7 @@
     ]
   },
   {
-    "git": "git@github.com:joyent/sdc-adm.git",
+    "git": "git@github.com:joyent/sdcadm.git",
     "desc": "A tool for SDC upgrades, health and sanity checks, and possibly other SDC setup duties",
     "tags": [
       "cli"
