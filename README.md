@@ -10,16 +10,16 @@
 
 # Joyent SmartDataCenter
 
-SmartDataCenter (SDC) is a complete cloud management solution for server and
-network virtualization, operations management and customer self-service. It is
-the software that runs the Joyent Public Cloud and can be used to provide
-public, private, and hybrid clouds on customer premises.
-
 TODO(trentm): bit more overview here
 
-This repository is just a starting point for SDC - all of the code lives in
-other repos.  See the [repo list](../docs/developer-guide/repos.md)
-for an overview of all of the repos.
+SmartDataCenter (SDC) is open source cloud computing software. It is
+the same software that runs Joyent's Public Cloud and numerous
+on-premise private clouds.
+* Distributed system written in Node.js on SmartOS.
+* High-performance SmartOS Zones (containers) with KVM support.
+
+This repository is the starting point for SDC - all of the code lives in
+other repos.  See the [repo list](docs/developer-guide/repos.md).
 
 
 ## Getting Started
