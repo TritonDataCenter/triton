@@ -60,26 +60,25 @@ See
 
 ### Building
 
-SDC is composed of several pre-built components:
+SmartDataCenter components are built using [Mountain Gorilla](https://github.com/joyent/mountain-gorilla).
+The exception to this is the [SmartOS platform image](https://github.com/joyent/smartos-live).
 
-* A [SmartOS platform image](https://github.com/joyent/smartos-live)
-* [Images](https://docs.joyent.com/sdc7/working-with-images) for SDC
-  services, which are provisioned as VMs at install time.
-* Agents, which are bundled into a [shar file](https://github.com/joyent/sdc-agents-core)
-  that can then be installed into the global zone of Compute Nodes.
+There are two types of SDC components built by Mountain Gorilla:
+* Agents which are bundled into a [shar file](https://github.com/joyent/sdc-agents-core)
+  and installed into the global zone of SDC compute nodes.
+* Images for SDC services which are provisioned as zones.
 
-All of these components other than SmartOS are built using
-[Mountain Gorilla](https://github.com/joyent/mountain-gorilla). See its
-[README](https://github.com/joyent/mountain-gorilla/blob/master/README.md) for
-instructions on building these images.
-
-The images from Mountain Gorilla are stored in
-[Manta](https://www.joyent.com/products/manta).  They are then combined into
-a boot image that can be written to a USB key and used to boot a headnode.  The
+The builds from Mountain Gorilla are stored in the
+[Joyent Manta public cloud](https://www.joyent.com/products/manta).
+Joyent Manta is also its own [open source
+software project](https://github.com/joyent/manta). The built components are then combined into
+a bootable disk image that can be written to a USB key and used to boot
+an SDC head node.  The
 [sdc-headnode](https://github.com/joyent/sdc-headnode) repo automates this
 process. See the
-[sdc-headnode README](https://github.com/joyent/sdc-headnode/blob/master/README.md)
-for instructions.
+[sdc-headnode README](https://github.com/joyent/sdc-headnode/blob/master/README.md).
+
+See the [Mountain Gorilla README](https://github.com/joyent/mountain-gorilla/blob/master/README.md).
 
 
 ### Contributing
