@@ -35,27 +35,27 @@ TODO: Instructions on how to download and install CoaL.
 
 ### Installing
 
+TODO: Supported hardware: Joyent-branded, certified hardware, known to work,
+min features & capacities
+
 TODO: How to obtain an image
 
 Once you have downloaded an image, you will need to
 [write it to a USB key](https://docs.joyent.com/sdc7/installing-sdc7/creating-a-usb-key-from-a-release-tarball),
-boot the machine with it, and follow the install prompts.  See the
-[installing SDC 7](https://docs.joyent.com/sdc7/installing-sdc7) and
-[install checklist](https://docs.joyent.com/sdc7/installing-sdc7/install-checklist)
-documents for information.
+boot the machine from the key, and follow the install prompts. See
+[Installing SDC 7](https://docs.joyent.com/sdc7/installing-sdc7) and
+[Installation Checklist](https://docs.joyent.com/sdc7/installing-sdc7/install-checklist).
 
 After installation, you will probably want to perform some
 [additional configuration](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration).
 The most common of these include:
-
 * [Adding external nics to the imgapi and adminui zones](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration#AddingExternalNICstoHeadNodeVMs)
-  to give them internet access.  This enables simple import of VM images.
+  to give them Internet access. This enables simple import of VM images.
 * [Provision a cloudapi zone](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration#CreatingCloudAPI)
   to allow users to create and administer their VMs without an operator.
 
-See the
-[post-installation configuration documentation](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration)
-for the complete list.
+See
+[Post-Installation Configuration](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration).
 
 
 ### Building
