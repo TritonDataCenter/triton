@@ -18,8 +18,8 @@ on-premise private clouds.
 * Distributed system written in Node.js on SmartOS.
 * High-performance SmartOS Zones (containers) with KVM support.
 
-This repository is the starting point for SDC - all of the code lives in
-other repos.  See the [repo list](docs/developer-guide/repos.md).
+This repository is the starting point for SDC. All of the code lives in
+other repos. See the [repo list](docs/developer-guide/repos.md).
 
 
 ## Getting Started
@@ -27,10 +27,10 @@ other repos.  See the [repo list](docs/developer-guide/repos.md).
 ### Cloud on a Laptop (CoaL)
 
 An easy way to try SmartDataCenter is by downloading the Cloud on a Laptop
-(CoaL) image.  This is a VMware image that you can import and setup for testing
+(CoaL) image. This is a VMware virtual appliance that you can use for testing
 or development.
 
-TODO: Instructions on how to download and install coal.
+TODO: Instructions on how to download and install CoaL.
 
 
 ### Installing
