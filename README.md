@@ -81,44 +81,39 @@ process. See the
 See the [Mountain Gorilla README](https://github.com/joyent/mountain-gorilla/blob/master/README.md).
 
 
-### Contributing
+## Contributing
 
-* Reporting bugs / feature requests: [sdc project issues](https://github.com/joyent/sdc/issues)
-* Contributing code: make a pull request to the appropriate repo.
+TODO: add mailing list & IRC info
 
-If you're contributing something substantial, you should contact developers on
+* Reporting a bug or feature request: [sdc project issues](https://github.com/joyent/sdc/issues).
+* Contributing code: make a pull request to the specific component's repo.
+
+If you're contributing something substantial, please contact developers on
 the mailing list or IRC first.
 
-For issues with Joyent's public cloud or production Manta service, contact
-Joyent support instead.
-
-To report bugs or request features, submit issues to the Manta project on
-Github.  If you're asking for help with Joyent's production Manta service,
-you should contact Joyent support instead.  If you're contributing code, start
-with a pull request.
+For issues with Joyent's public cloud or Manta service, [contact
+Joyent support](https://www.joyent.com/developers) instead.
 
 SDC repositories follow the
-[Joyent Engineering Guidelines](https://github.com/joyent/eng).  Notably:
+[Joyent Engineering Guidelines](https://github.com/joyent/eng). Notably:
+* Use the master branch for development and releases.
+* The master branch should be [FCS quality all the time](https://github.com/joyent/eng/blob/master/docs/index.restdown#L43).
+* `make check` runs clean at all times.
+* Tests run cleanly at all times.
 
-* The #master branch should be first-customer-ship (FCS) quality at all times.
-  Don't push anything until it's tested.
-* All repositories should be "make check" clean at all times.
-* All repositories should have tests that run cleanly at all times.
+`make check` checks both JavaScript style and lint.
 
-"make check" checks both JavaScript style and lint.  Style is checked with
-[jsstyle](https://github.com/davepacheco/jsstyle).  The specific style rules are
-somewhat repo-specific.  Style is somewhat repo-specific.  See the jsstyle
-configuration file or JSSTYLE\_FLAGS in Makefiles in each repo for exceptions
-to the default jsstyle rules.
+Style is checked with [jsstyle](https://github.com/davepacheco/jsstyle). The
+Style is somewhat repo-specific. See the jsstyle configuration file or
+JSSTYLE\_FLAGS in makefiles in each repo for exceptions to the
+default jsstyle rules.
 
-Lint is checked with
-[javascriptlint](https://github.com/davepacheco/javascriptlint).  ([Don't
-conflate lint with
-style!](http://dtrace.org/blogs/dap/2011/08/23/javascriptlint/)  There are gray
-areas, but generally speaking, style rules are arbitrary, while lint warnings
-identify potentially broken code.)  Repos sometimes have repo-specific lint
-rules - look for tools/jsl.web.conf and tools/jsl.node.conf for per-repo
-execeptions to the default rules.
+Lint is checked with [javascriptlint](https://github.com/davepacheco/javascriptlint).
+([Don't conflate lint with style!](http://dtrace.org/blogs/dap/2011/08/23/javascriptlint/)
+There are gray areas, but generally speaking, style rules are arbitrary, while
+lint warnings identify potentially broken code.) Repos sometimes have
+repo-specific lint rules - look for tools/jsl.web.conf and tools/jsl.node.conf
+for per-repo exceptions to the default rules.
 
 
 ## Design principles
