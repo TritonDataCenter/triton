@@ -1,0 +1,5 @@
+- basic sphinx structure under
+    sphinx/
+- sphinx rtd theme at deps/... (submodule)
+- add reference handling after that
+

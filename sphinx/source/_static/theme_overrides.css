@@ -1,0 +1,10 @@
+
+/* https://github.com/snide/sphinx_rtd_theme/issues/117#issuecomment-53190115 */
+/* override table width restrictions */
+html body div.wy-table-responsive table td,
+html body div.wy-table-responsive table th {
+    white-space: normal;
+}
+html body div.wy-table-responsive {
+    overflow: visible;
+}

@@ -1,0 +1,30 @@
+
+#XXX TRACE
+set -o errexit
+set -o pipefail
+
+TOP=$(cd $(dirname $0)/../; pwd)
+BUILDDIR=$TOP/build/reference
+OUTDIR=$TOP/build/docs/public/reference
+
+docset=$1
+repourl=$2
+if [[ -z "$docset" || -z "$repourl" ]]; then
+    echo "$0: error: not enough arguments" >&2
+    echo "XXX usage"
+fi
+
+mkdir -p $BUILDDIR
+if [[ ! -d "$BUILDDIR/$docset" ]]; then
+    tmp_dir=$BUILDDIR/.tmp.$docset
+    rm -rf $tmp_dir
+    git clone $repourl $tmp_dir
+    mv $tmp_dir $BUILDDIR/$docset
+else
+    (cd $BUILDDIR/$docset; git pull)
+fi
+# Error out if the cached repo is dirty. It should always be pristine.
+if [[ "$(cd $BUILDDIR/$docset && git describe --all --dirty | grep dirty)" != "" ]]; then
+    fatal "Repo '$repo_dir' cache, $MG_CACHE_DIR/repos/$repo_dir, is dirty!"
+fi
+

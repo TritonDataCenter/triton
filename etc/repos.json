@@ -9,6 +9,8 @@
   {
     "git": "git@github.com:joyent/sdc-amon.git",
     "desc": "SDC internal API and agents for monitoring and alarming",
+    "ref_name": "amon",
+    "ref_doc": "docs/index.restdown",
     "tags": [
       "agents",
       "api"
@@ -144,6 +146,7 @@
   {
     "git": "git@github.com:joyent/sdc-cnapi.git",
     "desc": "SDC Compute Node API -- deals with communication to and management of compute nodes",
+    "ref_doc": "docs/index.restdown",
     "tags": [
       "api"
     ]

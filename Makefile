@@ -18,6 +18,7 @@ RAMSEY = node_modules/.bin/ramsey
 DOC_FILES = \
 	docs/developer-guide/repos.md
 
+.PHONY: docs
 docs: $(DOC_FILES)
 
 docs/developer-guide/repos.md: $(RAMSEY) docs/developer-guide/repos.md.in build/repos.json
@@ -31,3 +32,37 @@ build:
 
 $(RAMSEY):
 	$(NPM) install
+
+
+
+# TODO:
+# - basic sphinx structure and build
+# - add reference handling after that
+
+# build/
+#	sphinx/
+#		conf.py
+# 		
+
+.PHONY: sphinx
+sphinx:
+
+#REFERENCE_DOCS = \
+#    amon \
+#    cnapi
+#
+## amon
+## -> git clone sdc-amon.git
+## -> cp sdc-amon.git/docs/index.restdown build/sphinx/source/reference/amon.md
+## -> markdown2 amon.md > amon.html
+## -> simplehtml2rst amon.html > amon.rst
+## -> build/sphinx/source/reference/amon.rst
+#
+#
+## amon
+## -> ./tools/build-reference-doc amon build/sphinx/source/reference
+#
+#
+#.PHONY: reference
+#reference: $(REFERENCE_DOCS)
+#	echo TODO build reference
