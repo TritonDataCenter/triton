@@ -10,7 +10,7 @@ The user interface and CLI tools for administering the system:
 
 * [sdc-adminui](https://github.com/joyent/sdc-adminui): Operations UI for SDC
 * [sdc-sdc](https://github.com/joyent/sdc-sdc): Contains all the tools that go into the &#39;sdc&#39; zone.
-* [sdc-adm](https://github.com/joyent/sdc-adm): A tool for SDC upgrades, health and sanity checks, and possibly other SDC setup duties
+* [sdcadm](https://github.com/joyent/sdcadm): A tool for SDC upgrades, health and sanity checks, and possibly other SDC setup duties
 * [sdc-imgapi-cli](https://github.com/joyent/sdc-imgapi-cli): SDC CLI client for working with an IMGAPI repository
 * [sdc-amonadm](https://github.com/joyent/sdc-amonadm): SDC monitoring configuration tool
 
