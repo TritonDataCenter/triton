@@ -143,7 +143,7 @@ The goals behind the design of SDC services include:
 
 ## Dependencies
 
-SmartDataCenter uses [SmartOS](https://smartos.org) as its hypervisor.
+SmartDataCenter uses [SmartOS](http://smartos.org) as its hypervisor.
 
 
 ## License
