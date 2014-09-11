@@ -13,7 +13,7 @@
 TODO(trentm): bit more overview here
 
 SmartDataCenter (SDC) is open source cloud computing software. It is
-the same software that runs Joyent's Public Cloud and numerous
+the same software that runs Joyent's public cloud and numerous
 on-premise private clouds.
 * Distributed system written in Node.js on SmartOS.
 * High-performance SmartOS Zones (containers) with KVM support.
@@ -133,7 +133,7 @@ The goals behind the design of SDC services include:
 * The state of the running service should be simple to obtain.
 * The internals of the system should make it straightfoward to debug from a
   core file (from a crash or taken from a running process using
-  [gcore (1)](http://smartos.org/man/1/gcore))
+  [gcore (1)](http://smartos.org/man/1/gcore)).
 * Services should be RESTful unless there is a compelling reason otherwise.
 * Services should avoid keeping state and should not assume that there is
   only one instance of that service running. This allows multiple instances
