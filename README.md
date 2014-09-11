@@ -149,6 +149,6 @@ SmartDataCenter uses [SmartOS](http://smartos.org) as its hypervisor.
 ## License
 
 SmartDataCenter is licensed under the
-[Mozilla Public License, v. 2.0](http://mozilla.org/MPL/2.0/). It uses
+[Mozilla Public License version 2.0](http://mozilla.org/MPL/2.0/). It uses
 [SmartOS](http://smartos.org), which is its own project and
 [licensed separately](http://smartos.org/cddl/).
