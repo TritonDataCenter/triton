@@ -138,7 +138,7 @@ The goals behind the design of SDC services include:
 * Services should avoid keeping state and should not assume that there is
   only one instance of that service running. This allows multiple instances
   of a service to be provisioned for high availability.
-* C and Node.js should be used for new services.
+* Node.js and C should be used for new services.
 
 
 ## Dependencies
