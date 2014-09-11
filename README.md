@@ -116,19 +116,16 @@ repo-specific lint rules - look for tools/jsl.web.conf and tools/jsl.node.conf
 for per-repo exceptions to the default rules.
 
 
-## Design principles
+## Design Principles
 
-SmartDataCenter is very opinionated about how to architect a cloud.  These
-opinions are the result of many years of deploying and debugging the Joyent
-Public Cloud (JPC).  Design principles include the following:
+SmartDataCenter's architect is the result of many years of deploying and
+debugging Joyent's public cloud. Design principles include:
 
+* A VM's normal operation should rely as little as possible on SDC services.
 * A VM's primary storage should be a local disk, not over the network - this
   avoids difficult to debug performance pathologies.
 * Communication between internal APIs should occur in its own control plane
-  (network) that is separate from the customer networks. Avoid communicating
-  over the open Internet if possible.
-* A provisioned VM should rely as little as possible on SDC services outside of
-  the operating system for its normal operation.
+  (network).
 
 The goals behind the design of SDC services include:
 
@@ -140,8 +137,8 @@ The goals behind the design of SDC services include:
 * Services should be RESTful unless there is a compelling reason otherwise.
 * Services should avoid keeping state and should not assume that there is
   only one instance of that service running. This allows multiple instances
-  of a service to be provisioned for High Availability.
-* C and node.js should be used for new services.
+  of a service to be provisioned for high availability.
+* C and Node.js should be used for new services.
 
 
 ## Dependencies
