@@ -33,7 +33,7 @@ SDC is the cloud orchestration software that consists of the following component
 
 - A public API for provisioning and managing instances (virtual machines),
   networks, users, images, etc.
-- An Operations Portal.
+- An Operator Portal.
 - A set of private APIs.
 - Agents running in the global zone of CNs for management and monitoring.
 
@@ -47,7 +47,7 @@ for more details.
 
 An easy way to try SmartDataCenter is by downloading a Cloud on a Laptop
 (CoaL) build. This is a VMware virtual appliance that you can open and setup to
-provide a full SDC Head Node for *testing or development*.
+provide a full SDC headnode for *testing or development*.
 
 A note on minimum requirements: Practically speaking, a good CoaL experience
 requires a *Mac* with at least *16GiB RAM* and *SSD* drives. CoaL is resource
@@ -64,9 +64,9 @@ only supported on the VMware hypervisor.
 2. Configure VMware virtual networks for CoaL's "external" and "admin"
    networks. This is a one time configuration for a VMware installation.
 
-    a. First ensure that you have run VMware at least once.
+    1. First ensure that you have run VMware at least once.
 
-    b. Run the following setup script:
+    2. Run the following setup script:
 
             # Mac
             ./tools/coal-mac-vmware-setup
@@ -99,11 +99,9 @@ only supported on the VMware hypervisor.
 5. Configure and setup the CoaL headnode. The CoaL setup process, in short,
    is as follows:
 
-    - On first boot, you are [interactively
-      prompted](https://github.com/joyent/sdc-headnode/blob/master/scripts/prompt-config.sh)
-      for minimal configuration (e.g. datacenter name, company name,
-      networking information). This is written out (to "/mnt/usbkey/config")
-      and it reboots.
+    - On first boot, you are interactively prompted for minimal configuration
+      (e.g. datacenter name, company name, networking information). The
+      configuration is saved and the server reboots.
     - On reboot, all SDC services are installed. Expect this to take around
       15-20 minutes.
 
@@ -117,7 +115,7 @@ After setup is complete you should be able to ssh into your CoaL on the
 
 For just a taste: run `svcs` to see running [SMF
 services](http://wiki.smartos.org/display/DOC/Using+the+Service+Management+Facility).
-Run `vmadm list` to see a list of current VMs (smartos
+Run `vmadm list` to see a list of current VMs (SmartOS
 [zones](http://wiki.smartos.org/display/DOC/Zones)). Each SDC service runs in
 its own zone. For more, see [the SDC operator
 guide](https://docs.joyent.com/sdc7).
@@ -172,7 +170,7 @@ stored in a [Manta object store](https://github.com/joyent/manta), e.g.
 [Joyent's public Manta](https://www.joyent.com/products/manta) and pulled from
 there. For example, Joyent's core builds push to
 `/Joyent_Dev/public/builds` in Joyent's public Manta in us-east-1
-(https://us-east.manta.joyent.com/).
+(<https://us-east.manta.joyent.com/>).
 
 You can build your own CoaL and USB on Mac or SmartOS (see the [sdc-headnode
 README](https://github.com/joyent/sdc-headnode#readme)). However, all other

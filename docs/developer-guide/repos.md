@@ -1,4 +1,4 @@
-# SDC repositories
+# SmartDataCenter repos
 
 The customer-facing self-service API:
 
@@ -38,7 +38,7 @@ services:
 * [manatee](https://github.com/joyent/manatee): Automated fault monitoring and leader-election system for strongly-consistent, highly-available writes to PostgreSQL
 
 
-Infrastructure zones (VM instances) provider other essential services:
+Infrastructure zones (VM instances) provide other essential services:
 
 * [sdc-amonredis](https://github.com/joyent/sdc-amonredis): SDC &quot;amonredis&quot; core zone.
 * [sdc-assets](https://github.com/joyent/sdc-assets): Static file service for SDC CNs.
