@@ -77,8 +77,6 @@ only supported on the VMware hypervisor.
             # Linux
             # (Not yet written.)
 
-   XXX add these scripts.
-
 3. Download the latest release CoaL build:
 
         curl -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/coal-latest.tgz
@@ -107,9 +105,10 @@ only supported on the VMware hypervisor.
       networking information). This is written out (to "/mnt/usbkey/config")
       and it reboots.
     - On reboot, all SDC services are installed. Expect this to take around
-      10 minutes (XXX).
+      15-20 minutes.
 
-   See [the CoaL setup document](XXX) for a more complete walkthrough.
+   See [the CoaL setup document](./docs/developer-guide/coal-setup.md) for a
+   more walkthrough.
 
 After setup is complete you should be able to ssh into your CoaL on the
 "admin" network:
@@ -177,7 +176,7 @@ there. For example, Joyent's core builds push to
 
 You can build your own CoaL and USB on Mac or SmartOS (see the [sdc-headnode
 README](https://github.com/joyent/sdc-headnode#readme)). However, all other
-SDC components must be built using a running SDC (e.g. on the [Joyent Cloud](XXX)
+SDC components must be built using a running SDC (e.g. on the [Joyent Cloud](https://www.joyent.com/products/compute-service)
 or in a local CoaL). See [the building
 document](./docs/developer-guide/building.md) for details on building each of
 the SDC components.
@@ -192,8 +191,10 @@ overview](./docs/developer-guide/repos.md)). If you're contributing something
 substantial, you should contact developers on the [mailing list](TODO) or
 [IRC](TODO) first.
 
-For help or issues with the [Joyent Cloud](TODO) or production [Manta
-service](https://www.joyent.com/products/manta), contact [Joyent support](TODO) instead.
+For help or issues with the [Joyent
+Cloud](https://www.joyent.com/products/compute-service) or production [Manta
+service](https://www.joyent.com/products/manta), contact [Joyent Cloud customer
+support](https://help.joyent.com/home) instead.
 
 SDC repositories follow the
 [Joyent Engineering Guidelines](https://github.com/joyent/eng).  Notably:
