@@ -12,30 +12,126 @@
 
 SmartDataCenter (SDC) is a complete cloud management solution for server and
 network virtualization, operations management and customer self-service. It is
-the software that runs the Joyent Public Cloud and can be used to provide
-public, private, and hybrid clouds on customer premises.
+the software that runs the [Joyent Cloud
+service](https://www.joyent.com/products/compute-service) and can be used to
+provide public, private, and hybrid clouds on customer premises.
 
-TODO(trentm): bit more overview here
+This repo provides documentation for the overall SDC project and pointers to the
+other repositories that make up a complete SDC deployment. See the [repository
+list](docs/developer-guide/repos.md) for an overview of all of the repositories.
 
-This repository is just a starting point for SDC - all of the code lives in
-other repos.  See the [repo list](../docs/developer-guide/repos.md)
-for an overview of all of the repos.
+
+## Overview
+
+A SmartDataCenter installation consists of two or more servers. One server acts
+as the management server ("headnode" or "HN") which houses the initial set of
+core services that drive SDC, and the remainder are "Compute Nodes" (or "CNs")
+which run provisioned instances (virtual machines). Each SDC server runs
+[SmartOS](https://smartos.org).
+
+SDC is the cloud orchestration software that consists of the following components:
+
+- A public API for provisioning and managing instances (virtual machines),
+  networks, users, images, etc.
+- An Operations Portal.
+- A set of private APIs.
+- Agents running in the global zone of CNs for management and monitoring.
+
+See this [overview of SDC](https://docs.joyent.com/sdc7/overview-of-smartdatacenter-7)
+for more details.
 
 
 ## Getting Started
 
 ### Cloud on a Laptop (CoaL)
 
-An easy way to try SmartDataCenter is by downloading the Cloud on a Laptop
-(CoaL) image.  This is a VMware image that you can import and setup for testing
-or development.
+An easy way to try SmartDataCenter is by downloading a Cloud on a Laptop
+(CoaL) build. This is a VMware virtual appliance that you can open and setup to
+provide a full SDC Head Node for *testing or development*.
 
-TODO: Instructions on how to download and install coal.
+A note on minimum requirements: Practically speaking, a good CoaL experience
+requires a *Mac* with at least *16GiB RAM* and *SSD* drives. CoaL is resource
+intensive. Really it is a system running many services targetted at a beefy
+datacenter server. As well, all core team usage of CoaL is currently on Macs, so
+running on Windows or Linux is far less well tested. Currently CoaL builds are
+only supported on the VMware hypervisor.
+
+1. Install VMware, if you haven't already. On Mac, that is [VMware
+   Fusion](http://www.vmware.com/products/fusion) (version 5 or later). On
+   Windows or Linux, install [VMware
+   Workstation](http://www.vmware.com/products/workstation).
+
+2. Configure VMware virtual networks for CoaL's "external" and "admin"
+   networks. This is a one time configuration for a VMware installation.
+
+    a. First ensure that you have run VMware at least once.
+
+    b. Run the following setup script:
+
+            # Mac
+            ./tools/coal-mac-vmware-setup
+
+            # Windows
+            ./tools/coal-windows-vmware-setup.bat
+
+            # Linux
+            # (Not yet written.)
+
+   XXX add these scripts.
+
+3. Download the latest release CoaL build:
+
+        curl -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/coal-latest.tgz
+
+4. Unpack the CoaL build and open in VMware:
+
+        $ tar xzf coal-latest.tgz
+        root.password.20140911t161518z
+        coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/
+        coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmx
+        coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/zpool.vmdk
+        coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmdk
+        coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/4gb.img
+        ...
+
+        $ open coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm
+
+   This will boot the clean SDC headnode in VMware.
+
+5. Configure and setup the CoaL headnode. The CoaL setup process, in short,
+   is as follows:
+
+    - On first boot, you are [interactively
+      prompted](https://github.com/joyent/sdc-headnode/blob/master/scripts/prompt-config.sh)
+      for minimal configuration (e.g. datacenter name, company name,
+      networking information). This is written out (to "/mnt/usbkey/config")
+      and it reboots.
+    - On reboot, all SDC services are installed. Expect this to take around
+      10 minutes (XXX).
+
+   See [the CoaL setup document](XXX) for a more complete walkthrough.
+
+After setup is complete you should be able to ssh into your CoaL on the
+"admin" network:
+
+    ssh root@10.99.99.7  # password 'root'
+
+For just a taste: run `svcs` to see running [SMF
+services](http://wiki.smartos.org/display/DOC/Using+the+Service+Management+Facility).
+Run `vmadm list` to see a list of current VMs (smartos
+[zones](http://wiki.smartos.org/display/DOC/Zones)). Each SDC service runs in
+its own zone. For more, see [the SDC operator
+guide](https://docs.joyent.com/sdc7).
 
 
-### Installing
+### Installing SDC on a Physical Server
 
-TODO: How to obtain an image
+A SmartDataCenter server runs SmartOS, which is a "live image". That means that
+it boots from a USB key. Installing SDC involves writing a "USB" build to
+a physical USB key, inserting the key and booting the server from that key.
+To install SDC, first obtain the latest release USB build:
+
+    curl -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/usb-latest.tgz
 
 Once you have downloaded an image, you will need to
 [write it to a USB key](https://docs.joyent.com/sdc7/installing-sdc7/creating-a-usb-key-from-a-release-tarball),
@@ -62,54 +158,55 @@ for the complete list.
 
 SDC is composed of several pre-built components:
 
-* A [SmartOS platform image](https://github.com/joyent/smartos-live)
-* [Images](https://docs.joyent.com/sdc7/working-with-images) for SDC
-  services, which are provisioned as VMs at install time.
-* Agents, which are bundled into a [shar file](https://github.com/joyent/sdc-agents-core)
+- A [SmartOS *platform* image](https://github.com/joyent/smartos-live). This is
+  a slightly customized build of vanilla SmartOS for SDC.
+- *Virtual machine images* for SDC services (e.g. imgapi, vmapi, adminui), which
+  are provisioned as VMs at install time.
+- Agents, which are bundled into a [single
+  package](https://github.com/joyent/sdc-agents-installer)
   that can then be installed into the global zone of Compute Nodes.
 
-All of these components other than SmartOS are built using
-[Mountain Gorilla](https://github.com/joyent/mountain-gorilla). See its
-[README](https://github.com/joyent/mountain-gorilla/blob/master/README.md) for
-instructions on building these images.
+Each component is built separately and then all are combined into CoaL and USB
+builds (see the preceding sections) via the [sdc-headnode
+repository](https://github.com/joyent/sdc-headnode). Built components are typically
+stored in a [Manta object store](https://github.com/joyent/manta), e.g.
+[Joyent's public Manta](https://www.joyent.com/products/manta) and pulled from
+there. For example, Joyent's core builds push to
+`/Joyent_Dev/public/builds` in Joyent's public Manta in us-east-1
+(https://us-east.manta.joyent.com/).
 
-The images from Mountain Gorilla are stored in
-[Manta](https://www.joyent.com/products/manta).  They are then combined into
-a boot image that can be written to a USB key and used to boot a headnode.  The
-[sdc-headnode](https://github.com/joyent/sdc-headnode) repo automates this
-process. See the
-[sdc-headnode README](https://github.com/joyent/sdc-headnode/blob/master/README.md)
-for instructions.
+You can build your own CoaL and USB on Mac or SmartOS (see the [sdc-headnode
+README](https://github.com/joyent/sdc-headnode#readme)). However, all other
+SDC components must be built using a running SDC (e.g. on the [Joyent Cloud](XXX)
+or in a local CoaL). See [the building
+document](./docs/developer-guide/building.md) for details on building each of
+the SDC components.
 
 
 ### Contributing
 
-* Reporting bugs / feature requests: [sdc project issues](https://github.com/joyent/sdc/issues)
-* Contributing code: make a pull request to the appropriate repo.
+To report bugs or request features, submit issues to the [joyent/sdc
+project](https://github.com/joyent/sdc/issues). If you're contributing code,
+make a pull request to the appropriate repo (see [the repo
+overview](./docs/developer-guide/repos.md)). If you're contributing something
+substantial, you should contact developers on the [mailing list](TODO) or
+[IRC](TODO) first.
 
-If you're contributing something substantial, you should contact developers on
-the mailing list or IRC first.
-
-For issues with Joyent's public cloud or production Manta service, contact
-Joyent support instead.
-
-To report bugs or request features, submit issues to the Manta project on
-Github.  If you're asking for help with Joyent's production Manta service,
-you should contact Joyent support instead.  If you're contributing code, start
-with a pull request.
+For help or issues with the [Joyent Cloud](TODO) or production [Manta
+service](https://www.joyent.com/products/manta), contact [Joyent support](TODO) instead.
 
 SDC repositories follow the
 [Joyent Engineering Guidelines](https://github.com/joyent/eng).  Notably:
 
 * The #master branch should be first-customer-ship (FCS) quality at all times.
   Don't push anything until it's tested.
-* All repositories should be "make check" clean at all times.
+* All repositories should be `make check` clean at all times.
 * All repositories should have tests that run cleanly at all times.
 
-"make check" checks both JavaScript style and lint.  Style is checked with
+`make check` checks both JavaScript style and lint.  Style is checked with
 [jsstyle](https://github.com/davepacheco/jsstyle).  The specific style rules are
 somewhat repo-specific.  Style is somewhat repo-specific.  See the jsstyle
-configuration file or JSSTYLE\_FLAGS in Makefiles in each repo for exceptions
+configuration file or `JSSTYLE_FLAGS` in Makefiles in each repo for exceptions
 to the default jsstyle rules.
 
 Lint is checked with
@@ -117,18 +214,19 @@ Lint is checked with
 conflate lint with
 style!](http://dtrace.org/blogs/dap/2011/08/23/javascriptlint/)  There are gray
 areas, but generally speaking, style rules are arbitrary, while lint warnings
-identify potentially broken code.)  Repos sometimes have repo-specific lint
-rules - look for tools/jsl.web.conf and tools/jsl.node.conf for per-repo
-execeptions to the default rules.
+identify potentially broken code.  Repos sometimes have repo-specific lint
+rules -- look for "tools/jsl.web.conf" and "tools/jsl.node.conf" for per-repo
+exceptions to the default rules.
 
 
 ## Design principles
 
 SmartDataCenter is very opinionated about how to architect a cloud.  These
-opinions are the result of many years of deploying and debugging the Joyent
-Public Cloud (JPC).  Design principles include the following:
+opinions are the result of many years of deploying and debugging the [Joyent
+Cloud](https://www.joyent.com/products/compute-service). Design principles
+include the following:
 
-* A VM's primary storage should be a local disk, not over the network - this
+* A VM's primary storage should be a local disk, not over the network -- this
   avoids difficult to debug performance pathologies.
 * Communication between internal APIs should occur in its own control plane
   (network) that is separate from the customer networks. Avoid communicating
@@ -142,7 +240,7 @@ The goals behind the design of SDC services include:
 * The state of the running service should be simple to obtain.
 * The internals of the system should make it straightfoward to debug from a
   core file (from a crash or taken from a running process using
-  [gcore (1)](http://smartos.org/man/1/gcore))
+  [gcore(1)](http://smartos.org/man/1/gcore))
 * Services should be RESTful unless there is a compelling reason otherwise.
 * Services should avoid keeping state and should not assume that there is
   only one instance of that service running. This allows multiple instances
@@ -150,9 +248,14 @@ The goals behind the design of SDC services include:
 * C and node.js should be used for new services.
 
 
-## Dependencies
+## Dependencies and Related Projects
 
 SmartDataCenter uses [SmartOS](https://smartos.org) as its hypervisor.
+
+Joyent's [Manta project](https://github.com/joyent/manta] (also open
+source) is an HTTP-based object store with built-in support to run arbitrary
+programs on data at rest (i.e., without copying data out of the object store).
+It runs on and integrates with SmartDataCenter.
 
 
 ## License

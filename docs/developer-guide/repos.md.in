@@ -17,7 +17,7 @@ The user interface and CLI tools for administering the system:
 {{/cli}}{{/repos-json}}
 
 
-cloudapi and the administrative tools call out to the internal REST APIs
+Cloudapi and the administrative tools call out to the internal REST APIs
 to manage the system:
 
 {{#repos-json}}{{#api}}
@@ -33,7 +33,7 @@ services:
 {{/storage}}{{/repos-json}}
 
 
-Infrastructure zones provider other essential services:
+Infrastructure zones (VM instances) provide other essential services:
 
 {{#repos-json}}{{#service-zone}}
 * [{{name}}]({{url}}): {{desc}}

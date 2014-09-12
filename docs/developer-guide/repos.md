@@ -1,4 +1,4 @@
-# SDC repos
+# SDC repositories
 
 The customer-facing self-service API:
 
@@ -15,7 +15,7 @@ The user interface and CLI tools for administering the system:
 * [sdc-amonadm](https://github.com/joyent/sdc-amonadm): SDC monitoring configuration tool
 
 
-cloudapi and the administrative tools call out to the internal REST APIs
+Cloudapi and the administrative tools call out to the internal REST APIs
 to manage the system:
 
 * [sdc-amon](https://github.com/joyent/sdc-amon): SDC internal API and agents for monitoring and alarming
@@ -38,7 +38,7 @@ services:
 * [manatee](https://github.com/joyent/manatee): Automated fault monitoring and leader-election system for strongly-consistent, highly-available writes to PostgreSQL
 
 
-Infrastructure zones provider other essential services:
+Infrastructure zones (VM instances) provider other essential services:
 
 * [sdc-amonredis](https://github.com/joyent/sdc-amonredis): SDC &quot;amonredis&quot; core zone.
 * [sdc-assets](https://github.com/joyent/sdc-assets): Static file service for SDC CNs.
