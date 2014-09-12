@@ -1,0 +1,133 @@
+#!/bin/bash
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+#
+# Copyright (c) 2014, Joyent, Inc.
+#
+
+#
+# coal-vmware-setup: sets up VMWare Fusion so you can use
+# CoaL (Cloud on a Laptop) with it.
+
+function get_config_value() {
+    name=$1
+    script_dir=$(dirname $0)
+    if [[ -f "$script_dir/../config/config.coal" ]]; then
+      value=$(grep "^$name=" "$script_dir/../config/config.coal" | awk -F'=' '{print $2}')
+    fi
+    if [[ ! -z "$value" ]]; then
+        echo "$value"
+    else
+        return 1
+    fi
+}
+
+
+if [ $UID -ne 0 ] ; then
+    echo This script must be run as root.  Run again using the commandline:
+    echo    sudo $0
+    exit 1
+fi
+
+BIN_DIR=/Library/Application\ Support/VMware\ Fusion
+SETTINGS_DIR=/Library/Application\ Support/VMware\ Fusion
+NET_TMP=/tmp/coal.networking.$$
+LOCATIONS_TMP=/tmp/coal.locations.$$
+
+# Detect if Fusion 4 is installed
+if [ -e "/Applications/VMware Fusion.app/Contents/Library/services.sh" ]; then
+    BIN_DIR="/Applications/VMware Fusion.app/Contents/Library"
+    SETTINGS_DIR="/Library/Preferences/VMware Fusion"
+    FUSION4=true
+fi
+
+## Networks ##
+# The admin "host-only" network - vmnet1 (only between the Mac and the headnode)
+ADMIN_NETWORK=$(get_config_value admin_network || echo 10.99.99.0)
+ADMIN_NETMASK=$(get_config_value admin_netmask || echo 255.255.255.0)
+ADMIN_MAC_IP=$(echo ${ADMIN_NETWORK} | sed 's/\.[0-9]*$/.254/')
+
+# The external NAT network - vmnet8 (can reach the internet)
+# Note: There isn't currently an "external_network" var in config.coal to use.
+EXTERNAL_NETWORK=10.88.88.0
+EXTERNAL_NETMASK=255.255.255.0
+EXTERNAL_MAC_IP=10.88.88.1
+
+echo "Admin network:    network=\"${ADMIN_NETWORK}\", mac ip=\"${ADMIN_MAC_IP}\", netmask=\"${ADMIN_NETMASK}\""
+echo "External network: network=\"${EXTERNAL_NETWORK}\", mac ip=\"${EXTERNAL_MAC_IP}\", netmask=\"${EXTERNAL_NETMASK}\""
+
+cd "$SETTINGS_DIR"
+
+VM_LIST=$("$BIN_DIR/vmrun" list)
+if [ "$VM_LIST" != "Total running VMs: 0" ] ; then
+    echo You have Virtual Machines running.  Please shut them down before continuing.
+    exit 1
+fi
+
+
+echo "Setup VMWare networking: admin network $ADMIN_NETWORK, external network $EXTERNAL_NETWORK"
+cat networking | grep -ve 'VNET_[18]' > $NET_TMP
+cat locations | grep -ve 'VNET_[18]' > $LOCATIONS_TMP
+
+cat >> $NET_TMP <<__NETWORKING__
+answer VNET_1_DHCP no
+answer VNET_1_HOSTONLY_NETMASK $ADMIN_NETMASK
+answer VNET_1_HOSTONLY_SUBNET $ADMIN_NETWORK
+answer VNET_1_NAT no
+answer VNET_1_VIRTUAL_ADAPTER yes
+answer VNET_1_VIRTUAL_ADAPTER_ADDR $ADMIN_MAC_IP
+answer VNET_8_DHCP yes
+answer VNET_8_DHCP_CFG_HASH 889DD78A4E0F3E1F68AB5418242607E2B4A060B7
+answer VNET_8_HOSTONLY_NETMASK $EXTERNAL_NETMASK
+answer VNET_8_HOSTONLY_SUBNET $EXTERNAL_NETWORK
+answer VNET_8_NAT yes
+answer VNET_8_VIRTUAL_ADAPTER yes
+answer VNET_8_VIRTUAL_ADAPTER_ADDR $EXTERNAL_MAC_IP
+__NETWORKING__
+
+cat >> $LOCATIONS_TMP <<__LOCATIONS__
+remove_answer VNET_1_HOSTONLY_HOSTADDR
+remove_answer VNET_1_HOSTONLY_NETMASK
+answer VNET_1_HOSTONLY_HOSTADDR $ADMIN_MAC_IP
+answer VNET_1_HOSTONLY_NETMASK $ADMIN_NETMASK
+remove_answer VNET_1_DHCP
+answer VNET_1_DHCP no
+remove_answer VNET_8_HOSTONLY_HOSTADDR
+remove_answer VNET_8_HOSTONLY_NETMASK
+answer VNET_8_HOSTONLY_HOSTADDR $EXTERNAL_MAC_IP
+answer VNET_8_HOSTONLY_NETMASK $EXTERNAL_NETMASK
+remove_answer VNET_8_NAT
+answer VNET_8_NAT yes
+remove_answer VNET_8_DHCP
+answer VNET_8_DHCP yes
+__LOCATIONS__
+
+echo Changing VMware networking settings...
+
+cp networking networking.pre_coal
+cp locations locations.pre_coal
+echo Old settings backed up to the following files:
+echo     $SETTINGS_DIR/networking.pre_coal
+echo     $SETTINGS_DIR/locations.pre_coal
+
+mv $NET_TMP networking
+mv $LOCATIONS_TMP locations
+
+echo Restarting VMware services...
+if [ -n "$FUSION4" ]; then
+    "$BIN_DIR/services.sh" --stop
+    "$BIN_DIR/services.sh" --start
+else
+    "$BIN_DIR/boot.sh" --restart
+fi
+
+# If we're running before VMWare is run for the first time, the previous step
+# will have created a preference file as root, so fix it:
+chown -R $SUDO_UID:$SUDO_GID "/Users/$SUDO_USER/Library/Preferences/VMWare Fusion"
+
+echo Done!
+
