@@ -9,27 +9,26 @@
 # Copyright (c) 2014, Joyent, Inc.
 #
 
-#
-# coal-vmware-setup: sets up VMWare Fusion so you can use
+# coal-vmware-setup: sets up VMWare Fusion (on a Mac) so you can use
 # CoaL (Cloud on a Laptop) with it.
 
-function get_config_value() {
-    name=$1
-    script_dir=$(dirname $0)
-    if [[ -f "$script_dir/../config/config.coal" ]]; then
-      value=$(grep "^$name=" "$script_dir/../config/config.coal" | awk -F'=' '{print $2}')
-    fi
-    if [[ ! -z "$value" ]]; then
-        echo "$value"
-    else
-        return 1
-    fi
-}
+if [[ -n "$TRACE" ]]; then
+    export PS4='[\D{%FT%TZ}] ${BASH_SOURCE}:${LINENO}: ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+    set -o xtrace
+fi
+set -o errexit
+set -o pipefail
 
 
-if [ $UID -ne 0 ] ; then
-    echo This script must be run as root.  Run again using the commandline:
-    echo    sudo $0
+
+if [[ "$(uname -s)" != "Darwin" ]]; then
+    echo "error: This script is written for a Mac" >&2
+    exit 1
+fi
+
+if [[ $UID -ne 0 ]]; then
+    echo "error: This script must be run as root. Run again using:" >&2
+    echo "    sudo $0" >&2
     exit 1
 fi
 
@@ -47,8 +46,8 @@ fi
 
 ## Networks ##
 # The admin "host-only" network - vmnet1 (only between the Mac and the headnode)
-ADMIN_NETWORK=$(get_config_value admin_network || echo 10.99.99.0)
-ADMIN_NETMASK=$(get_config_value admin_netmask || echo 255.255.255.0)
+ADMIN_NETWORK=10.99.99.0
+ADMIN_NETMASK=255.255.255.0
 ADMIN_MAC_IP=$(echo ${ADMIN_NETWORK} | sed 's/\.[0-9]*$/.254/')
 
 # The external NAT network - vmnet8 (can reach the internet)
@@ -70,8 +69,8 @@ fi
 
 
 echo "Setup VMWare networking: admin network $ADMIN_NETWORK, external network $EXTERNAL_NETWORK"
-cat networking | grep -ve 'VNET_[18]' > $NET_TMP
-cat locations | grep -ve 'VNET_[18]' > $LOCATIONS_TMP
+cat networking | (grep -ve 'VNET_[18]' || true) > $NET_TMP
+cat locations | (grep -ve 'VNET_[18]' || true) > $LOCATIONS_TMP
 
 cat >> $NET_TMP <<__NETWORKING__
 answer VNET_1_DHCP no
