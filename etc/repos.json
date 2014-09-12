@@ -254,10 +254,6 @@
     ]
   },
   {
-    "git": "git@github.com:joyent/sdcsso.git",
-    "desc": "Single-sign on page for SDC7"
-  },
-  {
     "git": "git@github.com:joyent/sdc-ufds.git",
     "desc": "SDC LDAP Server",
     "tags": [
@@ -410,10 +406,7 @@
   },
   {
     "git": "git@github.com:joyent/aperture-config.git",
-    "desc": "Common aperture config for SDC/Manta",
-    "tags": [
-      "external-api"
-    ]
+    "desc": "Common aperture config for SDC/Manta"
   },
   {
     "git": "git@github.com:joyent/keyapi.git",

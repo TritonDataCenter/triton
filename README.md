@@ -167,7 +167,7 @@ Each component is built separately and then all are combined into CoaL and USB
 builds (see the preceding sections) via the [sdc-headnode
 repository](https://github.com/joyent/sdc-headnode). Built components are typically
 stored in a [Manta object store](https://github.com/joyent/manta), e.g.
-[Joyent's public Manta](https://www.joyent.com/products/manta) and pulled from
+[Joyent's public Manta](https://www.joyent.com/products/manta), and pulled from
 there. For example, Joyent's core builds push to
 `/Joyent_Dev/public/builds` in Joyent's public Manta in us-east-1
 (<https://us-east.manta.joyent.com/>).

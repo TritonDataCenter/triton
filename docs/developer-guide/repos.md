@@ -3,7 +3,6 @@
 The customer-facing self-service API:
 
 * [sdc-cloudapi](https://github.com/joyent/sdc-cloudapi): SDC Public HTTP API
-* [aperture-config](https://github.com/joyent/aperture-config): Common aperture config for SDC/Manta
 
 
 The user interface and CLI tools for administering the system:
@@ -128,7 +127,6 @@ Documentation repos:
 
 The other repos are used by one of the other repos above:
 
-* [sdcsso](https://github.com/joyent/sdcsso): Single-sign on page for SDC7
 * [convertvm](https://github.com/joyent/convertvm): convert OVF vm packages to smartos compatible images
 * [sdc-system-tests](https://github.com/joyent/sdc-system-tests): SDC system tests
 * [node-timeseries-heatmap](https://github.com/joyent/node-timeseries-heatmap): Time series heatmaps for node.js
@@ -137,6 +135,7 @@ The other repos are used by one of the other repos above:
 * [node-imgmanifest](https://github.com/joyent/node-imgmanifest): Node.js library for working with SmartOS image manifests
 * [sdc-fast-stream](https://github.com/joyent/sdc-fast-stream): Stream event messages via node-fast.
 * [sdc-fwrule](https://github.com/joyent/sdc-fwrule): SmartDataCenter firewall rule parser and object.
+* [aperture-config](https://github.com/joyent/aperture-config): Common aperture config for SDC/Manta
 * [node-workflow-moray-backend](https://github.com/joyent/node-workflow-moray-backend): A backend for node-workflow built over Moray
 * [sdc-securetoken](https://github.com/joyent/sdc-securetoken): Library to securely pass data publicly between services.
 * [node-tracker](https://github.com/joyent/node-tracker): Node.js library list vm details, watch for status changes
