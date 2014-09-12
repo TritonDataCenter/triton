@@ -411,8 +411,41 @@ generating the target list. The only target that currently cannot be built
 this way which is required for building a new headnode image is the platform
 target. The next section will deal with that.
 
+### Building sdc-headnode without using manta at all
+
+XXX this is incomplete
+
+ * do all the builds with "make ${TARG}" instead of "make ${TARG}_upload_manta"
+ * build the platform (see next section)
+ * merge the MG/bits/ directories together onto one zone's MG dir
+ * point sdc-headnode at this bits dir and build
+
+
 ## Building the platform image
 
-XXX: vmadm update <uuid> fs_allowed="ufs,pcfs,tmpfs"
+The platform image can be built in a 13.3.1 build zone just like any other
+MG target. However there are some additional changes required to these build
+zones before you can build platform.
 
-TODO
+You need to:
+
+ * set fs_allowed="ufs,pcfs,tmpfs"
+ * ensure you've got plenty of quota for your zone
+ * ensure you've got enough DRAM allocated for your zone
+
+One option for performing all of these at once would be do something like:
+
+ * vmadm update <uuid> fs_allowed="ufs,pcfs,tmpfs" ram=8192 quota=200
+
+from the GZ. This would work fine on hardware but is unlikely to work with COAL
+unless you've bumped the default amount of DRAM for COAL significantly.
+
+Once you have a properly setup 13.3.1 build zone you can build the platform
+with the same command as you'd use for other targets:
+
+```
+TARG=platform; ./configure -t ${TARG} -d joyager -D /stor/whatever/builds -O /stor/whatever/builds && make ${TARG}_upload_manta
+```
+
+which will build and upload to Manta. Alternatively you can omit the
+_upload_manta and just have the platform build to the local bits/ directory.
