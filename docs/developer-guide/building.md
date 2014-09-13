@@ -413,12 +413,58 @@ target. The next section will deal with that.
 
 ### Building sdc-headnode without using manta at all
 
-XXX this is incomplete
+Assuming you've set all the environment variables and setup both build zones
+you need (including the modifications in the "Building the platform image"
+section) and setup your cloudapi and so forth, you can use the instructions in
+this section to build everything locally without Manta.
 
- * do all the builds with "make ${TARG}" instead of "make ${TARG}_upload_manta"
- * build the platform (see next section)
- * merge the MG/bits/ directories together onto one zone's MG dir
- * point sdc-headnode at this bits dir and build
+Start on the 1.6.3 build zone and run:
+
+```
+mkdir /root/MY_BITS
+export LOCAL_BITS_DIR=/root/MY_BITS
+```
+
+Then cd to your MG workspace on this zone and run:
+
+```
+(set -o errexit; for TARG in $(tools/targets-1.6.3.sh); do ./configure -t ${TARG} -d joyager -D /stor/donotuse/builds -O /stor/donotuse/builds && make ${TARG}_local_bits_dir; done)
+```
+
+This will take a while. Once it completes, create the /root/MY_BITS directory
+on your 13.3.1 build zone and set the LOCAL_BITS_DIR variable:
+
+```
+mkdir /root/MY_BITS
+export LOCAL_BITS_DIR=/root/MY_BITS
+```
+
+Now transfer all the bits from your 1.6.3 build zone to this 13.3.1 build zone.
+One way to do this is using rsync (make sure you preserve the directory
+structure):
+
+```
+rsync -va root@<1.6.3-zone-IP>:/root/MY_BITS/* /root/MY_BITS/
+```
+
+Once that's complete (still logged into the 13.3.1 build zone with the
+LOCAL_BITS_DIR set) you can go to your MG directory and run:
+
+```
+(set -o errexit; for TARG in $(tools/targets-13.3.1.sh) platform; do ./configure -t ${TARG} -d joyager -D /stor/donotuse/builds -O /stor/donotuse/builds && make ${TARG}_local_bits_dir; done)
+```
+
+This will take quite a while (3-4 hours most likely) but once it's complete,
+/root/MY_BITS will contain all the bits required to build the usb headnode
+image. To do this, you will want to:
+
+```
+git clone git@github.com:joyent/sdc-headnode.git
+cd sdc-headnode
+make BITS_DIR=/root/MY_BITS usb
+```
+
+You can also change 'usb' to 'coal' if you want to build the COAL image instead.
 
 
 ## Building the platform image
