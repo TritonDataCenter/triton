@@ -10,26 +10,35 @@
 
 # Joyent SmartDataCenter
 
-SmartDataCenter (SDC) is a complete cloud management solution for server and
-network virtualization, operations management and customer self-service. It is
-the software that runs the [Joyent Cloud
-service](https://www.joyent.com/products/compute-service) and can be used to
-provide public, private, and hybrid clouds on customer premises.
+SmartDataCenter (SDC) is an open-source cloud computing software platform. It is
+a complete system for creating and operating a secure, scalable, and robust
+cloud. Features:
+
+- SmartOS Zones provides high performance container virtualization. KVM support
+  on top of zones means secure full Linux and Windows guest OS support.
+- RESTful API and CLI tooling for customer self-service
+- complete operations portal (web GUI)
+- robust and observable service oriented architecture (implemented primarily in
+  Node.js)
+- automated USB key installation
+
+SDC is the software that runs Joyent's public cloud and numerous on-premise
+private clouds.
 
 This repo provides documentation for the overall SDC project and pointers to the
 other repositories that make up a complete SDC deployment. See the [repository
-list](docs/developer-guide/repos.md) for an overview of all of the repositories.
+list](./docs/developer-guide/repos.md).
 
 
 ## Overview
 
-A SmartDataCenter installation consists of two or more servers. One server acts
-as the management server ("headnode" or "HN") which houses the initial set of
-core services that drive SDC, and the remainder are "Compute Nodes" (or "CNs")
-which run provisioned instances (virtual machines). Each SDC server runs
-[SmartOS](https://smartos.org).
+A SmartDataCenter installation consists of two or more servers. All servers run
+[SmartOS](https://smartos.org). One server acts as the management server, the
+headnode (HN), which houses the initial set of core services that drive SDC. The
+remainder are compute nodes (CNs) which run instances (virtual machines).
 
-SDC is the cloud orchestration software that consists of the following components:
+SDC is the cloud orchestration software that consists of the following
+components:
 
 - A public API for provisioning and managing instances (virtual machines),
   networks, users, images, etc.
@@ -38,7 +47,8 @@ SDC is the cloud orchestration software that consists of the following component
 - Agents running in the global zone of CNs for management and monitoring.
 
 See this [overview of SDC](https://docs.joyent.com/sdc7/overview-of-smartdatacenter-7)
-for more details.
+for more details. See [the reference](./docs/developer-guide/reference.md)
+for reference docs on each component.
 
 
 ## Getting Started
@@ -251,7 +261,8 @@ The goals behind the design of SDC services include:
 
 ## Dependencies and Related Projects
 
-SmartDataCenter uses [SmartOS](https://smartos.org) as its hypervisor.
+SmartDataCenter uses [SmartOS](https://smartos.org) as its hypervisor (hosting
+VMs and OS-containers).
 
 Joyent's [Manta project](https://github.com/joyent/manta] (also open
 source) is an HTTP-based object store with built-in support to run arbitrary
