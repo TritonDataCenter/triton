@@ -10,35 +10,33 @@
 
 # Joyent SmartDataCenter
 
-SmartDataCenter (SDC) is a complete cloud management solution for server and
-network virtualization, operations management and customer self-service. It is
-the software that runs the [Joyent Cloud
-service](https://www.joyent.com/products/compute-service) and can be used to
-provide public, private, and hybrid clouds on customer premises.
+SmartDataCenter (SDC) is open source cloud orchestrating software. It's
+the software that runs Joyent's public cloud and numerous
+on-premise private clouds.
+- Distributed system written in [Node.js](http://nodejs.org/) on [SmartOS](https://smartos.org).
+- Performant [SmartOS Zones](http://en.wikipedia.org/wiki/Solaris_Containers)
+  (containers) with [KVM](http://www.linux-kvm.org/) support.
 
-This repo provides documentation for the overall SDC project and pointers to the
-other repositories that make up a complete SDC deployment. See the [repository
-list](docs/developer-guide/repos.md) for an overview of all of the repositories.
+SDC consists of the following components:
 
-
-## Overview
-
-A SmartDataCenter installation consists of two or more servers. One server acts
-as the management server ("headnode" or "HN") which houses the initial set of
-core services that drive SDC, and the remainder are "Compute Nodes" (or "CNs")
-which run provisioned instances (virtual machines). Each SDC server runs
-[SmartOS](https://smartos.org).
-
-SDC is the cloud orchestration software that consists of the following components:
-
-- A public API for provisioning and managing instances (virtual machines),
-  networks, users, images, etc.
-- An Operator Portal.
-- A set of private APIs.
+- Public APIs (CloudAPI) for provisioning and managing images, instances,
+  networks, users, etc.
+- An operator portal.
+- Internal APIs mainly used by the pre-defined workflows during the execution of
+  jobs (provision, destroy, etc).
 - Agents running in the global zone of CNs for management and monitoring.
 
-See this [overview of SDC](https://docs.joyent.com/sdc7/overview-of-smartdatacenter-7)
+A SmartDataCenter installation consists of two or more servers. All servers runs
+SmartOS. One server acts as the management server, the headnode (HN), which
+houses the initial set of core services that drive SDC. The remainder are
+compute nodes (CNs) which run instances (virtual machines).
+
+See the [SmartDataCenter operator documentation](https://docs.joyent.com/sdc7/overview-of-smartdatacenter-7)
 for more details.
+
+This repo provides documentation for the overall SDC project and pointers to the
+other repositories that make up a complete SDC deployment.
+See [SmartDataCenter repos](docs/developer-guide/repos.md).
 
 
 ## Getting Started
