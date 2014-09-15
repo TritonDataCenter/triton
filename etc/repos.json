@@ -177,6 +177,13 @@
     ]
   },
   {
+    "git": "git@github.com:joyent/sdc-manta.git",
+    "desc": "SDC tools for deploying and managing a Manta",
+    "tags": [
+      "service-zone"
+    ]
+  },
+  {
     "git": "git@github.com:joyent/mahi.git",
     "desc": "Authentication cache",
     "tags": [

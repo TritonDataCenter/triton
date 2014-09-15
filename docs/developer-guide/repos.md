@@ -1,5 +1,9 @@
 # SmartDataCenter repos
 
+This page holds an overview of the source repositories that make up
+SmartDataCenter (SDC). See also [the reference](./reference.md).
+
+
 The customer-facing self-service API:
 
 * [sdc-cloudapi](https://github.com/joyent/sdc-cloudapi): SDC Public HTTP API
@@ -44,6 +48,7 @@ Infrastructure zones (VM instances) provide other essential services:
 * [binder](https://github.com/joyent/binder): SDC/Manta DNS server over Apache Zookeeper
 * [sdc-booter](https://github.com/joyent/sdc-booter): SmartDataCenter Compute Node DHCP and TFTP server
 * [sdc-manatee](https://github.com/joyent/sdc-manatee): SDC HA Postgres
+* [sdc-manta](https://github.com/joyent/sdc-manta): SDC tools for deploying and managing a Manta
 * [mahi](https://github.com/joyent/mahi): Authentication cache
 * [sdc-rabbitmq](https://github.com/joyent/sdc-rabbitmq): RabbitMQ zone for SDC.
 * [sdc-redis](https://github.com/joyent/sdc-redis): SDC &quot;redis&quot; core zone.

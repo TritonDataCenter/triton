@@ -24,7 +24,12 @@ docs/developer-guide/repos.md: $(RAMSEY) docs/developer-guide/repos.md.in build/
 	$(RAMSEY) -d build -j repos.json "$@.in" "$@"
 
 build/repos.json: build etc/repos.json
-	$(JSON) -f ./etc/repos.json -e 'this.name = /([^:/]+).git$$/.exec(this.git)[1]; this.url = "https://github.com/joyent/" + this.name; var self = this; (this.tags || ["none"]).forEach(function (t) { self[t] = true; });' > "$@"
+	$(JSON) -f ./etc/repos.json -e ' \
+	    var self = this; \
+	    this.name = /([^:/]+).git$$/.exec(this.git)[1]; \
+	    this.url = "https://github.com/joyent/" + this.name; \
+	    (this.tags || ["none"]).forEach(function (t) { self[t] = true; }); \
+	    ' > "$@"
 
 build:
 	mkdir -p "$@"
