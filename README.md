@@ -195,7 +195,9 @@ service](https://www.joyent.com/products/manta), contact [Joyent Cloud customer
 support](https://help.joyent.com/home) instead.
 
 SDC repositories follow the
-[Joyent Engineering Guidelines](https://github.com/joyent/eng).  Notably:
+[Joyent Engineering
+Guidelines](https://github.com/joyent/eng/blob/master/docs/index.restdown).
+Notably:
 
 * The #master branch should be first-customer-ship (FCS) quality at all times.
   Don't push anything until it's tested.
