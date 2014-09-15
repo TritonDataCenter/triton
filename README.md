@@ -26,7 +26,7 @@ SDC consists of the following components:
   jobs (provision, destroy, etc).
 - Agents running in the global zone of CNs for management and monitoring.
 
-A SmartDataCenter installation consists of two or more servers. All server runs
+A SmartDataCenter installation consists of two or more servers. All servers runs
 SmartOS. One server acts as the management server, the headnode (HN), which
 houses the initial set of core services that drive SDC. The remainder are
 compute nodes (CNs) which run instances (virtual machines).
