@@ -178,7 +178,7 @@ When finally public the intention is to have the latest build here:
 
 Once you have downloaded an image, you will need to
 [write it to a USB key](https://docs.joyent.com/sdc7/installing-sdc7/creating-a-usb-key-from-a-release-tarball),
-boot the machine with it, and follow the install prompts.  See the
+boot the machine with it, and follow the install prompts. See the
 [installing SDC 7](https://docs.joyent.com/sdc7/installing-sdc7) and
 [install checklist](https://docs.joyent.com/sdc7/installing-sdc7/install-checklist)
 documents for information.
@@ -188,7 +188,7 @@ After installation, you will probably want to perform some
 The most common of these include:
 
 * [Adding external nics to the imgapi and adminui zones](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration#AddingExternalNICstoHeadNodeVMs)
-  to give them internet access.  This enables simple import of VM images.
+  to give them internet access. This enables simple import of VM images.
 * [Provision a cloudapi zone](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration#CreatingCloudAPI)
   to allow users to create and administer their VMs without an operator.
 
@@ -250,25 +250,25 @@ Notably:
 * All repositories should be `make check` clean at all times.
 * All repositories should have tests that run cleanly at all times.
 
-`make check` checks both JavaScript style and lint.  Style is checked with
-[jsstyle](https://github.com/davepacheco/jsstyle).  The specific style rules are
-somewhat repo-specific.  Style is somewhat repo-specific.  See the jsstyle
+`make check` checks both JavaScript style and lint. Style is checked with
+[jsstyle](https://github.com/davepacheco/jsstyle). The specific style rules are
+somewhat repo-specific. Style is somewhat repo-specific. See the jsstyle
 configuration file or `JSSTYLE_FLAGS` in Makefiles in each repo for exceptions
 to the default jsstyle rules.
 
 Lint is checked with
-[javascriptlint](https://github.com/davepacheco/javascriptlint).  ([Don't
+[javascriptlint](https://github.com/davepacheco/javascriptlint). ([Don't
 conflate lint with
 style!](http://dtrace.org/blogs/dap/2011/08/23/javascriptlint/)  There are gray
 areas, but generally speaking, style rules are arbitrary, while lint warnings
-identify potentially broken code.  Repos sometimes have repo-specific lint
+identify potentially broken code. Repos sometimes have repo-specific lint
 rules -- look for "tools/jsl.web.conf" and "tools/jsl.node.conf" for per-repo
 exceptions to the default rules.
 
 
 ## Design principles
 
-SmartDataCenter is very opinionated about how to architect a cloud.  These
+SmartDataCenter is very opinionated about how to architect a cloud. These
 opinions are the result of many years of deploying and debugging the [Joyent
 Cloud](https://www.joyent.com/products/compute-service). Design principles
 include the following:
