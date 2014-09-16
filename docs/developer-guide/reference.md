@@ -56,7 +56,7 @@ compute nodes).
 | [hagfish-watcher](https://github.com/joyent/sdc-hagfish-watcher/blob/master/docs/index.restdown) | [sdc-hagfish-watcher](https://github.com/joyent/sdc-hagfish-watcher) | gz | Records telemetry about customer workloads for usage monitoring and billing purposes. |
 | heartbeater | [sdc-heartbeater-agent](https://github.com/joyent/sdc-heartbeater-agent) | gz | Heartbeats CN and VM status to CNAPI and VMAPI. |
 | net-agent | [sdc-net-agent](https://github.com/joyent/sdc-net-agent) | gz | Next generation agent for updating NAPI with CN network data. |
-| [provisioner](https://github.com/joyent/sdc-provisioner-agent/blob/master/docs/index.restdown) | [sdc-provisioner-agent](https://github.com/joyent/sdc-provisioner-agent) | gz | CNAPI agent for managing VMs on a CN (provisioning, rebooting, etc.).  |
+| [provisioner](https://github.com/joyent/sdc-provisioner-agent/blob/master/docs/index.restdown) | [sdc-provisioner-agent](https://github.com/joyent/sdc-provisioner-agent) | gz | CNAPI agent for managing VMs on a CN (provisioning, rebooting, etc.). |
 | [registrar](https://github.com/joyent/registrar/blob/master/docs/index.restdown) | [registrar](https://github.com/joyent/registrar) | vm | Registers the local host with *binder* for SDC internal DNS. |
 | smartlogin | [sdc-smart-login](https://github.com/joyent/sdc-smart-login) | gz | The set of components that enable SSHd on VMs to resolve public keys in UFDS. |
 | vm-agent | [sdc-vm-agent](https://github.com/joyent/sdc-vm-agent) | gz | Next generation agent for updating VMAPI with VM data from a CN. |

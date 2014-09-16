@@ -39,7 +39,7 @@ zone image built) and store results in Manta, both of which will have billing
 consequences.
 
 If instead you would like to build components in a local SDC install or in a
-downloaded COAL image, you will have some additional setup to do before you can
+downloaded CoaL image, you will have some additional setup to do before you can
 build. In this case, see the section "Setting up an SDC for builds".
 
 NOTE: Even if you do not use JPC and output your builds to Manta, you will still
@@ -91,7 +91,7 @@ export SDC_URL=https://us-east-1.api.joyentcloud.com
 where <USER> is the name of the JPC/SDC user you want to build with, and <KEY>
 is the SSH fingerprint of the SSH key that you've added for your user.
 
-If you're using COAL and using the default self-signed certificates for cloudapi
+If you're using CoaL and using the default self-signed certificates for cloudapi
 you will also want to:
 
 ```
@@ -121,12 +121,12 @@ cloudapi in the next section.
 NOTE: skip this section (move on to "Setting up the build environment") if
 you're going to build in the JPC.
 
-This section assumes that you have a local SDC/COAL setup and have access to
+This section assumes that you have a local SDC/CoaL setup and have access to
 the global zone.
 
 ### Setting up cloudapi
 
-If you are using COAL you won't have cloudapi by default. To add it you can
+If you are using CoaL you won't have cloudapi by default. To add it you can
 run the following from within the MG directory on your workstation:
 
 ```
@@ -136,8 +136,8 @@ run the following from within the MG directory on your workstation:
 where <HN_GZ_IP> is the IP of the GZ of your headnode. This script will login
 and create the cloudapi zone for you.
 
-If you're using COAL and don't have any CNs attached to your headnode, you
-will also want to login to the GZ of your COAL headnode and run:
+If you're using CoaL and don't have any CNs attached to your headnode, you
+will also want to login to the GZ of your CoaL headnode and run:
 
 ```
 /zones/$(vmadm lookup -1 tags.smartdc_role=cloudapi)/root/opt/smartdc/cloudapi/tools/coal-setup.sh
@@ -163,7 +163,7 @@ Record the external IP address for imgapi. You'll need this later to set
 SDC_IMGAPI_URL.
 
 If you're using your own SDC and do not have imgapi connected to a Manta (eg.
-you're using COAL) you'll also need to run the following from the GZ of the
+you're using CoaL) you'll also need to run the following from the GZ of the
 headnode:
 
 ```
@@ -173,7 +173,7 @@ echo '{"metadata": {"IMGAPI_ALLOW_LOCAL_CREATE_IMAGE_FROM_VM": true}}' \
 
 ### Importing the images
 
-If you are using COAL the sdc-smartos and sdc-multiarch images should already
+If you are using CoaL the sdc-smartos and sdc-multiarch images should already
 be imported. If for some reason your setup does *not* have these images, you'll
 need to import them. Follow the SDC documentation on importing images. The
 images you need are:
@@ -191,7 +191,7 @@ the creation of the required zones.
 ### Common steps to creating any build zone
 
 Before you continue, ensure that whatever user you're going to use (whether your
-personal account in JPC or 'admin' or other user in your local SDC/COAL) has
+personal account in JPC or 'admin' or other user in your local SDC/CoaL) has
 your SSH keys added to it. This is important as these instructions will have
 you running sdc-* commands and manta commands which will need these credentials.
 
@@ -212,7 +212,7 @@ sdc-listpackages | json -c "this.name == 'g3-standard-2-smartos'" 0.id
 ```
 
 replacing 'g3-standard-2-smartos' with the name of your package if you're not
-using JPC. For COAL you can use package 'sdc_2048' if you haven't changed the
+using JPC. For CoaL you can use package 'sdc_2048' if you haven't changed the
 default packages. The output of this command will be a UUID which you should
 substitute in commands below. In my case the value was
 '486bb054-6a97-4ba3-97b7-2413d5f8e849' so substitute your own value where you
@@ -293,7 +293,7 @@ git clone git@github.com:joyent/mountain-gorilla.git MG && cd MG
 ### Add additional environment variables
 
 If you're building in JPC, you can skip this step. If you're building in a local
-SDC/COAL setup, you'll probably also need to also set the following at this
+SDC/CoaL setup, you'll probably also need to also set the following at this
 point:
 
 ```
@@ -310,7 +310,7 @@ where:
  * SDC_LOCAL_BUILD tells MG that you don't want the build creating zones in JPC
    or pushing files to JPC's Manta as part of the build process.
  * SDC_IMAGE_PACKAGE is the name of the package you want to use for the build
-   zones. COAL ships with an sdc_2048 package which should work.
+   zones. CoaL ships with an sdc_2048 package which should work.
  * SDC_TESTING allows the node-smartdc tools to work even when you've got a
    self-signed SSL certificate.
  * SDC_IMGAPI_URL should be set to https://<IP> where <IP> is the external IP
@@ -330,7 +330,7 @@ environment variables described earlier set.
 
 Ensure you've set the appropriate environment variables, especially:
 
- * SDC_LOCAL_BUILD if you're building against your own SDC/COAL
+ * SDC_LOCAL_BUILD if you're building against your own SDC/CoaL
  * SDC_URL set to the proper cloudapi
 
 Then to build, run the following in your MG directory in your build zone:
@@ -464,7 +464,7 @@ cd sdc-headnode
 make BITS_DIR=/root/MY_BITS usb
 ```
 
-You can also change 'usb' to 'coal' if you want to build the COAL image instead.
+You can also change 'usb' to 'coal' if you want to build the CoaL image instead.
 
 
 ## Building the platform image
@@ -483,8 +483,8 @@ One option for performing all of these at once would be do something like:
 
  * vmadm update <uuid> fs_allowed="ufs,pcfs,tmpfs" ram=8192 quota=200
 
-from the GZ. This would work fine on hardware but is unlikely to work with COAL
-unless you've bumped the default amount of DRAM for COAL significantly.
+from the GZ. This would work fine on hardware but is unlikely to work with CoaL
+unless you've bumped the default amount of DRAM for CoaL significantly.
 
 Once you have a properly setup 13.3.1 build zone you can build the platform
 with the same command as you'd use for other targets:
