@@ -14,13 +14,13 @@ SmartDataCenter (SDC) is an open-source cloud computing software platform. It is
 a complete system for creating and operating a secure, scalable, and robust
 cloud. Features:
 
-- SmartOS Zones provides high performance container virtualization. KVM support
+- SmartOS zones provides high performance container virtualization. KVM support
   on top of zones means secure full Linux and Windows guest OS support.
 - RESTful API and CLI tooling for customer self-service
-- complete operations portal (web GUI)
-- robust and observable service oriented architecture (implemented primarily in
+- Complete operations portal (web GUI)
+- Robust and observable service oriented architecture (implemented primarily in
   Node.js)
-- automated USB key installation
+- Automated USB key installation
 
 SDC is the software that runs Joyent's public cloud and numerous on-premise
 private clouds.
@@ -42,13 +42,14 @@ components:
 
 - A public API for provisioning and managing instances (virtual machines),
   networks, users, images, etc.
-- An Operator Portal.
+- An operator portal.
 - A set of private APIs.
 - Agents running in the global zone of CNs for management and monitoring.
 
-See this [overview of SDC](https://docs.joyent.com/sdc7/overview-of-smartdatacenter-7)
-for more details. See [the reference](./docs/developer-guide/reference.md)
-for reference docs on each component.
+See the [overview of SDC](https://docs.joyent.com/sdc7/overview-of-smartdatacenter-7)
+in the SDC operator documentation for more details. See
+the [SmartDataCenter Reference](./docs/developer-guide/reference.md)
+for an overview of each component.
 
 
 ## Getting Started
@@ -292,23 +293,22 @@ The goals behind the design of SDC services include:
 * Services should avoid keeping state and should not assume that there is
   only one instance of that service running. This allows multiple instances
   of a service to be provisioned for High Availability.
-* C and node.js should be used for new services.
+* Node.js and C should be used for new services.
 
 
 ## Dependencies and Related Projects
 
-SmartDataCenter uses [SmartOS](https://smartos.org) as its hypervisor (hosting
-VMs and OS-containers).
+SmartDataCenter uses [SmartOS](https://smartos.org) as the host OS. The SmartOS
+hypervisor provides both SmartOS zone (container) and KVM virtualization. 
 
-Joyent's [Manta project](https://github.com/joyent/manta] (also open
-source) is an HTTP-based object store with built-in support to run arbitrary
+Joyent's open-source [Manta project](https://github.com/joyent/manta]
+is an HTTP-based object store with built-in support to run arbitrary
 programs on data at rest (i.e., without copying data out of the object store).
-It runs on and integrates with SmartDataCenter.
+Manta runs on and integrates with SmartDataCenter.
 
 
 ## License
 
 SmartDataCenter is licensed under the
-[Mozilla Public License, v. 2.0](http://mozilla.org/MPL/2.0/). It uses
-[SmartOS](http://smartos.org), which is its own project and
-[licensed separately](http://smartos.org/cddl/).
+[Mozilla Public License version 2.0](http://mozilla.org/MPL/2.0/).
+SmartOS is [licensed separately](http://smartos.org/cddl/).
