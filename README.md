@@ -14,13 +14,13 @@ SmartDataCenter (SDC) is an open-source cloud computing software platform. It is
 a complete system for creating and operating a secure, scalable, and robust
 cloud. Features:
 
-- SmartOS Zones provides high performance container virtualization. KVM support
+- SmartOS zones provides high performance container virtualization. KVM support
   on top of zones means secure full Linux and Windows guest OS support.
 - RESTful API and CLI tooling for customer self-service
-- complete operations portal (web GUI)
-- robust and observable service oriented architecture (implemented primarily in
+- Complete operations portal (web GUI)
+- Robust and observable service oriented architecture (implemented primarily in
   Node.js)
-- automated USB key installation
+- Automated USB key installation
 
 SDC is the software that runs Joyent's public cloud and numerous on-premise
 private clouds.
@@ -42,13 +42,14 @@ components:
 
 - A public API for provisioning and managing instances (virtual machines),
   networks, users, images, etc.
-- An Operator Portal.
+- An operator portal.
 - A set of private APIs.
 - Agents running in the global zone of CNs for management and monitoring.
 
-See this [overview of SDC](https://docs.joyent.com/sdc7/overview-of-smartdatacenter-7)
-for more details. See [the reference](./docs/developer-guide/reference.md)
-for reference docs on each component.
+See the [overview of SDC](https://docs.joyent.com/sdc7/overview-of-smartdatacenter-7)
+in the SDC operator documentation for more details. See
+the [SmartDataCenter Reference](./docs/developer-guide/reference.md)
+for an overview of each component.
 
 
 ## Getting Started
@@ -56,38 +57,17 @@ for reference docs on each component.
 ### Cloud on a Laptop (CoaL)
 
 An easy way to try SmartDataCenter is by downloading a Cloud on a Laptop
-(CoaL) build. This is a VMware virtual appliance that you can open and setup to
-provide a full SDC headnode for *testing or development*.
+(CoaL) build. This is a VMware virtual appliance providing a
+full SDC headnode development and testing.
 
-A note on minimum requirements: Practically speaking, a good CoaL experience
-requires a *Mac* with at least *16GiB RAM* and *SSD* drives. CoaL is resource
-intensive. Really it is a system running many services targetted at a beefy
-datacenter server. As well, all core team usage of CoaL is currently on Macs, so
-running on Windows or Linux is far less well tested. Currently CoaL builds are
-only supported on the VMware hypervisor.
+Minimum requirements: practically speaking, a good CoaL experience
+requires a **Mac** with at least **16GB** RAM and **SSD** drives. Currently, all
+core team members using CoaL are on Macs with VMware Fusion. For Linux and Windows
+**VMware Workstation should work**, but has not recently been tested.
 
-1. Install VMware, if you haven't already. On Mac, that is [VMware
-   Fusion](http://www.vmware.com/products/fusion) (version 5 or later). On
-   Windows or Linux, install [VMware
-   Workstation](http://www.vmware.com/products/workstation).
+See [CoaL Setup](./docs/developer-guide/coal-setup.md) for a thorough walkthrough.
 
-2. Configure VMware virtual networks for CoaL's "external" and "admin"
-   networks. This is a one time configuration for a VMware installation.
-
-    1. First ensure that you have run VMware at least once.
-
-    2. Run the following setup script:
-
-            # Mac
-            ./tools/coal-mac-vmware-setup
-
-            # Windows
-            ./tools/coal-windows-vmware-setup.bat
-
-            # Linux
-            # (Not yet written.)
-
-3. Download the latest release CoaL build.
+1. Start the download of the latest CoaL build. The tarball is over 2GB.
 
    During the private beta, download as follows:
 
@@ -109,8 +89,32 @@ only supported on the VMware hypervisor.
 
         curl -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/coal-latest.tgz
 
-4. Unpack the CoaL build and open in VMware:
+1. Install VMware, if you haven't already.
+    - Mac: [VMware Fusion](http://www.vmware.com/products/fusion) 5 or later.
+    - Windows or Linux: [VMware Workstation](http://www.vmware.com/products/workstation).
 
+1. Configure VMware virtual networks for CoaL's "external" and "admin"
+   networks. This is a one time configuration for a VMware installation.
+
+    1. Launch VMware at least once after installing VMware.
+
+    2. Download and run the following setup script from this repository.
+         - Mac: download ./tools/[coal-mac-vmware-setup](https://github.com/joyent/sdc/raw/master/tools/coal-mac-vmware-setup).
+           Make this shell script executable and run as root:
+
+             ```
+             chmod 744 coal-mac-vmware-setup; sudo ./coal-mac-vmware-setup
+             ```
+
+         - Linux: not yet written.
+
+         - Windows: download ./tools/[coal-windows-vmware-setup.bat](https://github.com/joyent/sdc/raw/master/tools/coal-windows-vmware-setup.bat).
+
+1. Unpack the CoaL build that you downloaded in step 1.
+
+    - Mac:
+
+        ```
         $ tar xzf coal-latest.tgz
         root.password.20140911t161518z
         coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/
@@ -119,13 +123,33 @@ only supported on the VMware hypervisor.
         coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmdk
         coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/4gb.img
         ...
+        ```
 
-        $ open coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm
+1. Run CoaL on VMware:
+    - Mac: 'open'ing the folder will start VMware and load the appliance:
 
-   This will boot the clean SDC headnode in VMware.
+        ```
+        open coal-master-<build_id>-<git_sha1_hash>-4gb.vmwarevm
+        ```
 
-5. Configure and setup the CoaL headnode. The CoaL setup process, in short,
-   is as follows:
+1. Boot the headnode:
+
+    1. When you are prompted with the GRUB menu press the "down" arrow.
+
+    1. Select the "Live 64-bit" option and press 'c' to enter the command
+      line for GRUB. By default, the OS will be redirect the console to
+      be ttyb which is fine for production but needs to be changed for
+      COAL. While in the command line:
+
+        ```
+        grub> variable os_console vga
+        ```
+
+    1. Press 'ESC' to get back to the GRUB menu.
+
+    1. Boot "Live 64-bit" by pressing 'enter'.
+
+1. Configure the headnode. The setup process, in short, is as follows:
 
     - On first boot, you are interactively prompted for minimal configuration
       (e.g. datacenter name, company name, networking information). The
@@ -133,20 +157,21 @@ only supported on the VMware hypervisor.
     - On reboot, all SDC services are installed. Expect this to take around
       15-20 minutes.
 
-   See [the CoaL setup document](./docs/developer-guide/coal-setup.md) for a
-   more walkthrough.
+   See [CoaL Setup](./docs/developer-guide/coal-setup.md) for the recommended
+   prompt responses for new SDC developers or testers.
 
-After setup is complete you should be able to ssh into your CoaL on the
-"admin" network:
+1. After setup is complete you should be able to SSH into your CoaL on the
+"admin" network. Example:
 
+    ```
     ssh root@10.99.99.7  # password 'root'
+    ```
 
-For just a taste: run `svcs` to see running [SMF
+For just a taste run `svcs` to see running [SMF
 services](http://wiki.smartos.org/display/DOC/Using+the+Service+Management+Facility).
 Run `vmadm list` to see a list of current VMs (SmartOS
 [zones](http://wiki.smartos.org/display/DOC/Zones)). Each SDC service runs in
-its own zone. For more, see [the SDC operator
-guide](https://docs.joyent.com/sdc7).
+its own zone. See [the SDC operator guide](https://docs.joyent.com/sdc7).
 
 
 ### Installing SDC on a Physical Server
@@ -292,23 +317,22 @@ The goals behind the design of SDC services include:
 * Services should avoid keeping state and should not assume that there is
   only one instance of that service running. This allows multiple instances
   of a service to be provisioned for High Availability.
-* C and node.js should be used for new services.
+* Node.js and C should be used for new services.
 
 
 ## Dependencies and Related Projects
 
-SmartDataCenter uses [SmartOS](https://smartos.org) as its hypervisor (hosting
-VMs and OS-containers).
+SmartDataCenter uses [SmartOS](https://smartos.org) as the host OS. The SmartOS
+hypervisor provides both SmartOS zone (container) and KVM virtualization. 
 
-Joyent's [Manta project](https://github.com/joyent/manta] (also open
-source) is an HTTP-based object store with built-in support to run arbitrary
+Joyent's open-source [Manta project](https://github.com/joyent/manta]
+is an HTTP-based object store with built-in support to run arbitrary
 programs on data at rest (i.e., without copying data out of the object store).
-It runs on and integrates with SmartDataCenter.
+Manta runs on and integrates with SmartDataCenter.
 
 
 ## License
 
 SmartDataCenter is licensed under the
-[Mozilla Public License, v. 2.0](http://mozilla.org/MPL/2.0/). It uses
-[SmartOS](http://smartos.org), which is its own project and
-[licensed separately](http://smartos.org/cddl/).
+[Mozilla Public License version 2.0](http://mozilla.org/MPL/2.0/).
+SmartOS is [licensed separately](http://smartos.org/cddl/).
