@@ -162,6 +162,21 @@ the first build.
 Record the external IP address for imgapi. You'll need this later to set
 SDC_IMGAPI_URL.
 
+For your convienence, here are commands for the previous steps if you are
+running in COAL:
+
+```
+# Add an external nic
+$ /usbkey/scripts/add_external_nic.sh $(vmadm lookup alias=~imgapi)
+# Make sure the job finished successfully
+$ sdc-workflow /jobs/405b26f1-0f6a-4118-aacb-0d89fd777a36 | json -Ha execution
+succeeded
+# Find the external imgapi ip address
+$ sdc-vmapi /vms/$(vmadm lookup alias=~imgapi) | json -H nics | \
+    json -ac 'this.nic_tag === "external"' ip
+10.88.88.3
+```
+
 If you're using your own SDC and do not have imgapi connected to a Manta (eg.
 you're using COAL) you'll also need to run the following from the GZ of the
 headnode:
@@ -216,7 +231,18 @@ using JPC. For COAL you can use package 'sdc_2048' if you haven't changed the
 default packages. The output of this command will be a UUID which you should
 substitute in commands below. In my case the value was
 '486bb054-6a97-4ba3-97b7-2413d5f8e849' so substitute your own value where you
-see that.
+see that.  If your SDC_ACCOUNT isn't an administrator, you may not be able
+to find the `sdc_2048` package.  If you are using COAL this is because the
+package's owner_uuid is admin.  To make images public for you ruser to see, run
+this from the global zone:
+
+```
+sdc-papi /packages | json -Ha uuid | while read l; do \
+    echo '{ "owner_uuids": null }' | sdc-papi /packages/$l -X PUT -d@-; done
+```
+
+Note that you probably do *not* want to do this for a public SDC.  You are
+better off creating a new, public package.
 
 ### Creating a sdc-smartos 1.6.3 build zone
 
@@ -287,6 +313,7 @@ For each build zone (1.6.3 or 13.3.1) you want to clone MG before you start
 building. So SSH to the build zone, then run:
 
 ```
+ssh -A root@<BUILD_ZONE_IP> # Use the -A to forward your SSH agent
 git clone git@github.com:joyent/mountain-gorilla.git MG && cd MG
 ```
 
@@ -336,13 +363,15 @@ Ensure you've set the appropriate environment variables, especially:
 Then to build, run the following in your MG directory in your build zone:
 
 ```
-TARG=<build>; ./configure -t ${TARG} -d joyager -D /stor/builds -O /stor/whatever/builds && make ${TARG}_upload_manta
+TARG=<build>; ./configure -t ${TARG} -d joyager -D /stor/builds \
+    -O /stor/whatever/builds && make ${TARG}_upload_manta
 ```
 
 if we use 'assets' for the build for example:
 
 ```
-TARG=assets; ./configure -t ${TARG} -d joyager -D /stor/builds -O /stor/whatever/builds && make ${TARG}_upload_manta
+TARG=assets; ./configure -t ${TARG} -d joyager -D /stor/builds \
+    -O /stor/whatever/builds && make ${TARG}_upload_manta
 ```
 
 which will:
@@ -386,7 +415,8 @@ in my 1.6.3 zone and run:
 ```
 (set -o errexit
     for TARG in $(./tools/targets-1.6.3.sh); do
-        ./configure -t ${TARG} -d joyager -D /stor/whatever/builds -O /stor/whatever/builds && make ${TARG}_upload_manta
+        ./configure -t ${TARG} -d joyager -D /stor/whatever/builds \
+            -O /stor/whatever/builds && make ${TARG}_upload_manta
     done
 )
 ```
@@ -428,7 +458,9 @@ export LOCAL_BITS_DIR=/root/MY_BITS
 Then cd to your MG workspace on this zone and run:
 
 ```
-(set -o errexit; for TARG in $(tools/targets-1.6.3.sh); do ./configure -t ${TARG} -d joyager -D /stor/donotuse/builds -O /stor/donotuse/builds && make ${TARG}_local_bits_dir; done)
+(set -o errexit; for TARG in $(tools/targets-1.6.3.sh); do \
+    ./configure -t ${TARG} -d joyager -D /stor/donotuse/builds \
+        -O /stor/donotuse/builds && make ${TARG}_local_bits_dir; done)
 ```
 
 This will take a while. Once it completes, create the /root/MY_BITS directory
@@ -451,7 +483,9 @@ Once that's complete (still logged into the 13.3.1 build zone with the
 LOCAL_BITS_DIR set) you can go to your MG directory and run:
 
 ```
-(set -o errexit; for TARG in $(tools/targets-13.3.1.sh) platform; do ./configure -t ${TARG} -d joyager -D /stor/donotuse/builds -O /stor/donotuse/builds && make ${TARG}_local_bits_dir; done)
+(set -o errexit; for TARG in $(tools/targets-13.3.1.sh) platform; do \
+    ./configure -t ${TARG} -d joyager -D /stor/donotuse/builds \
+        -O /stor/donotuse/builds && make ${TARG}_local_bits_dir; done)
 ```
 
 This will take quite a while (3-4 hours most likely) but once it's complete,
@@ -490,7 +524,8 @@ Once you have a properly setup 13.3.1 build zone you can build the platform
 with the same command as you'd use for other targets:
 
 ```
-TARG=platform; ./configure -t ${TARG} -d joyager -D /stor/whatever/builds -O /stor/whatever/builds && make ${TARG}_upload_manta
+TARG=platform; ./configure -t ${TARG} -d joyager -D /stor/whatever/builds \
+    -O /stor/whatever/builds && make ${TARG}_upload_manta
 ```
 
 which will build and upload to Manta. Alternatively you can omit the
