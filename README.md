@@ -87,7 +87,25 @@ only supported on the VMware hypervisor.
             # Linux
             # (Not yet written.)
 
-3. Download the latest release CoaL build:
+3. Download the latest release CoaL build.
+
+   During the private beta, download as follows:
+
+        # Get the Manta CLI tools (https://github.com/joyent/node-manta).
+        npm install -g manta
+
+        # Setup to use the Manta CLI tools as the 'joyager' user.
+        export MANTA_URL=https://us-east.manta.joyent.com
+        export MANTA_USER=joyager
+        export MANTA_KEY_ID=`ssh-keygen -l -f ~/.ssh/id_rsa.pub | awk '{print $2}' | tr -d '\n'`
+
+        # Find the latest build on the master branch and download it.
+        latest=$(mget -q /joyager/stor/builds/headnode/master-latest)
+        pkg=$(mls $latest/headnode | grep coal-)
+        echo "Downloading $latest/headnode/$pkg"
+        mget -O $latest/headnode/$pkg
+
+   When finally public the intention is to have the latest build here:
 
         curl -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/coal-latest.tgz
 
@@ -136,7 +154,25 @@ guide](https://docs.joyent.com/sdc7).
 A SmartDataCenter server runs SmartOS, which is a "live image". That means that
 it boots from a USB key. Installing SDC involves writing a "USB" build to
 a physical USB key, inserting the key and booting the server from that key.
-To install SDC, first obtain the latest release USB build:
+To install SDC, first obtain the latest release USB build.
+
+During the private beta, download as follows:
+
+    # Get the Manta CLI tools (https://github.com/joyent/node-manta).
+    npm install -g manta
+
+    # Setup to use the Manta CLI tools as the 'joyager' user.
+    export MANTA_URL=https://us-east.manta.joyent.com
+    export MANTA_USER=joyager
+    export MANTA_KEY_ID=`ssh-keygen -l -f ~/.ssh/id_rsa.pub | awk '{print $2}' | tr -d '\n'`
+
+    # Find the latest build on the master branch and download it.
+    latest=$(mget -q /joyager/stor/builds/headnode/master-latest)
+    pkg=$(mls $latest/headnode | grep usb-)
+    echo "Downloading $latest/headnode/$pkg"
+    mget -O $latest/headnode/$pkg
+
+When finally public the intention is to have the latest build here:
 
     curl -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/usb-latest.tgz
 
