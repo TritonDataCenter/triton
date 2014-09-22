@@ -15,10 +15,10 @@
 JSON = json
 NPM = npm
 RAMSEY = node_modules/.bin/ramsey
-DOC_FILES = \
+MD_FILES = \
 	docs/developer-guide/repos.md
 
-docs: $(DOC_FILES)
+docs: $(MD_FILES)
 
 docs/developer-guide/repos.md: $(RAMSEY) docs/developer-guide/repos.md.in build/repos.json
 	$(RAMSEY) -d build -j repos.json "$@.in" "$@"
