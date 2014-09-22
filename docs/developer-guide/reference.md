@@ -33,7 +33,7 @@ section in the glossary](../glossary.md#service) for details.
 | [redis](https://github.com/joyent/sdc-redis/blob/master/docs/index.restdown) | [sdc-redis](https://github.com/joyent/sdc-redis) | SDC internal redis |
 | [sapi](https://github.com/joyent/sdc-sapi/blob/master/docs/index.restdown) | [sdc-sapi](https://github.com/joyent/sdc-sapi) | SDC Service API |
 | [sdc](https://github.com/joyent/sdc-sdc/blob/master/docs/index.restdown) | [sdc-sdc](https://github.com/joyent/sdc-sdc) | SDC internal "sdc" zone with ops tooling |
-| [ufds](https://github.com/joyent/sdc-ufds/blob/master/docs/index.restdown) | [sdc-ufds](https://github.com/joyent/sdc-ufds) | SDC LDAP directory service. It is used primarily for user management. The deprecated customer API (CAPI) runs in this zone. |
+| [ufds](https://github.com/joyent/sdc-ufds/blob/master/docs/index.restdown) | [sdc-ufds](https://github.com/joyent/sdc-ufds) | SDC LDAP directory service. It is used primarily for user management. The customer API (CAPI) runs in this zone. CAPI is being depreciated. |
 | [vmapi](https://github.com/joyent/sdc-vmapi/blob/master/docs/index.restdown) | [sdc-vmapi](https://github.com/joyent/sdc-vmapi) | SDC Virtual Machine API |
 | [workflow](https://github.com/joyent/sdc-workflow/blob/master/docs/index.restdown) | [sdc-workflow](https://github.com/joyent/sdc-workflow) | SDC Workflow API and job runner service |
 
