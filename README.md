@@ -156,6 +156,26 @@ it boots from a USB key. Installing SDC involves writing a "USB" build to
 a physical USB key, inserting the key and booting the server from that key.
 To install SDC, first obtain the latest release USB build.
 
+#### Hardware
+
+For SDC development only, the minimum server hardware is:
+* 8 GB USB flash drive
+* Intel Processors with VT-x and EPT support (all Xeon since Nehalem).
+* 16 GB RAM
+* 6 GB available storage. Hardware RAID is not recommended.
+  SDC will lay down a ZFS ZPOOL across all available disks on install.
+  You'll want much more storage if you're working with images and instances.
+
+If setting up a SmartDataCenter pilot then you'll want to review
+the [SDC7 Installation Prerequisites](https://docs.joyent.com/sdc7/sdc7-installation-prerequisites)
+which include IPMI and at least 10 gigabit Ethernet. The supported hardware
+components for SmartOS are described in the [SmartOS Hardware Requirements](http://wiki.smartos.org/display/DOC/Hardware+Requirements).
+Joyent certified hardware for SmartDataCenter are all in
+the [Joyent Manufacturing Database](http://eng.joyent.com/manufacturing/).
+
+
+#### USB Key
+
 During the private beta, download as follows:
 
     # Get the Manta CLI tools (https://github.com/joyent/node-manta).
@@ -175,6 +195,8 @@ During the private beta, download as follows:
 When finally public the intention is to have the latest build here:
 
     curl -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/usb-latest.tgz
+
+#### Install
 
 Once you have downloaded an image, you will need to
 [write it to a USB key](https://docs.joyent.com/sdc7/installing-sdc7/creating-a-usb-key-from-a-release-tarball),
