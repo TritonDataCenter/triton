@@ -251,7 +251,7 @@ See the
 for the complete list.
 
 
-### Building
+## Building
 
 SDC is composed of several pre-built components:
 
@@ -280,7 +280,7 @@ document](./docs/developer-guide/building.md) for details on building each of
 the SDC components.
 
 
-### Contributing
+## Contributing
 
 To report bugs or request features, submit issues to the [joyent/sdc
 project](https://github.com/joyent/sdc/issues). If you're contributing code,
