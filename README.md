@@ -150,6 +150,7 @@ See [CoaL Setup](./docs/developer-guide/coal-setup.md) for a thorough walkthroug
             grub> variable os_console vga
 
     3. Press 'ESC' to get back to the GRUB menu.
+       ![CoaL GRUB menu](./docs/img/coal-grub-menu.png)
 
     4. Boot "Live 64-bit" by pressing 'enter'.
 
