@@ -230,6 +230,8 @@ When finally public the intention is to have the latest build here:
 
 #### Install
 
+#### Install
+
 Once you have downloaded an image, you will need to
 [write it to a USB key](https://docs.joyent.com/sdc7/installing-sdc7/creating-a-usb-key-from-a-release-tarball),
 boot the machine with it, and follow the install prompts. See the
