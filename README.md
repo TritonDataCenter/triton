@@ -118,7 +118,6 @@ See [CoaL Setup](./docs/developer-guide/coal-setup.md) for a thorough walkthroug
            [./tools/coal-windows-vmware-setup.bat](https://github.com/joyent/sdc/raw/master/tools/coal-windows-vmware-setup.bat).
 
 4. Unpack the CoaL build that you downloaded in step 1.
-
     - Mac:
 
         ```bash
@@ -155,7 +154,6 @@ See [CoaL Setup](./docs/developer-guide/coal-setup.md) for a thorough walkthroug
     4. Boot "Live 64-bit" by pressing 'enter'.
 
 7. Configure the headnode. The setup process, in short, is as follows:
-
     - On first boot, you are interactively prompted for minimal configuration
       (e.g. datacenter name, company name, networking information). The
       configuration is saved and the server reboots.
