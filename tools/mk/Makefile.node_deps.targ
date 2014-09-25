@@ -1,0 +1,24 @@
+# -*- mode: makefile -*-
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+#
+# Copyright (c) 2014, Joyent, Inc.
+#
+
+#
+# Makefile.node_deps.targ: targets for Makefile.node_deps.defs.
+#
+# NOTE: This makefile comes from the "eng" repo. It's designed to be dropped
+# into other repos as-is without requiring any modifications. If you find
+# yourself changing this file, you should instead update the original copy in
+# eng.git and then update your repo to use the new version.
+#
+
+NPM_EXEC  ?= $(error NPM_EXEC must be defined for Makefile.node_deps.targ)
+
+node_modules/%: src/node-% | $(NPM_EXEC)
+	$(NPM) install $<

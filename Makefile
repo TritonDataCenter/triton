@@ -18,6 +18,19 @@ RAMSEY = node_modules/.bin/ramsey
 MD_FILES = \
 	docs/developer-guide/repos.md
 
+
+
+include ./tools/mk/Makefile.defs
+
+
+#
+# Repo-specific targets
+#
+
+.PHONY: all
+all: docs
+
+.PHONY: docs
 docs: $(MD_FILES)
 
 docs/developer-guide/repos.md: $(RAMSEY) docs/developer-guide/repos.md.in build/repos.json
@@ -36,3 +49,8 @@ build:
 
 $(RAMSEY):
 	$(NPM) install
+
+
+
+include ./tools/mk/Makefile.deps
+include ./tools/mk/Makefile.targ

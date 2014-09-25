@@ -1,0 +1,42 @@
+# -*- mode: makefile -*-
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+#
+# Copyright (c) 2014, Joyent, Inc.
+#
+
+#
+# Makefile.node_prebuilt.targ: Makefile for including a prebuilt Node.js
+# build.
+#
+# NOTE: This makefile comes from the "eng" repo. It's designed to be dropped
+# into other repos as-is without requiring any modifications. If you find
+# yourself changing this file, you should instead update the original copy in
+# eng.git and then update your repo to use the new version.
+
+
+NODE_PREBUILT_TARBALL ?= $(error NODE_PREBUILT_TARBALL is not set: was Makefile.node_prebuilt.defs included?)
+
+
+# TODO: remove this limitation
+# Limitation: currently presuming that the NODE_INSTALL basename is
+# 'node' and that sdcnode tarballs have a 'node' top-level dir.
+$(NODE_EXEC) $(NPM_EXEC) $(NODE_WAF_EXEC):
+	[[ $(shell basename $(NODE_INSTALL)) == "node" ]] \
+		|| (echo "Limitation: 'basename NODE_INSTALL' is not 'node'" && exit 1)
+	rm -rf $(NODE_INSTALL) \
+		$(BUILD)/prebuilt-node-* $(BUILD)/prebuilt-npm-*
+	mkdir -p $(shell dirname $(NODE_INSTALL))
+	if [[ $(shell echo $(NODE_PREBUILT_TARBALL) | cut -c 1-4) == "http" ]]; then \
+		echo "Downloading '$(NODE_PREBUILT_BASE)'."; \
+		curl -ksS --fail --connect-timeout 30 -o $(shell dirname $(NODE_INSTALL))/$(NODE_PREBUILT_BASE) $(NODE_PREBUILT_TARBALL); \
+		(cd $(shell dirname $(NODE_INSTALL)) && $(TAR) xf $(NODE_PREBUILT_BASE)); \
+	else \
+		(cd $(shell dirname $(NODE_INSTALL)) && $(TAR) xf $(NODE_PREBUILT_TARBALL)); \
+	fi
+	ln -s $(TOP)/$(NODE_INSTALL)/bin/node $(NODE_EXEC)
+	ln -s $(TOP)/$(NODE_INSTALL)/bin/npm $(NPM_EXEC)

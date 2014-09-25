@@ -1,0 +1,43 @@
+# -*- mode: makefile -*-
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+#
+# Copyright (c) 2014, Joyent, Inc.
+#
+
+#
+# Makefile.node_deps.defs: Makefile for including npm modules whose sources
+# reside inside the repo.  This should NOT be used for modules in the npm
+# public repo or modules that could be specified with git SHAs.
+#
+# NOTE: This makefile comes from the "eng" repo. It's designed to be dropped
+# into other repos as-is without requiring any modifications. If you find
+# yourself changing this file, you should instead update the original copy in
+# eng.git and then update your repo to use the new version.
+#
+
+#
+# This Makefile takes as input the following make variable:
+#
+#    REPO_MODULES	List of relative paths to node modules (i.e., npm
+#    			packages) inside this repo.  For example:
+#    			src/node-canative, where there's a binary npm package
+#    			in src/node-canative.
+#
+# Based on the above, this Makefile defines the following new variables:
+#
+#    REPO_DEPS		List of relative paths to the installed modules.  For
+#    			example: "node_modules/canative".
+#
+# The accompanying Makefile.node_deps.targ defines a target that will install
+# each of REPO_MODULES into REPO_DEPS and remove REPO_DEPS with "make clean".
+# The top-level Makefile is responsible for depending on REPO_DEPS where
+# appropriate (usually the "deps" or "all" target).
+#
+
+REPO_DEPS    = $(REPO_MODULES:src/node-%=node_modules/%)
+CLEAN_FILES += $(REPO_DEPS)

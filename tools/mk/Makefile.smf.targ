@@ -1,0 +1,29 @@
+# -*- mode: makefile -*-
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+#
+# Copyright (c) 2014, Joyent, Inc.
+#
+
+#
+# Makefile.smf.targ: see Makefile.smf.defs.
+#
+# NOTE: This makefile comes from the "eng" repo. It's designed to be dropped
+# into other repos as-is without requiring any modifications. If you find
+# yourself changing this file, you should instead update the original copy in
+# eng.git and then update your repo to use the new version.
+#
+.PHONY: check-manifests
+check-manifests: $(SMF_MANIFESTS:%=%.smfchk)
+
+%.smfchk: %
+	$(XMLLINT) --path $(dir $(SMF_DTD)) --dtdvalid $(SMF_DTD) $^
+
+check:: check-manifests
+
+$(SMF_MANIFESTS): %: %.in
+	$(SED) -e 's#@@NODE@@#@@PREFIX@@/$(NODE_INSTALL)/bin/node#' $< > $@
