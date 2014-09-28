@@ -8,7 +8,7 @@
     Copyright (c) 2014, Joyent, Inc.
 -->
 
-# Joyent SmartDataCenter
+# SmartDataCenter
 
 SmartDataCenter (SDC) is an open-source cloud computing software platform. It is
 a complete system for creating and operating a secure, scalable, and robust
@@ -156,13 +156,42 @@ See [CoaL Setup](./docs/developer-guide/coal-setup.md) for a thorough walkthroug
 
 7. Configure the headnode. The setup process, in short, is as follows:
     - On first boot, you are interactively prompted for minimal configuration
-      (e.g. datacenter name, company name, networking information). The
-      configuration is saved and the server reboots.
+      (e.g. datacenter name, company name, networking information). Here
+      is a guide for answering these questions:
+
+      | Setting | Value | Notes |
+      | ---- | ---- | ---- |
+      | Company Name | Joyent, Inc. | *Can substitute with your choice* |
+      | Region of Datacenter | west | *Can substitute with your choice* |
+      | Name of Datacenter | coal | *Can substitute with your choice* |
+      | Location of Datacenter | San Francisco, CA | *Can substitute with your choice* |
+      | 'admin' interface | 2 | *The second NIC is set up as the admin network by the COAL networking script* |
+      | (admin) headnode IP address | 10.99.99.7 | *Must use this value* |
+      | (admin) headnode netmask: | ↵ | *Use Default* |
+      | (admin) Zone's starting IP address: | ↵ | *Use Default* |
+      | Add external network now? (Y/n) | Y | *Must use this value* |
+      | 'external' interface | 1 | *The first NIC is set up as the external network by the COAL networking script* |
+      | (external) headnode IP address | 10.88.88.200 | *Must use this value* |
+      | (external) headnode netmask: | ↵ | *Use Default* |
+      | (external) gateway IP address: | 10.88.88.2 | *Must use this value* |
+      | (external) network VLAN ID | ↵ | *Use Default, the external network is not on a VLAN in COAL* |
+      | Starting Provisionable IP address for external Network | ↵ | *Use Default or 10.88.88.20* |
+      | Ending Provisionable IP address for external Network | ↵ | *Use Default or 10.88.88.254* |
+      | Default gateway IP address | ↵ | *Use Default* |
+      | Primary DNS Server | ↵ | *Use Default* |
+      | Secondary DNS Server | ↵ | *Use Default* |
+      | Head node domain name | joyent.us | *Can substitute with your choice* |
+      | DNS Search Domain | joyent.us | *Can substitute with your choice* |
+      | NTP Server IP Address | ↵ | *Use Default* |
+      | root password | root | *Can substitute with your choice* |
+      | admin password | joypass123 | *Can substitute with your choice* |
+      | Administrator's email | ↵ | *Use Default* |
+      | Support email | ↵ | *Use Default* |
+
+      The configuration is saved and the server reboots. 
+
     - On reboot, all SDC services are installed. Expect this to take around
       15-20 minutes.
-
-   See [CoaL Setup](./docs/developer-guide/coal-setup.md) for the recommended
-   prompt responses for new SDC developers or testers.
 
 8. After setup is complete you should be able to SSH into your CoaL on the
    "admin" network. Example:
