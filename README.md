@@ -69,26 +69,6 @@ See [CoaL Setup](./docs/developer-guide/coal-setup.md) for a thorough walkthroug
 
 1. Start the download of the latest CoaL build. The tarball is over 2GB.
 
-   During the private beta, download as follows:
-
-    ```bash
-    # Get the Manta CLI tools (https://github.com/joyent/node-manta).
-    npm install -g manta
-
-    # Setup to use the Manta CLI tools as the 'joyager' user.
-    export MANTA_URL=https://us-east.manta.joyent.com
-    export MANTA_USER=joyager
-    export MANTA_KEY_ID=`ssh-keygen -l -f ~/.ssh/id_rsa.pub | awk '{print $2}' | tr -d '\n'`
-
-    # Find the latest build on the master branch and download it.
-    latest=$(mget -q /joyager/stor/builds/headnode/master-latest)
-    pkg=$(mls $latest/headnode | grep coal-)
-    echo "Downloading $latest/headnode/$pkg"
-    mget -O $latest/headnode/$pkg
-    ```
-
-   When finally public the intention is to have the latest build here:
-
     ```bash
     curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/coal-latest.tgz
     ```
@@ -188,7 +168,7 @@ See [CoaL Setup](./docs/developer-guide/coal-setup.md) for a thorough walkthroug
       | Administrator's email | ↵ | *Use Default* |
       | Support email | ↵ | *Use Default* |
 
-      The configuration is saved and the server reboots. 
+      The configuration is saved and the server reboots.
 
     - On reboot, all SDC services are installed. Expect this to take around
       15-20 minutes.
@@ -234,27 +214,11 @@ the [Joyent Manufacturing Database](http://eng.joyent.com/manufacturing/).
 
 #### USB Key
 
-During the private beta, download as follows:
+Download the USB key image:
 
 ```bash
-# Get the Manta CLI tools (https://github.com/joyent/node-manta).
-npm install -g manta
-
-# Setup to use the Manta CLI tools as the 'joyager' user.
-export MANTA_URL=https://us-east.manta.joyent.com
-export MANTA_USER=joyager
-export MANTA_KEY_ID=`ssh-keygen -l -f ~/.ssh/id_rsa.pub | awk '{print $2}' | tr -d '\n'`
-
-# Find the latest build on the master branch and download it.
-latest=$(mget -q /joyager/stor/builds/headnode/master-latest)
-pkg=$(mls $latest/headnode | grep usb-)
-echo "Downloading $latest/headnode/$pkg"
-mget -O $latest/headnode/$pkg
+curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/usb-latest.tgz
 ```
-
-When finally public the intention is to have the latest build here:
-
-    curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/usb-latest.tgz
 
 #### Install
 
