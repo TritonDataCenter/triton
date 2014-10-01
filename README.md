@@ -346,7 +346,7 @@ The goals behind the design of SDC services include:
 SmartDataCenter uses [SmartOS](https://smartos.org) as the host OS. The SmartOS
 hypervisor provides both SmartOS zone (container) and KVM virtualization.
 
-Joyent's open-source [Manta project](https://github.com/joyent/manta]
+Joyent's open-source [Manta project](https://github.com/joyent/manta)
 is an HTTP-based object store with built-in support to run arbitrary
 programs on data at rest (i.e., without copying data out of the object store).
 Manta runs on and integrates with SmartDataCenter.
