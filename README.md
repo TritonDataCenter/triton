@@ -74,7 +74,7 @@ See [CoaL Setup](./docs/developer-guide/coal-setup.md) for a thorough walkthroug
     ```
 
 2. Install VMware, if you haven't already.
-    - Mac: [VMware Fusion](http://www.vmware.com/products/fusion) 5 or later.
+    - Mac: [VMware Fusion](http://www.vmware.com/products/fusion) 4, 5 or 7.
     - Windows or Linux: [VMware Workstation](http://www.vmware.com/products/workstation).
 
 3. Configure VMware virtual networks for CoaL's "external" and "admin"
@@ -82,14 +82,18 @@ See [CoaL Setup](./docs/developer-guide/coal-setup.md) for a thorough walkthroug
 
     1. Launch VMware at least once after installing VMware.
 
-    2. Download and run the following setup script from this repository.
+    2. Download and run the following setup script from this repository to
+       configure VMware's networking.
+
+       TODO: once repo is public add `curl tools/coal-mac-vmware-setup` command
+       to Mac section.
 
          - Mac: download
-           [./tools/coal-mac-vmware-setup](https://github.com/joyent/sdc/raw/master/tools/coal-mac-vmware-setup).
-           Make this shell script executable and run as root:
+           [./tools/coal-mac-vmware-setup](https://github.com/joyent/sdc/raw/master/tools/coal-mac-vmware-setup)
+           and run as an administrator.
 
              ```bash
-             chmod 744 coal-mac-vmware-setup; sudo ./coal-mac-vmware-setup
+             sudo bash coal-mac-vmware-setup
              ```
 
          - Linux: not yet written.
