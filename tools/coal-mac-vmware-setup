@@ -44,6 +44,13 @@ if [ -e "/Applications/VMware Fusion.app/Contents/Library/services.sh" ]; then
     FUSION4=true
 fi
 
+# Detect if Fusion 7 is installed
+if [ -e "/Applications/VMware Fusion.app/Contents/Library/vmrun" ]; then
+    BIN_DIR="/Applications/VMware Fusion.app/Contents/Library"
+    SETTINGS_DIR="/Library/Preferences/VMware Fusion"
+    FUSION7=true
+fi
+
 ## Networks ##
 # The admin "host-only" network - vmnet1 (only between the Mac and the headnode)
 ADMIN_NETWORK=10.99.99.0
@@ -67,10 +74,8 @@ if [ "$VM_LIST" != "Total running VMs: 0" ] ; then
     exit 1
 fi
 
-
 echo "Setup VMWare networking: admin network $ADMIN_NETWORK, external network $EXTERNAL_NETWORK"
 cat networking | (grep -ve 'VNET_[18]' || true) > $NET_TMP
-cat locations | (grep -ve 'VNET_[18]' || true) > $LOCATIONS_TMP
 
 cat >> $NET_TMP <<__NETWORKING__
 answer VNET_1_DHCP no
@@ -88,6 +93,8 @@ answer VNET_8_VIRTUAL_ADAPTER yes
 answer VNET_8_VIRTUAL_ADAPTER_ADDR $EXTERNAL_MAC_IP
 __NETWORKING__
 
+if [ -e locations ]; then
+    cat locations | (grep -ve 'VNET_[18]' || true) > $LOCATIONS_TMP
 cat >> $LOCATIONS_TMP <<__LOCATIONS__
 remove_answer VNET_1_HOSTONLY_HOSTADDR
 remove_answer VNET_1_HOSTONLY_NETMASK
@@ -105,21 +112,31 @@ remove_answer VNET_8_DHCP
 answer VNET_8_DHCP yes
 __LOCATIONS__
 
+echo Changing VMware locations settings...
+
+cp locations locations.pre_coal
+
+echo Old locations settings backed up to the following files:
+echo     $SETTINGS_DIR/locations.pre_coal
+
+mv $LOCATIONS_TMP locations
+fi
+
 echo Changing VMware networking settings...
 
 cp networking networking.pre_coal
-cp locations locations.pre_coal
-echo Old settings backed up to the following files:
+
+echo Old networking settings backed up to the following files:
 echo     $SETTINGS_DIR/networking.pre_coal
-echo     $SETTINGS_DIR/locations.pre_coal
 
 mv $NET_TMP networking
-mv $LOCATIONS_TMP locations
 
 echo Restarting VMware services...
 if [ -n "$FUSION4" ]; then
     "$BIN_DIR/services.sh" --stop
     "$BIN_DIR/services.sh" --start
+elif [ -n "FUSION7" ]; then
+    echo "Restart Fusion after this script finishes!"
 else
     "$BIN_DIR/boot.sh" --restart
 fi
