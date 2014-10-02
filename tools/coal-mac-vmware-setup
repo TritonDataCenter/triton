@@ -38,14 +38,14 @@ NET_TMP=/tmp/coal.networking.$$
 LOCATIONS_TMP=/tmp/coal.locations.$$
 
 # Detect if Fusion 4 is installed
-if [ -e "/Applications/VMware Fusion.app/Contents/Library/services.sh" ]; then
+if [[ -e "/Applications/VMware Fusion.app/Contents/Library/services.sh" ]]; then
     BIN_DIR="/Applications/VMware Fusion.app/Contents/Library"
     SETTINGS_DIR="/Library/Preferences/VMware Fusion"
     FUSION4=true
 fi
 
 # Detect if Fusion 7 is installed
-if [ -e "/Applications/VMware Fusion.app/Contents/Library/vmrun" ]; then
+if [[ -e "/Applications/VMware Fusion.app/Contents/Library/vmrun" ]]; then
     BIN_DIR="/Applications/VMware Fusion.app/Contents/Library"
     SETTINGS_DIR="/Library/Preferences/VMware Fusion"
     FUSION7=true
@@ -69,7 +69,7 @@ echo "External network: network=\"${EXTERNAL_NETWORK}\", mac ip=\"${EXTERNAL_MAC
 cd "$SETTINGS_DIR"
 
 VM_LIST=$("$BIN_DIR/vmrun" list)
-if [ "$VM_LIST" != "Total running VMs: 0" ] ; then
+if [[ "$VM_LIST" != "Total running VMs: 0" ]]; then
     echo You have Virtual Machines running.  Please shut them down before continuing.
     exit 1
 fi
@@ -93,7 +93,7 @@ answer VNET_8_VIRTUAL_ADAPTER yes
 answer VNET_8_VIRTUAL_ADAPTER_ADDR $EXTERNAL_MAC_IP
 __NETWORKING__
 
-if [ -e locations ]; then
+if [[ -e locations ]]; then
     cat locations | (grep -ve 'VNET_[18]' || true) > $LOCATIONS_TMP
 cat >> $LOCATIONS_TMP <<__LOCATIONS__
 remove_answer VNET_1_HOSTONLY_HOSTADDR
@@ -132,10 +132,10 @@ echo     $SETTINGS_DIR/networking.pre_coal
 mv $NET_TMP networking
 
 echo Restarting VMware services...
-if [ -n "$FUSION4" ]; then
+if [[ -n "$FUSION4" ]]; then
     "$BIN_DIR/services.sh" --stop
     "$BIN_DIR/services.sh" --start
-elif [ -n "FUSION7" ]; then
+elif [[ -n "$FUSION7" ]]; then
     echo "Restart Fusion after this script finishes!"
 else
     "$BIN_DIR/boot.sh" --restart
