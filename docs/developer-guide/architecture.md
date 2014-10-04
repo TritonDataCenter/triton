@@ -183,7 +183,7 @@ Principles 2, 5, 6, 7, 8, 10 and 12.
 
 SDC software is implemented in **C** and Joyent's own **Node.js**. 
 
-SmartOS kernel modifications (e.g. KVM support) and some utilities (e.g. `hyprlofs`) are written in C. 
+SmartOS kernel modifications (e.g. KVM support) and some utilities (e.g. `hyperlofs`) are written in C. 
 SDC APIs and services make extensive use of Node.js
 
 Node.js is a runtime JavaScript engine built on the Google's portable, high performance, open source 
