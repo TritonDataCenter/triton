@@ -9,7 +9,7 @@ IaaS datacenter facilities:
 
 - Secure, multi-tenant, type 1 hypervisor-based, guest OS virtual machines,
   within containers.   
-**KVM in Zones** - including Linux, Windows FreeBSD guest OSes.
+**KVM in Zones** - including Linux, Windows, and FreeBSD guest OSes.
 
 - Secure, multi-tenant, durable object store with container-based 
   *in-situ* Map/Reduce Unix compute facility.   
