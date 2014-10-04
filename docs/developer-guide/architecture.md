@@ -1,6 +1,6 @@
 #SDC Architecture
 
-Joyent's SmartDataCenter (SDC) is a a software system engineered to for deploying massively scalable, 
+Joyent's SmartDataCenter (SDC) is a software system engineered for deploying massively scalable, 
 high-performance cloud computing datacenter services, implementing three key end-user accessible 
 IaaS datacenter facilities: 
 
