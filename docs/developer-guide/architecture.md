@@ -19,7 +19,7 @@ IaaS datacenter facilities:
 SDC is implemented with choices based on principles that some may find opinionated. These principles are based 
 on Joyent's extensive experience in operating a large public cloud service, and from selling and supporting SDC. 
 
-The open source release of SDC is seventh version of our cloud software (SDC7). The SDC implementation you see 
+The open source release of SDC is the seventh version of our cloud software (SDC7). The SDC implementation you see 
 today evolved from implementation details and experiments in previous versions. From this history, we can 
 articulate some of the key architectural principles in practice.
 
