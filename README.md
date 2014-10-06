@@ -106,12 +106,12 @@ See [CoaL Setup](./docs/developer-guide/coal-setup.md) for a thorough walkthroug
 
         ```bash
         $ tar xvzf coal-latest.tgz
-        x root.password.20140911t161518z
-        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/
-        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmx
-        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/zpool.vmdk
-        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmdk
-        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/4gb.img
+        x root.password.20140926t231701z
+        x coal-release-20140918-20140927T030204Z-gec168e5-4gb.vmwarevm/
+        x coal-release-20140918-20140927T030204Z-gec168e5-4gb.vmwarevm/zpool.vmdk
+        x coal-release-20140918-20140927T030204Z-gec168e5-4gb.vmwarevm/USB-headnode.vmxf
+        x coal-release-20140918-20140927T030204Z-gec168e5-4gb.vmwarevm/USB-headnode.vmsd
+        x coal-release-20140918-20140927T030204Z-gec168e5-4gb.vmwarevm/4gb.img
         ...
         ```
 
