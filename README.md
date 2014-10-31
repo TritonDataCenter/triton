@@ -292,7 +292,7 @@ support](https://help.joyent.com/home) instead.
 
 SDC repositories follow the
 [Joyent Engineering
-Guidelines](https://github.com/joyent/eng/blob/master/docs/index.restdown).
+Guidelines](https://github.com/joyent/eng/blob/master/docs/index.md).
 Notably:
 
 * The #master branch should be first-customer-ship (FCS) quality at all times.
