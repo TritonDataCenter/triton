@@ -5,7 +5,8 @@
  * we assume you have npm/node installed on your workstation
  * we assume you have git installed on your workstation
  * we assume you have json (npm install -g json) installed on your workstation
- * we assume you understand the basics of SDC, if not see: XXX (insert link)
+ * we assume you understand the basics of SDC, if not please start with [the
+   SmartDataCenter README](https://github.com/joyent/sdc#readme)
  * we assume you have your SSH keys loaded in your ssh-agent when connecting
    to build zones via SSH.
 
@@ -345,9 +346,6 @@ where:
    already)
 
 ## Building
-
-XXX: at release "joyager" will change to "Joyent_Dev" and builds will come from
-/public/builds instead of /stor/builds
 
 The following commands should be run in the MG directory in the appropriate
 build zone for the target you're building. They should also be run with all the

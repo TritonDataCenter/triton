@@ -1,12 +1,13 @@
 # The SmartDataCenter Glossary
 
 This glossary vocabulary and terminology used to talk about features and
-aspects of SmartDataCenter.
+aspects of SmartDataCenter (SDC).
 
 ### adminui
 
-The repository and internal SDC service name for the operator portal is
-"adminui". See [Operator Portal](#operator-portal).
+The [repository](https://github.com/joyent/sdc-adminui) and SDC
+core service name for the operator portal is "adminui". See [Operator
+Portal](#operator-portal).
 
 ### Agent
 
@@ -26,22 +27,44 @@ At the time of this writing, SDC is moving to having all GZ agents (the former
 type) be managed as "SAPI services" of type "agent" -- see the
 [Service](#service) section below.
 
-
 ### CN
 
 See [compute node](#compute-node).
 
 ### CoaL
 
-TODO
+"Cloud on a Laptop" is a VMware virtual appliance providing a full SDC headnode
+for development and testing. See [the
+README](https://github.com/joyent/sdc#cloud-on-a-laptop-coal) for getting start
+with SDC using a recent CoaL build.
 
 ### Compute Node
 
-TODO
+A node (or physical server) in a SmartDataCenter installation that is not the
+[headnode](#headnode). Compute nodes are where customer VMs are run.
 
 ### Global Zone
 
-TODO
+"Zones" is the term used in SmartOS/Illumos/Solaris and other derivatives to
+refer to operating system-level virtualized containers. See [Wikipedia's
+Solaris Containers article](http://en.wikipedia.org/wiki/Solaris_Containers)
+for a general introduction to zones. The special "global" zone is
+non-virtualized host for all "non-global" zones.
+
+Borrowing from [Jonathan Perkin's post on the SmartOS global
+zone](http://www.perkin.org.uk/posts/smartos-and-the-global-zone.html), two
+key principles in SmartOS' design govern usage of the global zone:
+
+- SmartOS is specifically designed as an OS for running Virtual Machines, not
+  as a general purpose OS.
+- The global zone is effectively a read-only hypervisor, and should only be
+  used for creating and managing Virtual Machines.  Everything else should be
+  performed inside Virtual Machines.
+
+In SmartDataCenter, which runs SmartOS as its OS on every node, the global zone
+is only ever used to run operator-owned infrastructure (agents, SMF services)
+for managing the data center. All customer activity is run in non-global zones.
+
 
 ### GZ
 
@@ -53,11 +76,16 @@ See [headnode](#headnode).
 
 ### headnode
 
-TODO
+The first node (or physical server) setup for a SmartDataCenter installation,
+and the one that houses the initial instances of all SDC services, is the
+"headnode" (or HN for short). Typically the headnode is reserved for SDC and
+operator services, i.e. no customer VMs are run on the headnode. All other
+nodes are referred to as [compute nodes](#compute-node).
 
 ### Operator Portal
 
-TODO
+The Operator Portal (a.k.a. adminui) is the Web UI for administering SmartDataCenter.
+Its repository is [sdc-admin.git](https://github.com/joyent/sdc-adminui).
 
 ### Service
 

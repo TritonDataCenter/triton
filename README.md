@@ -58,7 +58,7 @@ for an overview of each component.
 
 An easy way to try SmartDataCenter is by downloading a Cloud on a Laptop
 (CoaL) build. This is a VMware virtual appliance providing a
-full SDC headnode development and testing.
+full SDC headnode for development and testing.
 
 Minimum requirements: practically speaking, a good CoaL experience
 requires a **Mac** with at least **16GB** RAM and **SSD** drives. Currently, all
