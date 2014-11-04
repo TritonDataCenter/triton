@@ -46,9 +46,14 @@ components:
 - A set of private APIs.
 - Agents running in the global zone of CNs for management and monitoring.
 
-See the [overview of SDC](https://docs.joyent.com/sdc7/overview-of-smartdatacenter-7)
-in the SDC operator documentation for more details. See the [SmartDataCenter
-Reference](./docs/reference.md) for an overview of each component.
+For more details, see:
+
+- The [overview of SDC](https://docs.joyent.com/sdc7/overview-of-smartdatacenter-7)
+  in the SDC operator documentation.
+- [SmartDataCenter Architecture](./docs/developer-guide/architecture.md) for
+  overall architecture.
+- [SmartDataCenter Reference](./docs/reference.md) for an
+  overview of each component.
 
 
 ## Getting Started
@@ -198,10 +203,11 @@ To install SDC, first obtain the latest release USB build.
 #### Hardware
 
 For SDC development only, the minimum server hardware is:
-* 8 GB USB flash drive
-* Intel Processors with VT-x and EPT support (all Xeon since Nehalem).
-* 16 GB RAM
-* 6 GB available storage. Hardware RAID is not recommended.
+
+- 8 GB USB flash drive
+- Intel Processors with VT-x and EPT support (all Xeon since Nehalem).
+- 16 GB RAM
+- 6 GB available storage. Hardware RAID is not recommended.
   SDC will lay down a ZFS ZPOOL across all available disks on install.
   You'll want much more storage if you're working with images and instances.
 
@@ -234,9 +240,9 @@ After installation, you will probably want to perform some
 [additional configuration](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration).
 The most common of these include:
 
-* [Adding external nics to the imgapi and adminui zones](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration#AddingExternalNICstoHeadNodeVMs)
+- [Adding external nics to the imgapi and adminui zones](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration#AddingExternalNICstoHeadNodeVMs)
   to give them internet access. This enables simple import of VM images.
-* [Provision a cloudapi zone](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration#CreatingCloudAPI)
+- [Provision a cloudapi zone](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration#CreatingCloudAPI)
   to allow users to create and administer their VMs without an operator.
 
 See the
@@ -280,7 +286,7 @@ project](https://github.com/joyent/sdc/issues). If you're contributing code,
 make a pull request to the appropriate repo (see [the repo
 overview](./docs/developer-guide/repos.md)). If you're contributing something
 substantial, you should contact developers on the [mailing list](TODO) or
-[IRC](TODO) first.
+**#smartos on freenode** first.
 
 For help or issues with the [Joyent
 Cloud](https://www.joyent.com/products/compute-service) or production [Manta
@@ -292,10 +298,10 @@ SDC repositories follow the
 Guidelines](https://github.com/joyent/eng/blob/master/docs/index.md).
 Notably:
 
-* The #master branch should be first-customer-ship (FCS) quality at all times.
+- The #master branch should be first-customer-ship (FCS) quality at all times.
   Don't push anything until it's tested.
-* All repositories should be `make check` clean at all times.
-* All repositories should have tests that run cleanly at all times.
+- All repositories should be `make check` clean at all times.
+- All repositories should have tests that run cleanly at all times.
 
 `make check` checks both JavaScript style and lint. Style is checked with
 [jsstyle](https://github.com/davepacheco/jsstyle). The specific style rules are
@@ -320,26 +326,29 @@ opinions are the result of many years of deploying and debugging the [Joyent
 Cloud](https://www.joyent.com/products/compute-service). Design principles
 include the following:
 
-* A VM's primary storage should be a local disk, not over the network -- this
+- A VM's primary storage should be a local disk, not over the network -- this
   avoids difficult to debug performance pathologies.
-* Communication between internal APIs should occur in its own control plane
+- Communication between internal APIs should occur in its own control plane
   (network) that is separate from the customer networks. Avoid communicating
   over the open Internet if possible.
-* A provisioned VM should rely as little as possible on SDC services outside of
+- A provisioned VM should rely as little as possible on SDC services outside of
   the operating system for its normal operation.
+- Installation and operation should require as little human intervention as
+  possible.
 
 The goals behind the design of SDC services include:
 
-* All parts of the stack should be observable.
-* The state of the running service should be simple to obtain.
-* The internals of the system should make it straightfoward to debug from a
+- All parts of the stack should be observable.
+- The state of the running service should be simple to obtain.
+- The internals of the system should make it straightfoward to debug from a
   core file (from a crash or taken from a running process using
   [gcore(1)](http://smartos.org/man/1/gcore))
-* Services should be RESTful unless there is a compelling reason otherwise.
-* Services should avoid keeping state and should not assume that there is
+- Services should be RESTful and accept JSON unless there is a compelling
+  reason otherwise.
+- Services should avoid keeping state and should not assume that there is
   only one instance of that service running. This allows multiple instances
   of a service to be provisioned for High Availability.
-* Node.js and C should be used for new services.
+- Node.js and C should be used for new services.
 
 
 ## Dependencies and Related Projects
