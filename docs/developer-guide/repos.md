@@ -1,7 +1,7 @@
 # SmartDataCenter repos
 
 This page holds an overview of the source repositories that make up
-SmartDataCenter (SDC). See also [the reference](./reference.md).
+SmartDataCenter (SDC). See also [the reference](../reference.md).
 
 
 The customer-facing self-service API:

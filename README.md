@@ -47,9 +47,8 @@ components:
 - Agents running in the global zone of CNs for management and monitoring.
 
 See the [overview of SDC](https://docs.joyent.com/sdc7/overview-of-smartdatacenter-7)
-in the SDC operator documentation for more details. See
-the [SmartDataCenter Reference](./docs/developer-guide/reference.md)
-for an overview of each component.
+in the SDC operator documentation for more details. See the [SmartDataCenter
+Reference](./docs/reference.md) for an overview of each component.
 
 
 ## Getting Started
