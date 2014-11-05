@@ -23,7 +23,6 @@ This repo provides documentation for the overall SDC project and pointers to the
 other repositories that make up a complete SDC deployment. See the [repository
 list](./docs/developer-guide/repos.md).
 
-To stay up to date with the project, join the [SDC mailing list](TODO).
 To report bugs or request features, submit issues to the [joyent/sdc
 project](https://github.com/joyent/sdc/issues). 
 For additional resources, you can visit the
