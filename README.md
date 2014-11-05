@@ -63,6 +63,18 @@ For more details, see:
 - [SmartDataCenter Reference](./docs/reference.md) for an
   overview of each component.
 
+## Community
+
+Community discussion about SmartDataCenter happens in two main places:
+
+* The *sdc-discuss* mailing list.  Once you [subscribe to the
+  list](https://www.listbox.com/subscribe/?list_id=247449), you can send mail
+  to the list address: sdc-discuss@lists.smartdatacenter.org.  The mailing list
+  archives are also [available on the
+  web](https://www.listbox.com/member/archive/247449/=now).
+
+* In the *#smartos* IRC channel on the [Freenode IRC
+  network](https://freenode.net/).
 
 ## Getting Started
 
