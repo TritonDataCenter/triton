@@ -192,6 +192,7 @@ See [CoaL Setup](./docs/developer-guide/coal-setup.md) for a thorough walkthroug
       | admin password | joypass123 | *Can substitute with your choice* |
       | Administrator's email | ↵ | *Use Default* |
       | Support email | ↵ | *Use Default* |
+      | Enable telemetry | "true" or "false" | *Can use your choice* |
 
       The configuration is saved and the server reboots.
 

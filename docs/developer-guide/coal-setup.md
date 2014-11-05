@@ -110,6 +110,7 @@ the last step in configuration allows editing the resulting configuration file.
 |Administrator's email|↵|Use the default.|
 |Support email|↵|Use the default.|
 |Confirm password|||
+|Enable telemetry|"true" or "false"|*Can use your choice*|
 |Verify Configuration||See screenshot below.|
 |Verify Configuration Again|||
 
