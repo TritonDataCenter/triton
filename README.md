@@ -10,9 +10,33 @@
 
 # SmartDataCenter
 
-SmartDataCenter (SDC) is an open-source cloud computing software platform. It is
-a complete system for creating and operating a secure, scalable, and robust
-cloud. Features:
+SmartDataCenter (SDC) is an open-source cloud management platform, optimized
+to deliver next generation, container-based, service-oriented infrastructure
+across one or more datacenters.  With an emphasis on ease of installation
+and operation, SDC is proven at scale:  it is the software that runs
+the [Joyent public cloud](https://www.joyent.com/products/compute-service)
+and powers
+numerous [private clouds](https://www.joyent.com/products/private-cloud)
+at some of the world's largest companies.
+
+This repo provides documentation for the overall SDC project and pointers to the
+other repositories that make up a complete SDC deployment. See the [repository
+list](./docs/developer-guide/repos.md).
+
+To stay up to date with the project, join the [SDC mailing list](TODO).
+To report bugs or request features, submit issues to the [joyent/sdc
+project](https://github.com/joyent/sdc/issues). 
+For additional resources, you can visit the
+[Joyent Developer Center](https://www.joyent.com/developers).
+
+## Overview
+
+A SmartDataCenter installation consists of two or more servers. All servers run
+[SmartOS](https://smartos.org). One server acts as the management server, the
+headnode (HN), which houses the initial set of core services that drive SDC. The
+remainder are compute nodes (CNs) which run instances (virtual machines).
+
+SDC features:
 
 - SmartOS zones provides high performance container virtualization. KVM support
   on top of zones means secure full Linux and Windows guest OS support.
@@ -22,23 +46,7 @@ cloud. Features:
   Node.js)
 - Automated USB key installation
 
-SDC is the software that runs Joyent's public cloud and numerous on-premise
-private clouds.
-
-This repo provides documentation for the overall SDC project and pointers to the
-other repositories that make up a complete SDC deployment. See the [repository
-list](./docs/developer-guide/repos.md).
-
-
-## Overview
-
-A SmartDataCenter installation consists of two or more servers. All servers run
-[SmartOS](https://smartos.org). One server acts as the management server, the
-headnode (HN), which houses the initial set of core services that drive SDC. The
-remainder are compute nodes (CNs) which run instances (virtual machines).
-
-SDC is the cloud orchestration software that consists of the following
-components:
+SDC consists of the following components:
 
 - A public API for provisioning and managing instances (virtual machines),
   networks, users, images, etc.
