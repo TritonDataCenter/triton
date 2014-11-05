@@ -360,14 +360,14 @@
     ]
   },
   {
-    "git": "git://github.com/joyent/illumos-joyent.git",
+    "git": "git@github.com:joyent/illumos-joyent.git",
     "desc": "Community developed and maintained version of the OS/Net consolidation",
     "tags": [
       "smartos"
     ]
   },
   {
-    "git": "git://github.com/joyent/illumos-extra.git",
+    "git": "git@github.com:joyent/illumos-extra.git",
     "desc": "Extra non-ON software required for Illumos",
     "tags": [
       "smartos"
