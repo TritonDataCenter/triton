@@ -25,7 +25,7 @@ The following sections explain the diagram in more detail.
 
 ## SmartOS as hypervisor
 
-All systems in SDC use [SmartOS](https://smartos.org) as their hypervisor. This
+All systems in SDC use [SmartOS](http://smartos.org) as their hypervisor. This
 means that most of the [Global Zone](../glossary.md#global-zone)'s operating
 system filesystem is read-only. Notable exceptions to this are `/zones`, where
 VMs are stored, and `/opt`, where agents are installed.

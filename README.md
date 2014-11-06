@@ -31,7 +31,7 @@ For additional resources, you can visit the
 ## Overview
 
 A SmartDataCenter installation consists of two or more servers. All servers run
-[SmartOS](https://smartos.org). One server acts as the management server, the
+[SmartOS](http://smartos.org). One server acts as the management server, the
 headnode (HN), which houses the initial set of core services that drive SDC. The
 remainder are compute nodes (CNs) which run instances (virtual machines).
 
@@ -379,7 +379,7 @@ The goals behind the design of SDC services include:
 
 ## Dependencies and Related Projects
 
-SmartDataCenter uses [SmartOS](https://smartos.org) as the host OS. The SmartOS
+SmartDataCenter uses [SmartOS](http://smartos.org) as the host OS. The SmartOS
 hypervisor provides both SmartOS zone (container) and KVM virtualization.
 
 Joyent's open-source [Manta project](https://github.com/joyent/manta)
