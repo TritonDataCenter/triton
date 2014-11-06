@@ -24,7 +24,7 @@ other repositories that make up a complete SDC deployment. See the [repository
 list](./docs/developer-guide/repos.md).
 
 To report bugs or request features, submit issues to the [joyent/sdc
-project](https://github.com/joyent/sdc/issues). 
+project](https://github.com/joyent/sdc/issues).
 For additional resources, you can visit the
 [Joyent Developer Center](https://www.joyent.com/developers).
 
@@ -309,8 +309,10 @@ project](https://github.com/joyent/sdc/issues). If you're contributing code,
 make a pull request to the appropriate repo (see [the repo
 overview](./docs/developer-guide/repos.md)). If you're contributing something
 substantial, you should first contact developers on the
-[mailing list](https://www.listbox.com/subscribe/?list_id=247449) or
-**#smartos** on the [Freenode IRC network](https://freenode.net).
+[sdc-discuss mailing list](mailto:sdc-discuss@lists.smartdatacenter.org)
+([subscribe](https://www.listbox.com/subscribe/?list_id=247449),
+[archives](http://www.listbox.com/member/archive/247449/=now)) or **#smartos**
+on the [Freenode IRC network](https://freenode.net).
 
 For help or issues with the [Joyent
 Cloud](https://www.joyent.com/products/compute-service) or production [Manta

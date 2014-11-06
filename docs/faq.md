@@ -2,6 +2,13 @@
 
 Frequently asked questions about SmartDataCenter (SDC).
 
+If you have a question, please ask on any of
+[sdc-discuss mailing list](mailto:sdc-discuss@lists.smartdatacenter.org)
+([subscribe](https://www.listbox.com/subscribe/?list_id=247449),
+[archives](http://www.listbox.com/member/archive/247449/=now)),
+**#smartos** on the [Freenode IRC network](https://freenode.net),
+or in a [joyent/sdc issue](https://github.com/joyent/sdc/issues).
+
 
 ## Q: I already have SmartOS on my system; how do I upgrade to SDC?
 
