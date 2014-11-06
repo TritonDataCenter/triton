@@ -26,9 +26,9 @@ The following sections explain the diagram in more detail.
 ## SmartOS as hypervisor
 
 All systems in SDC use [SmartOS](https://smartos.org) as their hypervisor. This
-means that most of the [Global Zone](../glossary.md#agent)'s operating system
-filesystem is read-only. Notable exceptions to this are `/zones`, where VMs are
-stored, and `/opt`, where agents are installed.
+means that most of the [Global Zone](../glossary.md#global-zone)'s operating
+system filesystem is read-only. Notable exceptions to this are `/zones`, where
+VMs are stored, and `/opt`, where agents are installed.
 
 The Global Zone is only ever used to run operator infrastructure. All customer
 activity is run in non-global zones. Non-agent SDC services are run in
@@ -52,13 +52,13 @@ from the headnode.
 ## Agents
 
 SDC communicates with the Compute Nodes through [agents](../glossary.md#agent)
-that run in the [Global Zone](../glossary.md#agent) on each compute node. These
-agents serve a variety of functions including control operations for customer
-VMs, monitoring and log collection. The
+that run in the [Global Zone](../glossary.md#global-zone) on each compute node.
+These agents serve a variety of functions including control operations for
+customer VMs, monitoring and log collection. The
 [ur agent](https://github.com/joyent/sdc-ur-agent) is the initial agent used
 for bootstrapping all other agents.
 
-See the [reference](../reference.md#Agents) for more information about
+See the [reference](../reference.md#agents) for more information about
 agents.
 
 
@@ -78,10 +78,10 @@ endpoints ([Admin UI](https://github.com/joyent/sdc-adminui) and
 [cloudapi](https://github.com/joyent/sdc-cloudapi)) can be configured to listen
 on to avoid giving their users access to the admin network.
 
-Customer networks are separate from the two standard SDC networks - the number
+Customer networks are separate from the two standard SDC networks -- the number
 of them is limited by the number of VLANs.
 
-Compute node Global Zones are not given externally routable IP addresses - only
+Compute node Global Zones are not given externally routable IP addresses -- only
 addresses on the admin network. This is meant to minimize potential intrusion
 points and avoid using public IPs that could be used by customers.  VMs
 provisioned on those compute nodes can still have nics with externally routable
@@ -96,14 +96,14 @@ independently. The services are distributed as virtual machine images. This
 allows the service and its local dependencies to be updated as one unit, and
 allows for simple upgrades and rollbacks.
 
-See the [reference](../reference.md#Services) for more information about
+See the [reference](../reference.md#services) for more information about
 services.
 
 
 ### External facing services
 
 The external facing services are the administrative endpoints for SDC.
-[cloudapi](https://github.com/joyent/sdc-cloudapi) provides an API for
+[CloudAPI](https://github.com/joyent/sdc-cloudapi) provides an API for
 customers to administer their VMs, and
 [Admin UI](https://github.com/joyent/sdc-adminui) provides a web API for
 operators to administer SDC. They both communicate with the internal services
@@ -127,11 +127,11 @@ of the services are REST-based, though notable exceptions include:
 - [sdc](https://github.com/joyent/sdc-sdc): provides CLI tooling and
   miscellaneous administrative services
 
-See the [reference](../reference.md#Services) and
+See the [reference](../reference.md#services) and
 [SDC repositories overview](./repos.md) for information about the individual
 services.
 
-These services are stateless - they rely on the data tier services for
+These services are stateless -- they rely on the data tier services for
 persistence.
 
 ### Data tier services

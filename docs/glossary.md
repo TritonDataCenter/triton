@@ -27,6 +27,8 @@ At the time of this writing, SDC is moving to having all GZ agents (the former
 type) be managed as "SAPI services" of type "agent" -- see the
 [Service](#service) section below.
 
+See the [reference](reference.md#agents) for an overview of agents in SDC.
+
 ### CN
 
 See [compute node](#compute-node).
@@ -122,4 +124,3 @@ There are two common usages of "service" in SDC:
         svcs -x imgapi
         svcadm restart vmapi
         svcadm disable amon-relay
-
