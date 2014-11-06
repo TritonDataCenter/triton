@@ -305,8 +305,9 @@ To report bugs or request features, submit issues to the [joyent/sdc
 project](https://github.com/joyent/sdc/issues). If you're contributing code,
 make a pull request to the appropriate repo (see [the repo
 overview](./docs/developer-guide/repos.md)). If you're contributing something
-substantial, you should contact developers on the [mailing list](TODO) or
-**#smartos on freenode** first.
+substantial, you should first contact developers on the
+[mailing list](https://www.listbox.com/subscribe/?list_id=247449) or
+**#smartos** on the [Freenode IRC network](https://freenode.net).
 
 For help or issues with the [Joyent
 Cloud](https://www.joyent.com/products/compute-service) or production [Manta
