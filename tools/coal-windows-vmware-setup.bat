@@ -19,6 +19,7 @@ if "%errorlevel%" NEQ "0" (
 	goto:EOF
 )
 
+%SYSTEMDRIVE%
 set vmdir="\Program Files (x86)\VMware\VMware Player"
 echo before: %vmdir%
 if exist "\Program Files (x86)\VMware\VMware Workstation" set vmdir="\Program Files (x86)\VMware\VMware Workstation"
