@@ -50,6 +50,11 @@ build:
 $(RAMSEY):
 	$(NPM) install
 
+# A quick hack for convenience of looking at source for all SDC repos.
+# Assumption: you have `json` (npm install -g json).
+.PHONY: clone-all-repos
+clone-all-repos:
+	(mkdir -p build/repos; cd build/repos; json -f ../../etc/repos.json -a git | xargs -n1 git clone)
 
 
 include ./tools/mk/Makefile.deps
