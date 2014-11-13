@@ -24,3 +24,13 @@ ready for provisioning.  Migration of instances from SmartOS to SDC compute
 nodes and between SDC compute nodes may be possible using
 [vmadm(1m)](http://smartos.org/man/1m/vmadm) and ZFS commands but is not a
 supported product feature and is not recommended.
+
+## Q: My compute node failed to setup; how can I find out what went wrong?
+
+A: Find the IP of the compute node from the [Admin
+UI](./glossary.md#adminui). Obtain the compute node root password by
+running `/usbkey/scripts/mount-usb.sh && cat
+/mnt/usbkey/private/root.password.*` on your headnode. Run `bunyan $(svcs
+-L ur)` on the compute node and check
+the output for errors. The relevant output will likely be at the tail.
+
