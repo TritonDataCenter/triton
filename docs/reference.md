@@ -9,7 +9,7 @@ of each. See also the [overview of SDC repositories](./repos.md).
 ## Services
 
 By "Services" here, we mean SAPI services of type "vm". See [the *service*
-section in the glossary](../glossary.md#service) for details.
+section in the glossary](./glossary.md#service) for details.
 
 | Name | Repo | Description |
 | ---- | ---- | ----------- |
@@ -40,7 +40,7 @@ section in the glossary](../glossary.md#service) for details.
 ## Agents
 
 By "Agents" here, we mean all SDC agents as described by the [*agent* section in
-the glossary](../glossary.md#agent). The "Where" column of this table indicates
+the glossary](./glossary.md#agent). The "Where" column of this table indicates
 where an instance of this agent is typically running: "vm" means in SDC core
 VMs, "gz" means in the global zone of SDC servers (both the headnode and
 compute nodes).
