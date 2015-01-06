@@ -108,22 +108,26 @@ See [CoaL Setup](./docs/developer-guide/coal-setup.md) for a thorough walkthroug
 
     1. Launch VMware at least once after installing VMware.
 
-    2. Download and run the following setup script from this repository to
-       configure VMware's networking.
+    2. Run the following to configure VMware's networking.
 
          - Mac:
 
-            ```bash
-            sudo ./tools/coal-mac-vmware-setup
-            ```
+            1. Use the following command to fetch and execute [the network setup script](https://github.com/joyent/sdc/blob/master/tools/coal-mac-vmware-setup):
+
+                ```bash
+                curl -s https://raw.githubusercontent.com/joyent/sdc/master/tools/coal-mac-vmware-setup | sudo bash
+                ```
 
          - Linux: not yet written.
 
          - Windows:
 
-            ```
-            tools\coal-windows-vmware-setup.bat
-            ```
+            1. Download [the script](https://github.com/joyent/sdc/blob/master/tools/coal-windows-vmware-setup.bat) and save it to a local file.
+            1. Execute the script:
+
+                ```
+                tools\coal-windows-vmware-setup.bat
+                ```
 
 4. Unpack the CoaL build that you downloaded in step 1.
     - Mac:
