@@ -117,7 +117,7 @@ echo     $SETTINGS_DIR/networking.pre_coal
 mv $NET_TMP networking
 
 echo Changing vmnet interface permissions...
-groupadd vmnetadm
+groupadd -f vmnetadm
 usermod -a -G vmnetadm $SUDO_USER
 chgrp vmnetadm /dev/vmnet{0,1,8}
 chmod g+rw /dev/vmnet{0,1,8}
