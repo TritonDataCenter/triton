@@ -117,7 +117,11 @@ See [CoaL Setup](./docs/developer-guide/coal-setup.md) for a thorough walkthroug
             sudo ./tools/coal-mac-vmware-setup
             ```
 
-         - Linux: not yet written.
+         - Linux:
+
+            ```bash
+            sudo ./tools/coal-linux-vmware-setup
+            ```
 
          - Windows:
 
