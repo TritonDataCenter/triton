@@ -9,7 +9,7 @@
 # Copyright (c) 2014, Joyent, Inc.
 #
 
-# coal-vmware-setup: sets up VMWare Fusion (on a Mac) so you can use
+# coal-linux-vmware-setup: sets up VMWare (on Linux) so you can use
 # CoaL (Cloud on a Laptop) with it.
 
 if [[ -n "$TRACE" ]]; then
