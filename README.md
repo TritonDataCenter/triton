@@ -8,6 +8,7 @@
     Copyright (c) 2015, Joyent, Inc.
 -->
 
+
 # SmartDataCenter
 
 SmartDataCenter (SDC) is an open-source cloud management platform, optimized
@@ -26,6 +27,7 @@ See the [repository list](./docs/developer-guide/repos.md).
 Report bugs and request features using [GitHub Issues](https://github.com/joyent/sdc/issues).
 For additional resources, you can visit the
 [Joyent Developer Center](https://www.joyent.com/developers).
+
 
 ## Overview
 
@@ -61,6 +63,7 @@ For more details, see:
 - [SmartDataCenter Reference](./docs/reference.md) for an
   overview of each component.
 
+
 ## Community
 
 Community discussion about SmartDataCenter happens in two main places:
@@ -74,6 +77,7 @@ Community discussion about SmartDataCenter happens in two main places:
 You can also follow [@SmartDataCenter](https://twitter.com/SmartDataCenter) on
 Twitter for updates.
 
+
 ## Getting Started
 
 ### Cloud on a Laptop (CoaL)
@@ -85,11 +89,12 @@ full SDC headnode for development and testing.
 The minimum requirements, practically speaking, for a good CoaL experience
 is a **Mac with at least 16 GB RAM and an SSD**. Currently, almost all team
 members using CoaL are on Macs with VMware Fusion. Vmware Workstation for 
-Linux is used by few in the community. VMware Workstation for Windows
+Linux is used by a few in the community. VMware Workstation for Windows
 should work, but has not recently been tested.
 
 See [CoaL Setup](./docs/developer-guide/coal-setup.md) for a thorough
-walkthrough including adding virtualized compute nodes (CNs).
+walkthrough including updating CoaL and enabling provisioning on the
+headnode.
 
 1. Start the download of the latest CoaL build. The tarball is
    approximately 2 GB.
@@ -129,81 +134,93 @@ walkthrough including adding virtualized compute nodes (CNs).
             ```
 
 4. Unpack the CoaL build that you downloaded in step 1.
+
     - Mac:
 
         ```bash
         $ tar xvzf coal-latest.tgz
-        x root.password.20140926t231701z
-        x coal-release-20140918-20140927T030204Z-gec168e5-4gb.vmwarevm/
-        x coal-release-20140918-20140927T030204Z-gec168e5-4gb.vmwarevm/zpool.vmdk
-        x coal-release-20140918-20140927T030204Z-gec168e5-4gb.vmwarevm/USB-headnode.vmxf
-        x coal-release-20140918-20140927T030204Z-gec168e5-4gb.vmwarevm/USB-headnode.vmsd
-        x coal-release-20140918-20140927T030204Z-gec168e5-4gb.vmwarevm/4gb.img
+        x root.password.20140911t161518z
+        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/
+        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmx
+        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/zpool.vmdk
+        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmdk
+        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/4gb.img
         ...
         ```
 
-5. Run CoaL on VMware:
-    - Mac: 'open'ing the folder will start VMware and load the appliance:
+5. Start VMware and load the appliance.
 
-        ```bash
-        open coal-master-<build_id>-<git_sha1_hash>-4gb.vmwarevm
-        ```
+    - Mac: 'open'ing the folder will start VMware and "open and run" the vm:
 
-6. Boot the headnode:
+            open coal-<branch>-<build_date_time>-<git_sha1_hash>-4gb.vmwarevm
 
-    1. When you are prompted with the GRUB menu press the "down" arrow.
+6. Boot the headnode.
 
-    2. Select the "Live 64-bit" option and press 'c' to enter the command
-       line for GRUB. By default, the OS will be redirect the console to
-       be ttyb which is fine for production but needs to be changed for
-       COAL. While in the command line:
+  When you are prompted with the GRUB menu press the "down" arrow.
+
+  1. Select the "Live 64-bit" option and press 'c' to enter the command
+     line for GRUB.
+
+     By default, the OS will redirect the console to ttyb which is fine
+     for production but needs to be changed for CoaL. While in the command line:
 
             grub> variable os_console vga
 
-    3. Press 'ESC' to get back to the GRUB menu.
-       ![CoaL GRUB menu](./docs/img/coal-grub-menu.png)
+  1. Press enter.
 
-    4. Boot "Live 64-bit" by pressing 'enter'.
+  1. Press esc to get back to the GRUB menu.
 
-7. Configure the headnode. The setup process, in short, is as follows:
-    - On first boot, you are interactively prompted for minimal configuration
-      (e.g. datacenter name, company name, networking information). Here
-      is a guide for answering these questions:
+  1. Boot "Live 64-bit" by pressing enter.
 
-      | Setting | Value | Notes |
-      | ---- | ---- | ---- |
-      | Company Name | Joyent, Inc. | *Can substitute with your choice* |
-      | Region of Datacenter | west | *Can substitute with your choice* |
-      | Name of Datacenter | coal | *Can substitute with your choice* |
-      | Location of Datacenter | San Francisco, CA | *Can substitute with your choice* |
-      | 'admin' interface | 2 | *The second NIC is set up as the admin network by the COAL networking script* |
-      | (admin) headnode IP address | 10.99.99.7 | *Must use this value* |
-      | (admin) headnode netmask: | ↵ | *Use Default* |
-      | (admin) Zone's starting IP address: | ↵ | *Use Default* |
-      | Add external network now? (Y/n) | Y | *Must use this value* |
-      | 'external' interface | 1 | *The first NIC is set up as the external network by the COAL networking script* |
-      | (external) headnode IP address | 10.88.88.200 | *Must use this value* |
-      | (external) headnode netmask: | ↵ | *Use Default* |
-      | (external) gateway IP address: | 10.88.88.2 | *Must use this value* |
-      | (external) network VLAN ID | ↵ | *Use Default, the external network is not on a VLAN in COAL* |
-      | Starting Provisionable IP address for external Network | ↵ | *Use Default or 10.88.88.20* |
-      | Ending Provisionable IP address for external Network | ↵ | *Use Default or 10.88.88.254* |
-      | Default gateway IP address | ↵ | *Use Default* |
-      | Primary DNS Server | ↵ | *Use Default* |
-      | Secondary DNS Server | ↵ | *Use Default* |
-      | Head node domain name | joyent.us | *Can substitute with your choice* |
-      | DNS Search Domain | joyent.us | *Can substitute with your choice* |
-      | NTP Server IP Address | ↵ | *Use Default* |
-      | root password | root | *Can substitute with your choice* |
-      | admin password | joypass123 | *Can substitute with your choice* |
-      | Administrator's email | ↵ | *Use Default* |
-      | Support email | ↵ | *Use Default* |
-      | Enable telemetry | "true" or "false" | *Can use your choice* |
+7. Configure the headnode.
 
-      The configuration is saved and the server reboots.
+Use the following table to quickly configuration your CoaL with settings that
+are fine for development.
 
-    - On reboot, all SDC services are installed. Expect this to take around
-      15-20 minutes. This will finish with a "Setup complete" message.
+If you make a mistake while entering the configuration you can restart
+the VMware virtual machine. Also, as the onscreen instructions describe,
+the last step in configuration allows editing the resulting configuration file.
+
+|Setting|Value|Notes|
+|---|---|---|
+|*Instructions*|↵||
+|Company Name|Clavius|*Can substitute with your choice.*|
+|Region of Datacenter|orbit|*Can substitute with your choice.*|
+|Name of Datacenter|coal-1|(Availability zone.) *Can substitute with your choice.* |
+|Location of DataCenter|Moon, Earth|*Can substitute with your choice.*|
+|*Instructions*|↵||
+|'admin' interface|2|The second NIC is set up as the admin network by the CoaL networking script|
+|(admin) headnode IP address|10.99.99.7|Must use this value.|
+|(admin) headnode netmask:|↵|Use the default.|
+|(admin) Zone's starting IP address:|↵|Use the default.|
+|Add external network now? (Y/n)|Y|Must use this value.|
+|'external' interface|1|The first NIC is set up as the external network by the CoaL networking script|
+|(external) headnode IP address|10.88.88.200|Must use this value.|
+|(external) headnode netmask:|↵|Use the default.|
+|(external) gateway IP address:|10.88.88.2|Must use this value.|
+|(external) network VLAN ID|↵|Use default. The external network is not on a VLAN in CoaL|
+|Starting Provisionable IP address for external Network|↵|Use the default.|
+|Ending Provisionable IP address for external Network|↵|Use the default.|
+|Default gateway IP address:|↵|Use the default.|
+|Primary DNS Server|↵|Use the default.|
+|Secondary DNS Server|↵|Use the default.|
+|Head node domain name|example.com|*Can substitute with your choice.*|
+|DNS Search Domain|example.com|*Can substitute with your choice.*|
+|NTP Server IP Address|↵|Use the default.|
+|"root" password|rootpass|*Can substitute with your choice.*|
+|Confirm "root" password|||
+|"admin" password|adminpass1|*Can substitute with your choice.*|
+|Confirm "admin" password|||
+|Administrator's email|↵|Use the default.|
+|Support email|↵|Use the default.|
+|Confirm password|||
+|Enable telemetry|"true" or "false"|*Can use your choice*|
+|Verify Configuration|||
+|Verify Configuration Again|||
+
+- CoaL will now install based on the configuration parameters entered
+  above. Installation has been observed to take up to 20 minutes,
+  particularly if slow laptop HDD.
 
 After setup is complete you should be able to SSH into your CoaL on the
 "admin" network. Example:
@@ -219,7 +236,7 @@ Run `vmadm list` to see a list of current VMs (SmartOS
 its own zone. See [the Joyent customer operator guide](https://docs.joyent.com/sdc7).
 
 As mentioned previously, see [CoaL Setup](./docs/developer-guide/coal-setup.md)
-for a thorough walkthrough including adding virtualized compute nodes (CNs).
+for a thorough walkthrough.
 
 
 ### Installing SDC on a Physical Server
@@ -228,6 +245,7 @@ A SmartDataCenter server runs SmartOS which is a live image. This means that
 it boots from a USB flash drive (key).
 a physical USB key, inserting the key and booting the server from that key.
 To install SDC, first obtain the latest release USB build.
+
 
 #### Hardware
 
@@ -252,6 +270,7 @@ the [Joyent Manufacturing Database](http://eng.joyent.com/manufacturing/).
 
 
 #### Install
+
 To install SDC, first download the latest release image:
 
 ```bash
@@ -312,7 +331,7 @@ for details on building each of the SDC components.
 
 To report bugs or request features, submit issues here on
 GitHub, [joyent/sdc/issues](https://github.com/joyent/sdc/issues).
-If you're contributing code, make a pull request to the appropriate
+If you're contributing code, make pull requests to the appropriate
 repositories (see [the repo overview](./docs/developer-guide/repos.md)).
 If you're contributing something substantial, you should first contact
 developers on the [sdc-discuss mailing list](mailto:sdc-discuss@lists.smartdatacenter.org)
@@ -348,9 +367,9 @@ repo-specific lint rules -- look for "tools/jsl.web.conf" and
 ## Design Principles
 
 SmartDataCenter is very opinionated about how to architect a cloud. These
-opinions are the result of many years of deploying and debugging the [Joyent
-public cloud](https://www.joyent.com/public-cloud). Design principles
-include the following:
+opinions are the result of many years of deploying and debugging
+the [Joyent public cloud](https://www.joyent.com/public-cloud).
+Design principles include the following:
 
 - A VM's primary storage should be local disk, not over the network -- this
   avoids difficult to debug performance pathologies.
