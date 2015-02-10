@@ -290,7 +290,7 @@ The most common of these include:
 
 - [Adding external nics to the imgapi and adminui zones](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration#AddingExternalNICstoHeadNodeVMs)
   to give them internet access. This enables simple import of VM images.
-- [Provision a cloudapi zone](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration#CreatingCloudAPI)
+- [Provision a CloudAPI zone](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration#CreatingCloudAPI)
   to allow users to create and administer their VMs without an operator.
 
 See the
