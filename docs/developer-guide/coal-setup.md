@@ -30,7 +30,7 @@ At a high level the CoaL setup procedure is:
 
 ## Quick Path
 
-### Run CoaL on VMware:
+### Run CoaL on VMware
 
 1. Unpack the CoaL build that you downloaded.
 
@@ -56,16 +56,19 @@ At a high level the CoaL setup procedure is:
 
 1. When you are prompted with the GRUB menu press the "down" arrow.
 
-    1. Select the "Live 64-bit" option and press 'c' to enter the command
-       line for GRUB. By default, the OS will be redirect the console to
-       be ttyb which is fine for production but needs to be changed for
-       CoaL. While in the command line:
+  1. Select the "Live 64-bit" option and press 'c' to enter the command
+     line for GRUB.
+
+     By default, the OS will redirect the console to ttyb which is fine
+     for production but needs to be changed for CoaL. While in the command line:
 
             grub> variable os_console vga
 
-    1. Press ESC to get back to the GRUB menu.
+  1. Press enter.  
 
-    1. Boot "Live 64-bit" by pressing enter.
+  1. Press esc to get back to the GRUB menu.
+
+  1. Boot "Live 64-bit" by pressing enter.
 
 ### Configure the Headnode
 
@@ -75,7 +78,6 @@ are fine for development. The table is followed by screenshots.
 If you make a mistake while entering the configuration you can restart
 the VMware virtual machine. Also, as the onscreen instructions describe,
 the last step in configuration allows editing the resulting configuration file.
-
 
 |Setting|Value|Notes|
 |---|---|---|
@@ -117,9 +119,9 @@ the last step in configuration allows editing the resulting configuration file.
 
 ## Installation
 
-CoaL will now to installed based on the configuration parameters entered above.
- Installation has been observed to take up to 20 minutes particularly
-if slow laptop HDD.
+CoaL will now install based on the configuration parameters entered
+above. Installation has been observed to take up to 20 minutes,
+particularly if slow laptop HDD.
 
 ### Screenshots
 
@@ -127,8 +129,8 @@ if slow laptop HDD.
 
 ![CoaL Grub Boot Menu](../img/coal-grub-menu.png)
 
-- If on boot, it stays just showing a cursor then you might have forgotten
-to see the console (see above):
+- If while booting it stays just showing a cursor then you might have forgotten
+to redirect the console (see above):
 
 ![kvm warning on boot](../img/coal-only-cursor.png)
 
@@ -140,8 +142,8 @@ to see the console (see above):
 
 ![Configuration displayed on console for verification.](../img/coal-verify-configuration.png)
 
-- Mac: you will be prompted to enter your admin password, so that the VM can
-monitor all network traffic. You may receive this popup a few times:
+- On a Mac, you will be prompted to enter your admin password, so that the
+VM can monitor all network traffic. You may receive this popup a few times:
 
 ![Mac system dialog confirming VM can monitor all network traffic.](../img/coal-mac-vm-monitor-all-network-traffic.png)
 
@@ -181,15 +183,15 @@ ssh root@10.99.99.7  # password 'rootpass'
 For just a taste run `svcs` to see running [SMF services](http://wiki.smartos.org/display/DOC/Using+the+Service+Management+Facility).
 Run `vmadm list` to see a list of current VMs (SmartOS
 [zones](http://wiki.smartos.org/display/DOC/Zones)). Each SDC service runs in
-its own zone. See [the SDC operator guide](https://docs.joyent.com/sdc7).
+its own zone. See [the Joyent customer operator guide](https://docs.joyent.com/sdc7).
 
 
 ## Additional Configuration and Services
 
 The base setup of a SmartDataCenter headnode is minimal. In short it is
 everything up to and including the [operator portal](../glossary.md#operator-portal).
-For example, there is no customer public API instance (CloudAPI) and no services
+There is no customer public API instance (CloudAPI) and no services
 have been given access to the "external" network (locked down by default).
-See the [post-installation configuration
+See the [Joyent customer post-installation configuration
 documentation](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration)
 for others and instructions.
