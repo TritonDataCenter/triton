@@ -82,14 +82,14 @@ An easy way to try SmartDataCenter is by downloading a Cloud on a Laptop
 (CoaL) build. This is a VMware virtual appliance providing a
 full SDC headnode for development and testing.
 
-Minimum requirements: practically speaking, a good CoaL experience
-requires a **Mac** with at least **16 GB** RAM and **SSD** drives. Currently, almost
-all team members using CoaL are on Macs with VMware Fusion 5 or 7. There are
-some users of Linux with VMware Workstation. Windows VMware Workstation should work,
-but has not recently been tested.
+The minimum requirements, practically speaking, for a good CoaL experience
+is a **Mac with at least 16 GB RAM and an SSD**. Currently, almost all team
+members using CoaL are on Macs with VMware Fusion. Vmware Workstation for 
+Linux is used by few in the community. VMware Workstation for Windows
+should work, but has not recently been tested.
 
 See [CoaL Setup](./docs/developer-guide/coal-setup.md) for a thorough
-walkthrough including adding a virtualized compute nodes (CNs).
+walkthrough including adding virtualized compute nodes (CNs).
 
 1. Start the download of the latest CoaL build. The tarball is
    approximately 2 GB.
@@ -99,7 +99,7 @@ walkthrough including adding a virtualized compute nodes (CNs).
     ```
 
 2. Install VMware, if you haven't already.
-    - Mac: [VMware Fusion](http://www.vmware.com/products/fusion) 4, 5 or 7.
+    - Mac: [VMware Fusion](http://www.vmware.com/products/fusion) 5 or 7.
     - Windows or Linux: [VMware Workstation](http://www.vmware.com/products/workstation).
 
 3. Configure VMware virtual networks for CoaL's "external" and "admin"
@@ -203,7 +203,7 @@ walkthrough including adding a virtualized compute nodes (CNs).
       The configuration is saved and the server reboots.
 
     - On reboot, all SDC services are installed. Expect this to take around
-      15-20 minutes.
+      15-20 minutes. This will finish with a "Setup complete" message.
 
 After setup is complete you should be able to SSH into your CoaL on the
 "admin" network. Example:
