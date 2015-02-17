@@ -112,25 +112,25 @@ headnode.
 
     1. Launch VMware at least once after installing VMware.
 
-    2. Download and run the following setup script from this repository to
-       configure VMware's networking.
+    2. Run SDC set up script for VMware:
 
          - Mac:
 
             ```bash
-            sudo ./tools/coal-mac-vmware-setup
+            curl -s https://raw.githubusercontent.com/joyent/sdc/master/tools/coal-mac-vmware-setup | sudo bash
             ```
 
          - Linux:
 
             ```bash
-            sudo ./tools/coal-linux-vmware-setup
+            curl -s https://raw.githubusercontent.com/joyent/sdc/master/tools/coal-linux-vmware-setup | sudo bash
             ```
 
          - Windows:
 
             ```
-            tools\coal-windows-vmware-setup.bat
+            Download https://raw.githubusercontent.com/lloydde/sdc-1/readme-little-less/tools/coal-windows-vmware-setup.bat
+            Run coal-windows-vmware-setup.bat
             ```
 
 4. Unpack the CoaL build that you downloaded in step 1.
