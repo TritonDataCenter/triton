@@ -138,7 +138,7 @@ headnode.
     - Mac:
 
         ```bash
-        $ tar xvzf coal-latest.tgz
+        $ tar -zxvf coal-latest.tgz
         x root.password.20140911t161518z
         x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/
         x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmx
