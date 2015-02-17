@@ -14,7 +14,7 @@ CoaL stands for "Cloud on a Laptop". It is a VMware virtual appliance for
 a SmartDataCenter headnode. It's useful for developing and testing
 SmartDataCenter (SDC). This document walks through setting up CoaL.
 
-See [the SDC project README](https://github.com/joyent/sdc#cloud-on-a-laptop-CoaL)
+See the [SDC project README](https://github.com/joyent/sdc#cloud-on-a-laptop-CoaL)
 for the VMware desktop software required and where to download
 a recent CoaL build.
 
@@ -32,12 +32,14 @@ At a high level the CoaL setup procedure is:
 
 ### Run CoaL on VMware
 
-1. Unpack the CoaL build that you downloaded.
+1. Extract the CoaL virtual machine that you downloaded following the steps in
+   the [SDC project README](https://github.com/joyent/sdc#cloud-on-a-laptop-CoaL).
 
-    - Mac:
+
+    - Mac example:
 
         ```bash
-        $ tar xvzf coal-latest.tgz
+        $ tar -zxvf coal-latest.tgz -C ~/Documents/Virtual\ Machines.localized 
         x root.password.20140911t161518z
         x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/
         x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmx
@@ -50,9 +52,12 @@ At a high level the CoaL setup procedure is:
 
 1. Start VMware and load the appliance.
 
-    - Mac: 'open'ing the folder will start VMware and "open and run" the vm:
+    - Mac example: 'open'ing the folder will start VMware and "open and run" the vm:
 
-            open coal-<branch>-<build_date_time>-<git_sha1_hash>-4gb.vmwarevm
+        ```bash
+        cd ~/Documents/Virtual\ Machines.localized
+        open coal-<branch>-<build_date_time>-<git_sha1_hash>-4gb.vmwarevm
+        ```
 
 1. When you are prompted with the GRUB menu press the "down" arrow.
 
