@@ -78,7 +78,8 @@ intention is to eventually reduce that overlap.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| account_allowed_dcs | Boolean | Whether to consider 'allowed_dcs' field on UFDS account entries for cloudapi and sdc-docker in this datacenter. See [DOCKER-166](https://smartos.org/bugview/DOCKER-166). |
+| account_allowed_dcs | Boolean | Whether to consider 'allowed_dcs' field on UFDS account entries for cloudapi and sdc-docker authz in this datacenter. See [DOCKER-166](https://smartos.org/bugview/DOCKER-166). |
+| account_allowed_dcs_msg | String | Optional message to include in the "403 Forbidden" response body due to cloudapi or sdc-docker authz failure due to 'allowed_dcs'. |
 
 
 Example setting a SDC application config var:
