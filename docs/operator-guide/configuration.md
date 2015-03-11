@@ -111,3 +111,4 @@ provides links to the relevant documentation for each.
 | ------- |
 | [cloudapi](https://github.com/joyent/sdc-cloudapi/blob/master/docs/admin.restdown#L40) |
 | [cnapi](https://github.com/joyent/sdc-cnapi/blob/master/docs/index.md#sapi-configuration) |
+| [papi](https://github.com/joyent/sdc-papi/blob/master/docs/index.md#sapi-configuration) |
