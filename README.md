@@ -233,7 +233,7 @@ For just a taste run `svcs` to see running [SMF
 services](http://wiki.smartos.org/display/DOC/Using+the+Service+Management+Facility).
 Run `vmadm list` to see a list of current VMs (SmartOS
 [zones](http://wiki.smartos.org/display/DOC/Zones)). Each SDC service runs in
-its own zone. See [the Joyent customer operator guide](https://docs.joyent.com/sdc7).
+its own zone. See [the Joyent customer documentation](https://docs.joyent.com/sdc7).
 
 As mentioned previously, see [CoaL Setup](./docs/developer-guide/coal-setup.md)
 for a thorough walkthrough.
