@@ -698,4 +698,4 @@ Updated successfully (elapsed 2297s).
 
 ## Additional Operations
 
-See [the Joyent customer operator guide](https://docs.joyent.com/sdc7).
+See [the Joyent customer documentation](https://docs.joyent.com/sdc7).
