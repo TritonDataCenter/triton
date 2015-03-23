@@ -121,7 +121,7 @@ At a high level, setting up CoaL involves:
   1. Boot "Live 64-bit" by pressing enter.
 
      If while booting it stays just showing a cursor then you might have
-     forgotten to redirect the console (see above):
+     forgotten to redirect the console, see instructions above.
 
      ![kvm warning on boot](../img/coal-only-cursor.png)
 
@@ -339,6 +339,15 @@ Configuring CNAPI to allow headnode provisioning and over-provisioning (allow a 
 
 ## Update CoaL
 
+### Set Channel
+
+If this is your first time updating SDC, then you'll want to set the [update channel](../operator-guide/update.md):
+
+    ```bash
+    [root@headnode (coal-1) ~]# sdcadm channel set dev
+    Update channel has been successfully set to: 'dev
+    ```
+
 ### Check Health
 
 1. Confirm the health of CoaL using `sdc-healthcheck`.
@@ -346,26 +355,27 @@ Configuring CNAPI to allow headnode provisioning and over-provisioning (allow a 
 1. Update sdcadm:
 
     ```bash
-[root@headnode (coal-1) ~]# sdcadm --version
-sdcadm 1.4.4 (release-20150205-20150205T060457Z-g7d76790)
-[root@headnode (coal-1) ~]# sdcadm self-update
-Update to sdcadm 1.5.0 (master-20150211T134112Z-gef31015)
-Download update from https://updates.joyent.com
-Run sdcadm installer (log at /var/sdcadm/self-updates/20150217T234531Z/install.log)
-Updated to sdcadm 1.5.0 (master-20150211T134112Z-gef31015, elapsed 7s)
-```
+    [root@headnode (coal-1) ~]# sdcadm --version
+    sdcadm 1.4.4 (release-20150205-20150205T060457Z-g7d76790)
+    [root@headnode (coal-1) ~]# sdcadm self-update
+    Update to sdcadm 1.5.0 (master-20150211T134112Z-gef31015)
+    Download update from https://updates.joyent.com
+    Run sdcadm installer (log at /var/sdcadm/self-updates/20150217T234531Z/install.log)
+    Updated to sdcadm 1.5.0 (master-20150211T134112Z-gef31015, elapsed 7s)
+    ```
+
 1. Confirm the updated sdcadm reports SDC as healthy using `sdcadm check-health`.
 
 ### Back Up SDC's Brain
 
 Take a ZFS snapsnot of the manatee zone and temporarily store on headnode's drive:
 
-```bash
-MANATEE0_UUID=$(vmadm lookup -1 alias=~manatee)
-zfs snapshot zones/$MANATEE0_UUID/data/manatee@backup
-zfs send zones/$MANATEE0_UUID/data/manatee@backup > /var/tmp/manatee-backup.zfs
-zfs destroy zones/$MANATEE0_UUID/data/manatee@backup
-```
+    ```bash
+    MANATEE0_UUID=$(vmadm lookup -1 alias=~manatee)
+    zfs snapshot zones/$MANATEE0_UUID/data/manatee@backup
+    zfs send zones/$MANATEE0_UUID/data/manatee@backup > /var/tmp/manatee-backup.zfs
+    zfs destroy zones/$MANATEE0_UUID/data/manatee@backup
+    ```
 
 ### Update
 
