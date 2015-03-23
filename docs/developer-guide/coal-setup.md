@@ -18,10 +18,11 @@ SmartDataCenter (SDC). This document walks through setting up CoaL.
            production deployments.**
 
 The minimum requirements, practically speaking, for a good CoaL experience
-is a **Mac with at least 16 GB RAM and an SSD**. Currently, almost all team
-members using CoaL are on Macs with VMware Fusion. Vmware Workstation for
-Linux is used by a few in the community. VMware Workstation for Windows
-should work, but has not recently been tested.
+is a **Mac with at least 16 GB RAM and an SSD with at least 45 GB disk 
+available**. Currently, almost all team members using CoaL are on Macs
+with VMware Fusion. Vmware Workstation for Linux is used by a few in
+the community. VMware Workstation for Windows should work, but has not recently
+been tested.
 
 At a high level, setting up CoaL involves:
 
@@ -72,7 +73,6 @@ At a high level, setting up CoaL involves:
             Run coal-windows-vmware-setup.bat
             ```
 
-
 1. Extract the CoaL virtual machine:
 
     - Mac example:
@@ -88,16 +88,16 @@ At a high level, setting up CoaL involves:
         ...
         ```
 
-
 1. Set memory and run.
 
     - Mac example:
 
-		1. Launch VMware Fusion
-		2. File > Open... `coal-<branch>-<build_date_time>-<git_sha1_hash>-4gb.vmwarevm`
+        1. Launch VMware Fusion
+        2. File > Open... `coal-<branch>-<build_date_time>-<git_sha1_hash>-4gb.vmwarevm`
         3. Virtual Machine > Settings
         4. Processes & Memory > set memory to 8192 MB or greater. Be sure to 
            leave Mac OS X with at least 8 GB.
+        
 
 1. When you are prompted with the GRUB menu press the down arrow.
 
