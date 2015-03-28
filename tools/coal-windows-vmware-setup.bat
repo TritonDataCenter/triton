@@ -6,7 +6,7 @@ rem # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 rem #
 
 rem #
-rem # Copyright (c) 2014, Joyent, Inc.
+rem # Copyright (c) 2015, Joyent, Inc.
 rem #
 
 rem coal-vmware-setup.bat: sets up VMWare Workstation / Player
@@ -23,6 +23,7 @@ if "%errorlevel%" NEQ "0" (
 set vmdir="\Program Files (x86)\VMware\VMware Player"
 echo before: %vmdir%
 if exist "\Program Files (x86)\VMware\VMware Workstation" set vmdir="\Program Files (x86)\VMware\VMware Workstation"
+if exist "\Program Files (x86)\VMware\Workstation" set vmdir="\Program Files (x86)\VMware\Workstation"
 echo after: %vmdir%
 
 cd %vmdir%
