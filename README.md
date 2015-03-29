@@ -129,7 +129,7 @@ headnode.
          - Windows:
 
             ```
-            Download https://raw.githubusercontent.com/lloydde/sdc-1/readme-little-less/tools/coal-windows-vmware-setup.bat
+            Download https://raw.githubusercontent.com/joyent/sdc/master/tools/coal-windows-vmware-setup.bat
             Run coal-windows-vmware-setup.bat
             ```
 
