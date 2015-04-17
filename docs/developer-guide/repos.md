@@ -52,9 +52,8 @@ Infrastructure zones (VM instances) provide other essential services:
 * [mahi](https://github.com/joyent/mahi): Authentication cache
 * [sdc-rabbitmq](https://github.com/joyent/sdc-rabbitmq): RabbitMQ zone for SDC.
 * [sdc-redis](https://github.com/joyent/sdc-redis): SDC &quot;redis&quot; core zone.
-* [sdc-zookeeper](https://github.com/joyent/sdc-zookeeper): Zookeeper service for SDC
 * [muppet](https://github.com/joyent/muppet): Loadbalancer for Manta and SmartDataCenter
-* [zookeeper-common](https://github.com/joyent/zookeeper-common): Common submodule of the sdc-zookeeper and binder zones, to reduce drift in ZK
+* [zookeeper-common](https://github.com/joyent/zookeeper-common): Common submodule of the sdc-zookeeper (deprecated) and binder zones, to reduce drift in ZK
 * [keyapi](https://github.com/joyent/keyapi): SmartDataCenter token API
 
 

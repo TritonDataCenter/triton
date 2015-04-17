@@ -26,7 +26,7 @@ Use the `sdcadm channel ...` command to list and set your channel:
 
 
     [root@headnode (coal) ~]# sdcadm channel set release
-    Update channel has been successfully set to: 'release
+    Update channel has been successfully set to: 'release'
 
     [root@headnode (coal) ~]# sdcadm channel list
     NAME          DEFAULT  DESCRIPTION
