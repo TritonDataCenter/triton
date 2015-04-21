@@ -14,11 +14,11 @@ CoaL stands for "Cloud on a Laptop". It is a VMware virtual appliance for
 a SmartDataCenter headnode. It's useful for developing and testing
 SmartDataCenter (SDC). This document walks through setting up CoaL.
 
-**WARNING: these steps and command options are not appropriate for 
+**WARNING: these steps and command options are not appropriate for
            production deployments.**
 
 The minimum requirements, practically speaking, for a good CoaL experience
-is a **Mac with at least 16 GB RAM and an SSD with at least 45 GB disk 
+is a **Mac with at least 16 GB RAM and an SSD with at least 45 GB disk
 available**. Currently, almost all team members using CoaL are on Macs
 with VMware Fusion. Vmware Workstation for Linux is used by a few in
 the community. VMware Workstation for Windows should work, but has not recently
@@ -95,9 +95,9 @@ At a high level, setting up CoaL involves:
         1. Launch VMware Fusion
         2. File > Open... `coal-<branch>-<build_date_time>-<git_sha1_hash>-4gb.vmwarevm`
         3. Virtual Machine > Settings
-        4. Processes & Memory > set memory to 8192 MB or greater. Be sure to 
+        4. Processes & Memory > set memory to 8192 MB or greater. Be sure to
            leave Mac OS X with at least 8 GB.
-        
+
 
 1. When you are prompted with the GRUB menu press the down arrow.
 
@@ -351,6 +351,8 @@ Update channel has been successfully set to: 'dev'
 ### Check Health
 
 1. Confirm the health of CoaL using `sdc-healthcheck`.
+
+### Self Update
 
 1. Update sdcadm:
 
