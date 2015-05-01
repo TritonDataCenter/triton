@@ -17,8 +17,8 @@ across one or more data centers. With an emphasis on ease of installation
 and operation, SDC is proven at scale: it is the software that runs
 the [Joyent public cloud](https://www.joyent.com/public-cloud)
 and powers
-numerous [private clouds](https://www.joyent.com/products/private-cloud)
-at some of the world's largest companies.
+[private clouds](https://www.joyent.com/products/private-cloud)
+at organizations of all size and industry.
 
 This repository provides documentation for the overall SDC project and
 pointers to the other repositories that make up a complete SDC deployment.
