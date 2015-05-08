@@ -133,7 +133,7 @@ At a high level, setting up CoaL involves:
 
 ### Configure the Headnode
 
-Use the following table to quickly configuration your CoaL with settings that
+Use the following table to configure your CoaL with settings that
 are fine for development. The table is followed by screenshots.
 
 If you make a mistake while entering the configuration you can restart

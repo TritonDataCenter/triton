@@ -174,7 +174,7 @@ headnode.
 
 7. Configure the headnode.
 
-Use the following table to quickly configuration your CoaL with settings that
+Use the following table to configure your CoaL with settings that
 are fine for development.
 
 If you make a mistake while entering the configuration you can restart
