@@ -10,19 +10,19 @@
 
 # Set Up CoaL
 
-CoaL stands for "Cloud on a Laptop". It is a VMware virtual appliance for
-a SmartDataCenter headnode. It's useful for developing and testing
+CoaL stands for "Cloud on a Laptop". It is a VMware virtual appliance
+for a SmartDataCenter headnode. It's useful for developing and testing
 SmartDataCenter (SDC). This document walks through setting up CoaL.
 
 **WARNING: these steps and command options are not appropriate for
-           production deployments.**
+production deployments.**
 
-The minimum requirements, practically speaking, for a good CoaL experience
-is a **Mac with at least 16 GB RAM and an SSD with at least 45 GB disk
-available**. Currently, almost all team members using CoaL are on Macs
-with VMware Fusion. Vmware Workstation for Linux is used by a few in
-the community. VMware Workstation for Windows should work, but has not recently
-been tested.
+The minimum requirements, practically speaking, for a good CoaL
+experience is a **Mac with at least 16 GB RAM and an SSD with at least
+45 GB disk available**. Currently, almost all team members using CoaL
+are on Macs with VMware Fusion. Vmware Workstation for Linux is used by
+a few in the community. VMware Workstation for Windows should work, but
+has not recently been tested.
 
 At a high level, setting up CoaL involves:
 
@@ -133,12 +133,13 @@ At a high level, setting up CoaL involves:
 
 ### Configure the Headnode
 
-Use the following table to configure your CoaL with settings that
-are fine for development. The table is followed by screenshots.
+Use the following table to configure your CoaL with settings that are
+fine for development. The table is followed by screenshots.
 
 If you make a mistake while entering the configuration you can restart
 the VMware virtual machine. Also, as the onscreen instructions describe,
-the last step in configuration allows editing the resulting configuration file.
+the last step in configuration allows editing the resulting
+configuration file.
 
 |Setting|Value|Notes|
 |---|---|---|
@@ -189,7 +190,8 @@ particularly if installing on a laptop hard disk drive. It is not
 complete **until you see "Setup complete"**.
 
 On a Mac, you will be prompted to enter your admin password, so that the
-VM can monitor all network traffic. You may receive this popup a few times:
+VM can monitor all network traffic. You may receive this popup a few
+times:
 
 ![Mac system dialog confirming VM can monitor all network traffic.](../img/coal-mac-vm-monitor-all-network-traffic.png)
 
@@ -220,8 +222,8 @@ Finally, you'll see "Setup complete":
 
 ### Root Access
 
-After setup is complete you should be able to ssh into your CoaL
-using the admin network headnode IP address you configured.
+After setup is complete you should be able to ssh into your CoaL using
+the admin network headnode IP address you configured.
 
 ```bash
 ssh root@10.88.88.200  # password 'rootpass'
@@ -341,7 +343,8 @@ Configuring CNAPI to allow headnode provisioning and over-provisioning (allow a 
 
 ### Set Channel
 
-If this is your first time updating SDC, then you'll want to set the [update channel](../operator-guide/update.md):
+If this is your first time updating CoaL, then you'll want to set the [update
+channel](../operator-guide/update.md):
 
 ```bash
 [root@headnode (coal-1) ~]# sdcadm channel set dev
@@ -350,7 +353,10 @@ Update channel has been successfully set to: 'dev'
 
 ### Check Health
 
-1. Confirm the health of CoaL using `sdc-healthcheck`.
+It's a good idea to check the health of CoaL using `sdcadm check-health`
+before each step. Until [TOOLS-1001: "sdcadm check-health" should
+include "sdc-healthcheck" global results](https://smartos.org/bugview/TOOLS-1001)
+is resolved, you should also run `sdc-healthchek`.
 
 ### Self Update
 
@@ -381,7 +387,9 @@ zfs destroy zones/$MANATEE0_UUID/data/manatee@backup
 
 ### Update
 
-You've backed up the Manatee zone, now download and install the updated images for SDC services. This process can take up to 60 minutes depending on how many services have new images.
+You've backed up the Manatee zone, now download and install the updated images
+for SDC services. This process can take up to 60 minutes depending on how many
+services have new images.
 
 1. Update global zone tools:
 
