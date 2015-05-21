@@ -356,7 +356,7 @@ Update channel has been successfully set to: 'dev'
 It's a good idea to check the health of CoaL using `sdcadm check-health`
 before each step. Until [TOOLS-1001: "sdcadm check-health" should
 include "sdc-healthcheck" global results](https://smartos.org/bugview/TOOLS-1001)
-is resolved, you should also run `sdc-healthchek`.
+is resolved, you should also run `sdc-healthcheck`.
 
 ### Self Update
 
