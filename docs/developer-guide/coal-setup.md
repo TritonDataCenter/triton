@@ -29,9 +29,9 @@ At a high level, setting up CoaL involves:
 1. Downloading the latest build.
 1. Booting the VMware appliance (virtual machine).
 2. Configuring SmartDataCenter.
-3. Waiting for the SDC services to automatically install and setup in the
-   SDC headnode virtual machine. This can take from 10 to 20 minutes on
-   a Mac laptop.
+3. Waiting for the SDC services to automatically install and setup in
+   the SDC headnode virtual machine. This can take from 10 to 20 minutes
+   on a Mac laptop.
 4. Test and develop.
 
 
@@ -39,7 +39,8 @@ At a high level, setting up CoaL involves:
 
 ### Download CoaL and Configure VMware
 
-1. Start the download of the latest CoaL build. The tarball is approximately 2 GB.
+1. Start the download of the latest CoaL build. The tarball is
+   approximately 2 GB.
 
     curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/coal-latest.tgz
 
@@ -326,22 +327,22 @@ global                               running         smartlogin          online
 
 ### Configure for Development
 
-If you are setting up CloudAPI in your CoaL and attempting to
-provision VMs using that, you'll probably hit an error that there are
-no provisionable servers. That's because the headnode is excluded from the
+If you are setting up CloudAPI in your CoaL and attempting to provision
+VMs using that, you'll probably hit an error that there are no
+provisionable servers. That's because the headnode is excluded from the
 set of servers used for provisioning customer instances.
 
-However, for development and testing, allowing the headnode to act
-as a compute node for instances is handy. To enable:
+However, for development and testing, allowing the headnode to act as a
+compute node for instances is handy. To enable:
 
 ```bash
 [root@headnode (coal-1) ~]# sdcadm post-setup dev-headnode-prov
 Configuring CNAPI to allow headnode provisioning and over-provisioning (allow a minute to propagate)
 ```
 
-## Update CoaL
+# Update CoaL
 
-### Set Channel
+## Set Channel
 
 If this is your first time updating CoaL, then you'll want to set the [update
 channel](../operator-guide/update.md):
@@ -351,14 +352,13 @@ channel](../operator-guide/update.md):
 Update channel has been successfully set to: 'dev'
 ```
 
-### Check Health
+## Check Health
 
 It's a good idea to check the health of CoaL using `sdcadm check-health`
-before each step. Until [TOOLS-1001: "sdcadm check-health" should
-include "sdc-healthcheck" global results](https://smartos.org/bugview/TOOLS-1001)
+before each step. Until [TOOLS-1001](https://smartos.org/bugview/TOOLS-1001)
 is resolved, you should also run `sdc-healthcheck`.
 
-### Self Update
+## Self Update
 
 1. Update sdcadm:
 
@@ -372,11 +372,13 @@ is resolved, you should also run `sdc-healthcheck`.
     Updated to sdcadm 1.5.0 (master-20150211T134112Z-gef31015, elapsed 7s)
     ```
 
-1. Confirm the updated sdcadm reports SDC as healthy using `sdcadm check-health`.
+1. Confirm the updated sdcadm reports SDC as healthy using
+   `sdcadm check-health`.
 
-### Back Up SDC's Brain
+## Back Up SDC's Brain
 
-Take a ZFS snapsnot of the manatee zone and temporarily store on headnode's drive:
+Take a ZFS snapsnot of the manatee zone and temporarily store on
+headnode's drive:
 
 ```bash
 MANATEE0_UUID=$(vmadm lookup -1 alias=~manatee)
@@ -385,7 +387,7 @@ zfs send zones/$MANATEE0_UUID/data/manatee@backup > /var/tmp/manatee-backup.zfs
 zfs destroy zones/$MANATEE0_UUID/data/manatee@backup
 ```
 
-### Update
+## Update SDC
 
 You've backed up the Manatee zone, now download and install the updated images
 for SDC services. This process can take up to 60 minutes depending on how many
@@ -427,7 +429,8 @@ services have new images.
     Done.
     ```
 
-1. Update all the services. This step can take up to 45 minutes depending on how many services have new images.
+1. Update all the services. This step can take up to 45 minutes
+   depending on how many services have new images.
 
     ```bash
     [root@headnode (coal-1) /var/tmp]# sdcadm update --all -y
@@ -643,7 +646,16 @@ services have new images.
     Updated successfully (elapsed 2297s).
     ```
 
-1. Confirm SDC's health with `sdc-healthcheck` and `sdcadm check-health`.
+1. Confirm SDC's health with `sdcadm check-health`.
+
+## Update Platform
+
+[SmartOS](https://smartos.org/) is the operating system, the platform, of
+SmartDataCenter. You'll often update the platform image (PI) at the same
+time you install SDC updates. You might not reboot the headnode or
+compute nodes (CN) right away. You will likely "install" new PI more
+freqently than the rest of SDC, so that you on reboot you benefit from
+the most reliable and secure OS.
 
 1. Download and "install" the latest platform image:
 
