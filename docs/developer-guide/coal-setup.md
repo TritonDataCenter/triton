@@ -654,7 +654,7 @@ services have new images.
 SmartDataCenter. You'll often update the platform image (PI) at the same
 time you install SDC updates. You might not reboot the headnode or
 compute nodes (CN) right away. You will likely "install" new PI more
-freqently than the rest of SDC, so that you on reboot you benefit from
+freqently than the rest of SDC, so that on reboot you benefit from
 the most reliable and secure OS.
 
 1. Download and "install" the latest platform image:
