@@ -67,4 +67,4 @@ compute nodes).
 
 | Name | Description |
 | ---- | ----------- |
-| [sdc-designation](https://github.com/joyent/sdc-designation/blob/master/docs/index.restdown) | A package to select a compute node for VM instance provisioning. It is used by CNAPI. |
+| [sdc-designation](https://github.com/joyent/sdc-designation/blob/master/docs/index.restdown) | A package to select a compute node for VM instance provisioning. The Designation API (DAPI) is used by CNAPI. |
