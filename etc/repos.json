@@ -289,13 +289,6 @@
     ]
   },
   {
-    "git": "git@github.com:joyent/sdc-zookeeper.git",
-    "desc": "Zookeeper service for SDC",
-    "tags": [
-      "service-zone"
-    ]
-  },
-  {
     "git": "git@github.com:joyent/muppet.git",
     "desc": "Loadbalancer for Manta and SmartDataCenter",
     "tags": [
@@ -375,7 +368,7 @@
   },
   {
     "git": "git@github.com:joyent/zookeeper-common.git",
-    "desc": "Common submodule of the sdc-zookeeper and binder zones, to reduce drift in ZK",
+    "desc": "Common submodule of the sdc-zookeeper (deprecated) and binder zones, to reduce drift in ZK",
     "tags": [
       "service-zone"
     ]
