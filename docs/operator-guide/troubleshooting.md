@@ -11,15 +11,15 @@ can be found here: [Troubleshooting SDC7](https://docs.joyent.com/sdc7/troublesh
 This condition can arise in situations where SAPI fails to upgrade
 cleanly during a SmartDataCenter upgrade.
 
-Symptoms include:
+**Symptoms include:**
   * SAPI zone fails to upgrade/re-provision cleanly
   * a new SAPI zone with the alias "sapi0tmp" is visible
   * the overall SDC upgrade process can't continue
 
-Requirements:
+**Requirements:**
   * headnode root access
 
-How to diagnose:
+**How to diagnose:**
 
   1. Log into SDC headnode
   2. Verify sapi instances registered in SAPI:
@@ -32,7 +32,7 @@ How to diagnose:
 
   4. Determine which sapi instance is inactive "not running" in VMAPI
 
-The fix:
+**The fix:**
 
   1. Delete the inactive sapi instance from SAPI (previously obtained from VMAPI):
 
