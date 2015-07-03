@@ -80,10 +80,10 @@ This update will make the following changes:
 
   `sdc-vmapi /vms?query=\(alias=sapi*\)|json -Ha uuid state`
 
-```
-c9742298-6861-42f3-8ebd-56aca525a471 running sapi0
-2eeea6fc-e109-473c-b7c3-7374dbb122df destroyed sapi0tmp
-```
+  ```
+  c9742298-6861-42f3-8ebd-56aca525a471 running sapi0
+  2eeea6fc-e109-473c-b7c3-7374dbb122df destroyed sapi0tmp
+  ```
 
   Here we see the UUID identifier of the offending "sapi0tmp" instance
   and its inactive state - in this case destroyed.
