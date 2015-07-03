@@ -76,7 +76,7 @@ This update will make the following changes:
   }
   ```
 
-  3. Verify sapi instances registered in VMAPI:
+  3. Verify sapi instances registered in VMAPI and determine the offending instance:
 
   `sdc-vmapi /vms?query=\(alias=sapi*\)|json -Ha uuid state`
 
@@ -87,10 +87,6 @@ This update will make the following changes:
 
   Here we see the UUID identifier of the offending "sapi0tmp" instance
   and its inactive state - in this case destroyed.
-
-  4. Determine which sapi instance is inactive "not running" in VMAPI
-
-  The inactive sapi instance was "sapi0tmp" as shown above.
 
 **The fix:**
 
