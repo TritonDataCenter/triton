@@ -90,8 +90,35 @@ This update will make the following changes:
 
 **The fix:**
 
-  1. Delete the inactive sapi instance from SAPI (previously obtained from VMAPI):
+  1. Delete the inactive "sapi0tmp" instance from SAPI (previously obtained from VMAPI):
 
-  `sdc-sapi /instances/<INSTANCE_UUID> -X DELETE`
+  Example: `sdc-sapi /instances/<INSTANCE_UUID> -X DELETE`
 
-Once the offending record is removed the SDC upgrade process can continue.
+  In this case "sapi0tmp" with UUID 2eeea6fc-e109-473c-b7c3-7374dbb122df:
+
+  `sdc-sapi /instances/2eeea6fc-e109-473c-b7c3-7374dbb122df -X DELETE`
+
+  2. Verify registered instances in SAPI:
+
+  `sdc-sapi /instances?service_uuid=$(sdc-sapi /services?name=sapi|json -Ha uuid)|json -Ha`
+
+  ```
+  {
+    "uuid": "c9742298-6861-42f3-8ebd-56aca525a471",
+    "service_uuid": "0e6983da-9a5b-4e7b-84cb-98991bd92334",
+    "params": {
+      "alias": "sapi0",
+      "server_uuid": "fb6e5c86-4247-11e1-a93a-5cf3fcba325c"
+    },
+    "metadata": {
+      "ADMIN_IP": "10.65.65.26",
+      "PRIMARY_IP": "10.65.65.26"
+    },
+    "type": "vm"
+  }
+  ```
+
+  The sample output above shows the correct "sapi0" instance registered and
+  "sapi0tmp" not present anymore.
+
+Once the offending record is removed the SDC upgrade process can resume.
