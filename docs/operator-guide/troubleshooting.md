@@ -45,7 +45,7 @@ This update will make the following changes:
   1. Log into SDC headnode
   2. Verify sapi instances registered in SAPI:
 
-  `sdc-sapi /instances?service_uuid=$(sdc-sapi /services?name=sapi|json -Ha uuid)|json -Ha`
+  `sdc-sapi /instances?service_uuid=$(sdc-sapi /services?name=sapi | json -Ha uuid) | json -Ha`
 
   ```
   {
@@ -78,7 +78,7 @@ This update will make the following changes:
 
   3. Verify sapi instances registered in VMAPI and determine the offending instance:
 
-  `sdc-vmapi /vms?query=\(alias=sapi*\)|json -Ha uuid state`
+  `sdc-vmapi /vms?query=\(alias=sapi*\) | json -Ha uuid state`
 
   ```
   c9742298-6861-42f3-8ebd-56aca525a471 running sapi0
@@ -100,7 +100,7 @@ This update will make the following changes:
 
   2. Verify registered instances in SAPI:
 
-  `sdc-sapi /instances?service_uuid=$(sdc-sapi /services?name=sapi|json -Ha uuid)|json -Ha`
+  `sdc-sapi /instances?service_uuid=$(sdc-sapi /services?name=sapi | json -Ha uuid) | json -Ha`
 
   ```
   {
@@ -121,4 +121,4 @@ This update will make the following changes:
   The sample output above shows the correct "sapi0" instance registered and
   "sapi0tmp" not present anymore.
 
-Once the offending record is removed the SDC upgrade process can resume.
+Once the offending record is removed the SDC upgrade process can be re-run.
