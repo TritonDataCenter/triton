@@ -4,7 +4,7 @@ This document tries to capture some of the less known SmartDataCenter
 troubleshooting steps and fixes. A more comprehensive troubleshooting guide
 can be found here: [Troubleshooting SDC7](https://docs.joyent.com/sdc7/troubleshooting-sdc7)
 
-## #Upgrade
+## Upgrade
 
 ### Offending SAPI record in SAPI database
 
@@ -47,34 +47,34 @@ This update will make the following changes:
 
   `sdc-sapi /instances?service_uuid=$(sdc-sapi /services?name=sapi|json -Ha uuid)|json -Ha`
 
-```
-{
-  "uuid": "c9742298-6861-42f3-8ebd-56aca525a471",
-  "service_uuid": "0e6983da-9a5b-4e7b-84cb-98991bd92334",
-  "params": {
-    "alias": "sapi0",
-    "server_uuid": "fb6e5c86-4247-11e1-a93a-5cf3fcba325c"
-  },
-  "metadata": {
-    "ADMIN_IP": "10.65.65.26",
-    "PRIMARY_IP": "10.65.65.26"
-  },
-  "type": "vm"
-}
-{
-  "uuid": "2eeea6fc-e109-473c-b7c3-7374dbb122df",
-  "service_uuid": "6283f56a-212d-11e5-88d6-3c970e80eb61",
-  "params": {
-    "alias": "sapi0tmp",
-    "server_uuid": "fb6e5c86-4247-11e1-a93a-5cf3fcba325c"
-  },
-  "metadata": {
-    "ADMIN_IP": "10.65.65.27",
-    "PRIMARY_IP": "10.65.65.27"
-  },
-  "type": "vm"
-}
-```
+  ```
+  {
+    "uuid": "c9742298-6861-42f3-8ebd-56aca525a471",
+    "service_uuid": "0e6983da-9a5b-4e7b-84cb-98991bd92334",
+    "params": {
+      "alias": "sapi0",
+      "server_uuid": "fb6e5c86-4247-11e1-a93a-5cf3fcba325c"
+    },
+    "metadata": {
+      "ADMIN_IP": "10.65.65.26",
+      "PRIMARY_IP": "10.65.65.26"
+    },
+    "type": "vm"
+  }
+  {
+    "uuid": "2eeea6fc-e109-473c-b7c3-7374dbb122df",
+    "service_uuid": "6283f56a-212d-11e5-88d6-3c970e80eb61",
+    "params": {
+      "alias": "sapi0tmp",
+      "server_uuid": "fb6e5c86-4247-11e1-a93a-5cf3fcba325c"
+    },
+    "metadata": {
+      "ADMIN_IP": "10.65.65.27",
+      "PRIMARY_IP": "10.65.65.27"
+    },
+    "type": "vm"
+  }
+  ```
 
   3. Verify sapi instances registered in VMAPI:
 
