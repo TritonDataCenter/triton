@@ -25,7 +25,7 @@ This update will make the following changes:
     update "sapi" service to image 3fc4b974-1b08-11e5-a9ba-672a0f7e12c7
     (sapi@release-20150625-20150625T065520Z-g983d6be)
 
-    Would you like to continue? [y/N] y
+Would you like to continue? [y/N] y
 
 Create work dir: /var/sdcadm/updates/20150629T133211Z
 Get SAPI current mode
@@ -47,7 +47,6 @@ Headnode root access.
 
     ```
     $ sdc-sapi /instances?service_uuid=$(sdc-sapi /services?name=sapi | json -Ha uuid) | json -Ha
-
     {
       "uuid": "c9742298-6861-42f3-8ebd-56aca525a471",
       "service_uuid": "0e6983da-9a5b-4e7b-84cb-98991bd92334",
@@ -100,7 +99,6 @@ Headnode root access.
 
     ```
     $ sdc-sapi /instances?service_uuid=$(sdc-sapi /services?name=sapi | json -Ha uuid) | json -Ha
-
     {
       "uuid": "c9742298-6861-42f3-8ebd-56aca525a471",
       "service_uuid": "0e6983da-9a5b-4e7b-84cb-98991bd92334",
