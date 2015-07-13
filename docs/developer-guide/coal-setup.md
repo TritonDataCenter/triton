@@ -102,8 +102,9 @@ At a high level, setting up CoaL involves:
 
 1. When you are prompted with the GRUB menu press the down arrow.
 
-  1. Select the "Live 64-bit" option and press 'c' to enter the command
-     line for GRUB.
+  1. Press the down arrow key to highlight "Live 64-bit".
+
+  2. Press 'c' to go to the command line for GRUB.
 
      ![CoaL Grub Boot Menu](../img/coal-grub-menu.png)
 

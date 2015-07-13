@@ -158,8 +158,9 @@ headnode.
 
   When you are prompted with the GRUB menu press the "down" arrow.
 
-  1. Select the "Live 64-bit" option and press 'c' to enter the command
-     line for GRUB.
+  1. Press the down arrow key to highlight "Live 64-bit".
+
+  1. Press 'c' to go to the command line for GRUB.
 
      By default, the OS will redirect the console to ttyb which is fine
      for production but needs to be changed for CoaL. While in the command line:
