@@ -96,8 +96,8 @@ At a high level, setting up CoaL involves:
         1. Launch VMware Fusion
         2. File > Open... `coal-<branch>-<build_date_time>-<git_sha1_hash>-4gb.vmwarevm`
         3. Virtual Machine > Settings
-        4. Processes & Memory > set memory to 8192 MB or greater. Be sure to
-           leave Mac OS X with at least 8 GB.
+        4. **Processes & Memory > set memory to 8192 MB or greater. Be sure to
+           leave Mac OS X with at least 8 GB.**
 
 
 1. When you are prompted with the GRUB menu press the down arrow.
