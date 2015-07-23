@@ -14,29 +14,40 @@ the headnode to a new hardware. This document assumes a fully working SDC HA set
 
 ### Download latest SmartOS USB image
 
-Download USB media: `curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/usb-latest.tgz`
+Download USB media:
 
-Create a USB bootable image.
-Example (SmartOS specific): `dd if=usb-release-20110901-20110922T212927Z-179-4gb.img of=/dev/rdsk/c3t0d0p0 bs=4096b`
+```
+curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/usb-latest.tgz
+```
+
+Create a USB bootable image:
+(SmartOS specific)
+
+```
+dd if=usb-release-......img of=/dev/rdsk/c3t0d0p0 bs=4096b
+```
 
 Dont't forget to note down the root password for the USB image (will be required later).
+The root password is included with each USB image in a text file.
 
 ### Boot up new headnode
 
-Boot up USB media and from the GRUB menu select: "Live 64-bit Rescue (no importing zpool)"
+Boot up USB media and from the GRUB menu select:
+
+`Live 64-bit Rescue (no importing zpool)`
 
 ### Create zpool
 
-Create new zpool called zones.
+Create new zpool called zones, example:
 
-example: `zpool create zones raidz c0t13d1 c0t14d1 c0t15d1 c0t16d1`
+`zpool create zones raidz c0t13d1 c0t14d1 c0t15d1 c0t16d1`
 
 ### Prepare network connectivity between nodes
 
 This can be a dedicated cable on spare interfaces or plug the new headnode into
 the "admin" network and configure a unique IP address.
 
-#### New headnode
+#### On the new headnode
 
 Check whether the link is up:
 
@@ -58,7 +69,7 @@ ifconfig bnx1 192.168.10.1/24 up
 Start SSH server on new headnode: `/lib/svc/method/sshd start`
 (svcadm will not start it in recovery mode)
 
-#### Old headnode
+#### On the old headnode
 
 Connect cable and check link status:
 
@@ -226,7 +237,7 @@ external_netmask=255.255.255.0
 
 Correct any other network interfaces in the config file and save.
 
-## Shut down and old headnode and reboot new headnode
+## Shut down old headnode and reboot new headnode
 
 At this point shut down the old headnode.
 
@@ -272,7 +283,9 @@ The IP address is still owned by the old headnode's UUID.
 
 Unassign IP address for later assignment:
 
-`curl -X PUT http://napi.lab.local/networks/62a95100-8021-4210-8d1d-19f43b0d5d22/ips/10.11.11.1 -d unassign=true`
+```
+curl -X PUT http://napi.lab.local/networks/62a95100-8021-4210-8d1d-19f43b0d5d22/ips/10.11.11.1 -d unassign=true`
+```
 
 Fix external IP address ownership:
 
@@ -291,7 +304,9 @@ curl -X GET http://napi.lab.local/networks/62a95100-8021-4210-8d1d-19f43b0d5d22/
 
 Assign ownership to new headnode UUID:
 
-`curl -X PUT http://napi.lab.local/networks/e7753a91-b53a-48fc-990a-fdd86ed06c6c/ips/192.168.1.50 -d belongs_to_uuid=ff4cac1a-fe98-11e0-acf9-5cf3fce3e7b0`
+```
+curl -X PUT http://napi.lab.local/networks/e7753a91-b53a-48fc-990a-fdd86ed06c6c/ips/192.168.1.50 -d belongs_to_uuid=ff4cac1a-fe98-11e0-acf9-5cf3fce3e7b0
+```
 
 Verify changes:
 
@@ -308,9 +323,10 @@ curl -X GET http://napi.lab.local/networks/e7753a91-b53a-48fc-990a-fdd86ed06c6c/
 }
 ```
 
-curl -X GET http://napi.lab.local/nics?belongs_to_uuid=00000000-0000-0000-0000-002590fde488|json -a
+Check any interfaces still assigned to the old headnode UUID:
 
 ```
+curl -X GET http://napi.lab.local/nics?belongs_to_uuid=00000000-0000-0000-0000-002590fde488|json -a
 
 {
   "belongs_to_type": "server",
@@ -360,17 +376,25 @@ curl -X DELETE http://napi.lab.local/nics/002590fde48a
 
 Create an entry for the new headnode admin nic:
 
-`curl -X POST http://napi.lab.local/nics -d mac=5c:f3:fc:e3:e7:b0 -d belongs_to_uuid=ff4cac1a-fe98-11e0-acf9-5cf3fce3e7b0 -d owner_uuid=930896af-bf8c-48d4-885c-6573a94b1853 -d belongs_to_type=server`
+```
+curl -X POST http://napi.lab.local/nics -d mac=5c:f3:fc:e3:e7:b0 -d belongs_to_uuid=ff4cac1a-fe98-11e0-acf9-5cf3fce3e7b0 -d owner_uuid=930896af-bf8c-48d4-885c-6573a94b1853 -d belongs_to_type=server
+```
 
 Assign the old admin IP address to new nic:
 
-`curl -X PUT http://napi.lab.local/nics/5cf3fce3e7b0 -d belongs_to_uuid=ff4cac1a-fe98-11e0-acf9-5cf3fce3e7b0 -d belongs_to_type=server -d ip=10.11.11.1 -d network_uuid=62a95100-8021-4210-8d1d-19f43b0d5d22`
+```
+curl -X PUT http://napi.lab.local/nics/5cf3fce3e7b0 -d belongs_to_uuid=ff4cac1a-fe98-11e0-acf9-5cf3fce3e7b0 -d belongs_to_type=server -d ip=10.11.11.1 -d network_uuid=62a95100-8021-4210-8d1d-19f43b0d5d22
+```
 
-## Remove old headnode from the adminui
+## Final steps
+
+Log in to adminui and delete the old headnode highlighted in red.
 
 Re-sync VMAPI (this is required to re-sync the state of the zones)
 
-`for zone in `vmadm list -H -o uuid` ; do  sdc sdc-vmapi /vms/$zone?sync=true; done`
+```
+for zone in `vmadm list -H -o uuid` ; do  sdc sdc-vmapi /vms/$zone?sync=true; done
+```
 
 At this point SDC should be fully online and healthy.
 
