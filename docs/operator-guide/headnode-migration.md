@@ -63,7 +63,7 @@ dd if=usb-release-20150625-20150625T153756Z-gcc5a03f-4gb.img of=/dev/rdsk/c3t0d0
 
 More details on how to write a [bootable usb media image](https://docs.joyent.com/private-cloud/install/usb-key)
 
-Dont't forget to note down the root password for the USB image (will be required later).
+Don't forget to note down the root password for the USB image (will be required later).
 
 *Hint: the root password is included with each USB image in the downloaded tarball in a text file*
 *called root.password.RELEASE, example:* `root.password.20150625t055518z`
@@ -72,7 +72,7 @@ Dont't forget to note down the root password for the USB image (will be required
 
 Boot up USB media and from the GRUB menu select:
 
-*Live 64-bit Rescue (no importing zpool)*
+**Live 64-bit Rescue (no importing zpool)**
 
 GRUB menu:
 
@@ -103,10 +103,7 @@ GRUB menu:
       Valid <dev> values are: ttya, ttyb, ttyc, ttyd, vga
 ```
 
-Once the boot process finished, login as user root with the root password
-specified in `root.password.RELEASE` text file (mentioned earlier).
-
-(at this point login screen below should be visible)
+Once the boot process finished the following login screen should be visible:
 
 ```
              _____
@@ -121,10 +118,14 @@ specified in `root.password.RELEASE` text file (mentioned earlier).
 headnode ttyb login:
 ```
 
+Login as user root with the root password specified in `root.password.RELEASE`
+text file (mentioned earlier).
+
 ### Create zpool
 
 Once logged in as user root proceed with setting up the ZFS storage pool.
-(For additional details please consult `zpool(1M)`)
+
+*(For additional details please consult `zpool(1M)`)*
 
 Create a new ZFS storage pool called `zones` with *raidz* redundancy.
 
@@ -138,6 +139,8 @@ Verify new storage pool with: `zpool list` and `zpool status`
 
 This can be a dedicated cable on spare interfaces or connect the new headnode to
 the "SDC admin" network and configure a unique IP address.
+
+The following examples assume a dedicated cable connected to spare interfaces.
 
 #### On the new headnode
 
