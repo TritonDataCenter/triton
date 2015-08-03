@@ -1,51 +1,143 @@
 # Headnode hardware migration
 
 The purpose of this document is to aid hardware migration scenarios for the SDC
-headnode. By following the steps outlined below it should be possible to migrate
-the headnode to a new hardware. This document assumes a fully working SDC HA setup.
+headnode server. By following the steps outlined below it should be possible to
+migrate all headnode services and the full headnode installation to new hardware.
+
+This document assumes a fully working SDC HA setup.
+
+**Terminology**
+  * "old headnode" - original HW asset from which we intend to migrate away
+  * "new headnode" - new HW asset to which we intend to move all headnode services
+  * SDC HA setup - [highly available SDC deployment](https://docs.joyent.com/private-cloud/resilience)
+
+**Assumptions**
+  * SDC setup is 100% healthy
+  * SDC was deployed in a highly available fashion (HA setup)
+  * new headnode has sufficient disk space, DRAM, CPU's, network interfaces
+  * new headnode has direct SSH connectivity to old headnode
+  * physical access to new headnode
+  * sufficient maintenance window
+
+**Desired end result**
+  * minimal headnode downtime
+  * all SDC services migrated to new headnode
+  * fully operational SDC setup after migration
+
+**Impact**
+
+For the duration of the migration process:
+
+  * VM provisioning and configuration changes will be unavailable
+  * no operator access via "adminui"
+  * smartlogin root login will be unavailable to SmartOS zones
+
+**Rollback option**
+  * reconnect old headnode to the SDC cluster
 
 ## Preparing the new headnode
 
 **Requirements:**
-  * IPMI serial over lan
+  * IPMI serial over lan (optional)
   * headnode to headnode connectivity
   * SmartOS USB image
   * USB key/thumb drive
 
+Before we can start the migration process the new hardware asset needs to be booted up
+into a SmartOS rescue mode.
+
 ### Download latest SmartOS USB image
 
-Download USB media:
+Download latest USB media image:
 
 ```
 curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/usb-latest.tgz
 ```
 
-Create a USB bootable image:
-(SmartOS specific)
+Untar tarball and create a USB bootable image:
+(SmartOS specific `dd` command)
 
 ```
-dd if=usb-release-......img of=/dev/rdsk/c3t0d0p0 bs=4096b
+dd if=usb-release-20150625-20150625T153756Z-gcc5a03f-4gb.img of=/dev/rdsk/c3t0d0p0 bs=4096b
 ```
+
+More details on how to write a [bootable usb media image](https://docs.joyent.com/private-cloud/install/usb-key)
 
 Dont't forget to note down the root password for the USB image (will be required later).
-The root password is included with each USB image in a text file.
+
+*Hint: the root password is included with each USB image in the downloaded tarball in a text file*
+*called root.password.RELEASE, example:* `root.password.20150625t055518z`
 
 ### Boot up new headnode
 
 Boot up USB media and from the GRUB menu select:
 
-`Live 64-bit Rescue (no importing zpool)`
+*Live 64-bit Rescue (no importing zpool)*
+
+GRUB menu:
+
+```
+    GNU GRUB  version 0.97  (619K lower / 1983696K upper memory)
+
+ ***************************************************************************
+ * Compute Node (PXE)                                                      *
+ * Live 64-bit                                                             *
+ * Live 64-bit (rollback to 20150617T074149Z)                              *
+ * Live 64-bit Rescue (no importing zpool)                                 *
+ * Live 64-bit +kmdb                                                       *
+ * Legacy Firmware Upgrade Mode                                            *
+ *                                                                         *
+ *                                                                         *
+ *                                                                         *
+ *                                                                         *
+ *                                                                         *
+ *                                                                         *
+ ***************************************************************************
+      Use the * and * keys to select which entry is highlighted.
+      Press enter to boot the selected OS, 'e' to edit the
+      commands before booting, or 'c' for a command-line.
+
+      Selected OS console device is 'ttyb'.
+
+      and use 'variable os_console <dev>', then Esc to return.
+      Valid <dev> values are: ttya, ttyb, ttyc, ttyd, vga
+```
+
+Once the boot process finished, login as user root with the root password
+specified in `root.password.RELEASE` text file (mentioned earlier).
+
+(at this point login screen below should be visible)
+
+```
+             _____
+          ____   ____
+         _____   _____        .                   .
+         __         __        | .-. .  . .-. :--. |-
+         _____   _____        ;|   ||  |(.-' |  | |
+          ____   ____     `--'  `-' `;-| `-' '  ' `-'
+             _____                  /  ; Joyent Live Image v0.147+
+                                    `-'   build: 20150625T055518Z
+
+headnode ttyb login:
+```
 
 ### Create zpool
 
-Create new zpool called zones, example:
+Once logged in as user root proceed with setting up the ZFS storage pool.
+(For additional details please consult `zpool(1M)`)
+
+Create a new ZFS storage pool called `zones` with *raidz* redundancy.
+
+example:
 
 `zpool create zones raidz c0t13d1 c0t14d1 c0t15d1 c0t16d1`
 
-### Prepare network connectivity between nodes
+Verify new storage pool with: `zpool list` and `zpool status`
 
-This can be a dedicated cable on spare interfaces or plug the new headnode into
-the "admin" network and configure a unique IP address.
+### Prepare network connectivity between headnode servers
+
+This can be a dedicated cable on spare interfaces or connect the new headnode to
+the "SDC admin" network and configure a unique IP address.
 
 #### On the new headnode
 
@@ -114,18 +206,24 @@ Create a screen session first with `screen(1)`.
 
 Stop all zones on old headnode:
 
-`for zone in `vmadm list -H -o uuid`; do vmadm stop $zone; done`
+```
+for zone in `vmadm list -H -o uuid`; do vmadm stop $zone; done
+```
 
 Create ZFS snapshot:
 
 `zfs snapshot -r zones@$(date +%Y-%m-%d)`
 
 Send ZFS stream to new box:
-(this is where the saved root password is required)
+(this is where the saved root password will be required again)
 
 `zfs send -vR zones@2015-07-22 | ssh 192.168.10.1 "zfs recv -F zones"`
 
-## Take a backup of the old headnode's USB media
+## Take a backup of old headnode's configuration
+
+Copy `/usbkey/config` file from old to new headnode into `/var/tmp/`.
+
+## Take a backup of the old headnode's USB media (optional step)
 
 Look up removable USB media with: `rmformat`
 
@@ -158,7 +256,7 @@ Copy the USB image onto the new headnode into /zones
 
 `scp headnode-usb.img 192.168.10.1:/zones`
 
-## Restore USB image onto new headnode
+## Restore USB image onto new headnode (optional step)
 
 ```
 rmformat
@@ -184,11 +282,15 @@ dd if=headnode-usb.img of=/dev/rdsk/c1t0d0p0 bs=1M
 4026531840 bytes transferred in 896.871548 secs (4489530 bytes/sec)
 ```
 
+## Correcting new headnode configuration
+
 Mount first partition onto /mnt/usbkey
 
 `mount -F pcfs -o foldcase,noatime /dev/dsk/c1t0d0p1 /mnt/usbkey`
 
 Change directory to /mnt/usbkey: `cd /mnt/usbkey`
+
+Restore the old headnode configuration with: `cp /var/tmp/config /mnt/usbkey/config`
 
 Edit the configuration file with: `vi config`
 
@@ -200,15 +302,15 @@ Check the correct mac address with `ifconfig`
 ifconfig
 
 lo0: flags=2001000849<UP,LOOPBACK,RUNNING,MULTICAST,IPv4,VIRTUAL> mtu 8232 index 1
-        inet 127.0.0.1 netmask ff000000 
+        inet 127.0.0.1 netmask ff000000
 bnx0: flags=1000802<BROADCAST,MULTICAST,IPv4> mtu 1500 index 2
         inet 192.168.10.1 netmask ffffff00 broadcast 192.168.10.255
-        ether 5c:f3:fc:e3:e7:b0 
+        ether 5c:f3:fc:e3:e7:b0
 bnx1: flags=1000943<UP,BROADCAST,RUNNING,PROMISC,MULTICAST,IPv4> mtu 1500 index 4
         inet 192.168.10.1 netmask ffffff00 broadcast 192.168.10.255
-        ether 5c:f3:fc:e3:e7:b2 
+        ether 5c:f3:fc:e3:e7:b2
 lo0: flags=2002000849<UP,LOOPBACK,RUNNING,MULTICAST,IPv6,VIRTUAL> mtu 8252 index 1
-        inet6 ::1/128 
+        inet6 ::1/128
 ```
 
 In this instance the admin network is physically connected to bnx0.
@@ -235,7 +337,7 @@ external_gateway=192.168.1.1
 external_netmask=255.255.255.0
 ```
 
-Correct any other network interfaces in the config file and save.
+Repeat the same steps to correct any other network interfaces in the config file and save.
 
 ## Shut down old headnode and reboot new headnode
 
@@ -246,17 +348,19 @@ the status of services with: `svcs -xv`
 
 In case of any issues please resolve those first before starting the zones.
 
-This is a good time to verify whether the default gateway and admin network CN nodes are responding to pings.
+This is a good time to verify whether the default gateway and admin network CN (compute) nodes are responding to pings.
 
-## Start all headnode zones
+## Start all zones on new headnode
 
 Start all zones with:
 
-`for zone in `vmadm list -H -o uuid` ; do vmadm start $zone ; done`
+```
+for zone in `vmadm list -H -o uuid` ; do vmadm start $zone ; done
+```
 
 ## Verify SDC health
 
-At this point check SDC health with `sdc-healthcheck` and sdcadm `check-health`.
+At this point check SDC health with `sdc-healthcheck` and `sdcadm check-health`.
 
 These will report various errors. This is expected as NAPI needs corrections.
 
