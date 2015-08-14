@@ -365,12 +365,12 @@ is resolved, you should also run `sdc-healthcheck`.
 
     ```bash
     [root@headnode (coal-1) ~]# sdcadm --version
-    sdcadm 1.4.4 (release-20150205-20150205T060457Z-g7d76790)
+    sdcadm 1.6.0 (release-20150723-20150723T144058Z-g66f719b)
     [root@headnode (coal-1) ~]# sdcadm self-update
-    Update to sdcadm 1.5.0 (master-20150211T134112Z-gef31015)
+    Update to sdcadm 1.6.1 (master-20150805T230606Z-g752a217)
     Download update from https://updates.joyent.com
-    Run sdcadm installer (log at /var/sdcadm/self-updates/20150217T234531Z/install.log)
-    Updated to sdcadm 1.5.0 (master-20150211T134112Z-gef31015, elapsed 7s)
+    Run sdcadm installer (log at /var/sdcadm/self-updates/20150814T202432Z/install.log)
+    Updated to sdcadm 1.6.1 (master-20150805T230606Z-g752a217, elapsed 17s)
     ```
 
 1. Confirm the updated sdcadm reports SDC as healthy using
@@ -398,7 +398,7 @@ services have new images.
 
     ```bash
     [root@headnode (coal-1) ~]# sdcadm experimental update-gz-tools --latest
-    Downloading gz-tools image 55d74974-8c0b-4126-8ea4-5c246cf412f5 (2.0.0) to /var/tmp/gz-tools-55d74974-8c0b-4126-8ea4-5c246cf412f5.tgz
+    Downloading gz-tools image e9ea98b6-201b-4079-b4cb-e6f9c925d16d (3.0.0) to /var/tmp/gz-tools-e9ea98b6-201b-4079-b4cb-e6f9c925d16d.tgz
     Decompressing gz-tools tarball
     Updating "sdc" zone tools
     Updating global zone scripts
@@ -406,27 +406,37 @@ services have new images.
     Unmounting USB key
     Updating cn_tools on all compute nodes
     Cleaning up gz-tools tarball
-    Updated gz-tools successfully (elapsed 13s).
+    Updated gz-tools successfully (elapsed 14s).
     ```
 
 1. Update domain name services:
 
     ```bash
     [root@headnode (coal-1) ~]# sdcadm experimental update-other
-    Updating maintain_resolvers for all vm services
-    Updating DNS domain service metadata for papi, mahi
-    Updating DNS domain SDC application metadata for papi, mahi
-    No need to update region_name for this data center
-    sapi_domain already present on node.config
-    Done.
+    Update "sdc" SAPI app metadata_schema
     ```
 
 1. Update the agents:
 
     ```bash
-    [root@headnode (coal-1) ~]# sdcadm experimental update-agents --latest -y
-    Downloading agentsshar image 002774ed-e83d-423d-8d25-f133a588f84c (1.0.0-master-20150226T224702Z-gd3c2031) to /var/tmp/agents-002774ed-e83d-423d-8d25-f133a588f84c.sh
-    Executing agents installer across data center
+    [root@headnode (coal-1) ~]# sdcadm experimental update-agents --latest -y --all
+    UUID of latest installed agents image is: release-20150723-20150723t113741z-gd067c0e
+
+    Ensuring contact with all servers
+
+    This update will make the following changes:
+        Download and install
+         agentsshar image 31ad16e7-ded0-42c0-8f12-a23e4d2f0b82
+        (1.0.0-master-20150813T192358Z-gd067c0e) on 1 servers
+
+    Downloading agentsshar image to /var/tmp/agents-31ad16e7-ded0-42c0-8f12-a23e4d2f0b82.sh
+    Running agents installer into 1 servers
+    ...16e7-ded0-42c0-8f12-a23e4d2f0b82.sh [===============================================================================>] 100%        1
+    Ur command run complete
+    Reloading servers sysinfo
+    sysinfo reloaded for all the running servers
+    Refresh config-agent into all the setup and running servers
+    config-agent refresh for all the running servers
     Done.
     ```
 
@@ -434,217 +444,68 @@ services have new images.
    depending on how many services have new images.
 
     ```bash
-    [root@headnode (coal-1) /var/tmp]# sdcadm update --all -y
-    Finding candidate update images for 23 services (papi, mahi, ca, manatee, amonredis, amon, moray, binder, ufds, cnapi, dhcpd, redis, napi, workflow, fwapi, sdc, adminui, imgapi, vmapi, sapi, cloudapi, manta, assets).
-    Note: There are no "cloudapi" instances. Only the service configuration will be updated.
+    [root@headnode (coal-1) ~]# sdcadm update --all -y
+    Finding candidate update images for 23 services (cnapi, mahi, redis, papi, adminui, amonredis, amon, binder, manatee, ca, sapi, vmapi, napi, manta, imgapi, ufds, fwapi, workflow, dhcpd, sdc, cloudapi, moray, assets).
     Note: There are no "manta" instances. Only the service configuration will be updated.
+
     This update will make the following changes:
-        download 22 images (1108 MiB):
-            image 85157ca0-bd90-11e4-9016-477613964961 (papi@master-20150226T081600Z-g7905a77)
-            image a3012cb0-bde9-11e4-8816-57d15d66624e (manta-authcache@master-20150226T185448Z-g4e3f5d9)
-            image 78c965a4-bd8d-11e4-a1bc-2701505c414d (amon@master-20150226T075046Z-g58ecaf8)
-            image 6e9b95ec-beb5-11e4-806b-6fc4218e1009 (sdc-postgres@master-20150227T191223Z-gad45608)
-            image 30fe9576-bd8f-11e4-9066-63d665bc96ce (manta-nameservice@master-20150226T080343Z-gba090a8)
-            image 675087da-beb4-11e4-a9b3-8f914417afff (manta-moray@master-20150227T190616Z-gf7607c7)
-            image 970715a8-c16f-11e4-9fae-3f1afe2afdee (cnapi@master-20150303T063214Z-g0c8f661)
-            image 0c589eba-c177-11e4-9be7-b3bfec9244fb (dhcpd@master-20150303T072519Z-g54ca866)
-            image aaba7218-bd8f-11e4-81df-573bd1d77302 (redis@master-20150226T081228Z-g0d6e5b9)
-            image bfc5dac8-bd8d-11e4-a03b-67835b902758 (ufds@master-20150226T075650Z-g9a66af3)
-            image 959b6076-bd90-11e4-ae05-6fc0ef56abd1 (workflow@master-20150226T081626Z-g2a160f5)
-            image 1ac995dc-bd8d-11e4-89ed-0b706fd9fcfd (napi@master-20150226T074910Z-gbc4a87c)
-            image 1fa4af12-bd90-11e4-b420-dfe5cc431999 (fwapi@master-20150226T081200Z-g8601d56)
-            image 3862bfbc-c1d7-11e4-8dc0-7b7e574c78b0 (adminui@master-20150303T185212Z-gca114bd)
-            image 5231245e-bd8d-11e4-9db9-07ccad0e008e (imgapi@master-20150226T074935Z-gf69e4d4)
-            image 2752e4fc-bf0e-11e4-8de7-73e39bcc2a12 (vmapi@master-20150228T054919Z-gb09aea6)
-            image cf267ca8-bd91-11e4-941b-5f26cf29c0e5 (sapi@master-20150226T082326Z-g14fa2e4)
-            image 26eb639e-c112-11e4-ada8-ffb116cec9d8 (cloudapi@master-20150302T192040Z-g24cfb4d)
-            image 6ab73f54-bd8d-11e4-83c2-8b81723a3436 (manta-deployment@master-20150226T075408Z-gc8d74a9)
-            image 1ccefc72-bd8e-11e4-b163-df2139248aba (assets@master-20150226T080059Z-g6012d50)
-            image f1b6b7e0-bd8e-11e4-8ae4-d3a190985286 (amonredis@master-20150226T080620Z-g4bbca77)
-            image 156647c6-c174-11e4-804f-73c1ba84c2f5 (sdc@master-20150303T070134Z-g997645e)
-        update "papi" service to image 85157ca0-bd90-11e4-9016-477613964961 (papi@master-20150226T081600Z-g7905a77)
-        update "amonredis" service to image f1b6b7e0-bd8e-11e4-8ae4-d3a190985286 (amonredis@master-20150226T080620Z-g4bbca77)
-        update "amon" service to image 78c965a4-bd8d-11e4-a1bc-2701505c414d (amon@master-20150226T075046Z-g58ecaf8)
-        update "cnapi" service to image 970715a8-c16f-11e4-9fae-3f1afe2afdee (cnapi@master-20150303T063214Z-g0c8f661)
-        update "dhcpd" service to image 0c589eba-c177-11e4-9be7-b3bfec9244fb (dhcpd@master-20150303T072519Z-g54ca866)
-        update "redis" service to image aaba7218-bd8f-11e4-81df-573bd1d77302 (redis@master-20150226T081228Z-g0d6e5b9)
-        update "napi" service to image 1ac995dc-bd8d-11e4-89ed-0b706fd9fcfd (napi@master-20150226T074910Z-gbc4a87c)
-        update "workflow" service to image 959b6076-bd90-11e4-ae05-6fc0ef56abd1 (workflow@master-20150226T081626Z-g2a160f5)
-        update "fwapi" service to image 1fa4af12-bd90-11e4-b420-dfe5cc431999 (fwapi@master-20150226T081200Z-g8601d56)
-        update "sdc" service to image 156647c6-c174-11e4-804f-73c1ba84c2f5 (sdc@master-20150303T070134Z-g997645e)
-        update "adminui" service to image 3862bfbc-c1d7-11e4-8dc0-7b7e574c78b0 (adminui@master-20150303T185212Z-gca114bd)
-        update "vmapi" service to image 2752e4fc-bf0e-11e4-8de7-73e39bcc2a12 (vmapi@master-20150228T054919Z-gb09aea6)
-        update "cloudapi" service to image 26eb639e-c112-11e4-ada8-ffb116cec9d8 (cloudapi@master-20150302T192040Z-g24cfb4d)
-        update "manta" service to image 6ab73f54-bd8d-11e4-83c2-8b81723a3436 (manta-deployment@master-20150226T075408Z-gc8d74a9)
-        update "assets" service to image 1ccefc72-bd8e-11e4-b163-df2139248aba (assets@master-20150226T080059Z-g6012d50)
-        update "imgapi" service to image 5231245e-bd8d-11e4-9db9-07ccad0e008e (imgapi@master-20150226T074935Z-gf69e4d4)
-        update "ufds" service to image bfc5dac8-bd8d-11e4-a03b-67835b902758 (ufds@master-20150226T075650Z-g9a66af3)
-        update "moray" service to image 675087da-beb4-11e4-a9b3-8f914417afff (manta-moray@master-20150227T190616Z-gf7607c7)
-        update "sapi" service to image cf267ca8-bd91-11e4-941b-5f26cf29c0e5 (sapi@master-20150226T082326Z-g14fa2e4)
-        update "manatee" service to image 6e9b95ec-beb5-11e4-806b-6fc4218e1009 (sdc-postgres@master-20150227T191223Z-gad45608)
-        update "binder" service to image 30fe9576-bd8f-11e4-9066-63d665bc96ce (manta-nameservice@master-20150226T080343Z-gba090a8)
-        update "mahi" service to image a3012cb0-bde9-11e4-8816-57d15d66624e (manta-authcache@master-20150226T185448Z-g4e3f5d9)
-    Create work dir: /var/sdcadm/updates/20150303T194912Z
-    Downloading image 85157ca0-bd90-11e4-9016-477613964961 (papi@master-20150226T081600Z-g7905a77)
-    Downloading image a3012cb0-bde9-11e4-8816-57d15d66624e (manta-authcache@master-20150226T185448Z-g4e3f5d9)
-    Downloading image 78c965a4-bd8d-11e4-a1bc-2701505c414d (amon@master-20150226T075046Z-g58ecaf8)
-    Downloading image 6e9b95ec-beb5-11e4-806b-6fc4218e1009 (sdc-postgres@master-20150227T191223Z-gad45608)
-    Imported image a3012cb0-bde9-11e4-8816-57d15d66624e (manta-authcache@master-20150226T185448Z-g4e3f5d9)
-    Downloading image 30fe9576-bd8f-11e4-9066-63d665bc96ce (manta-nameservice@master-20150226T080343Z-gba090a8)
-    Imported image 30fe9576-bd8f-11e4-9066-63d665bc96ce (manta-nameservice@master-20150226T080343Z-gba090a8)
-    Downloading image 675087da-beb4-11e4-a9b3-8f914417afff (manta-moray@master-20150227T190616Z-gf7607c7)
-    Imported image 85157ca0-bd90-11e4-9016-477613964961 (papi@master-20150226T081600Z-g7905a77)
-    Downloading image 970715a8-c16f-11e4-9fae-3f1afe2afdee (cnapi@master-20150303T063214Z-g0c8f661)
-    Imported image 970715a8-c16f-11e4-9fae-3f1afe2afdee (cnapi@master-20150303T063214Z-g0c8f661)
-    Downloading image 0c589eba-c177-11e4-9be7-b3bfec9244fb (dhcpd@master-20150303T072519Z-g54ca866)
-    Imported image 0c589eba-c177-11e4-9be7-b3bfec9244fb (dhcpd@master-20150303T072519Z-g54ca866)
-    Downloading image aaba7218-bd8f-11e4-81df-573bd1d77302 (redis@master-20150226T081228Z-g0d6e5b9)
-    Imported image 78c965a4-bd8d-11e4-a1bc-2701505c414d (amon@master-20150226T075046Z-g58ecaf8)
-    Downloading image bfc5dac8-bd8d-11e4-a03b-67835b902758 (ufds@master-20150226T075650Z-g9a66af3)
-    Imported image aaba7218-bd8f-11e4-81df-573bd1d77302 (redis@master-20150226T081228Z-g0d6e5b9)
-    Downloading image 959b6076-bd90-11e4-ae05-6fc0ef56abd1 (workflow@master-20150226T081626Z-g2a160f5)
-    Imported image 959b6076-bd90-11e4-ae05-6fc0ef56abd1 (workflow@master-20150226T081626Z-g2a160f5)
-    Downloading image 1ac995dc-bd8d-11e4-89ed-0b706fd9fcfd (napi@master-20150226T074910Z-gbc4a87c)
-    Imported image 675087da-beb4-11e4-a9b3-8f914417afff (manta-moray@master-20150227T190616Z-gf7607c7)
-    Downloading image 1fa4af12-bd90-11e4-b420-dfe5cc431999 (fwapi@master-20150226T081200Z-g8601d56)
-    Imported image 1fa4af12-bd90-11e4-b420-dfe5cc431999 (fwapi@master-20150226T081200Z-g8601d56)
-    Downloading image 3862bfbc-c1d7-11e4-8dc0-7b7e574c78b0 (adminui@master-20150303T185212Z-gca114bd)
-    Imported image 6e9b95ec-beb5-11e4-806b-6fc4218e1009 (sdc-postgres@master-20150227T191223Z-gad45608)
-    Downloading image 5231245e-bd8d-11e4-9db9-07ccad0e008e (imgapi@master-20150226T074935Z-gf69e4d4)
-    Imported image bfc5dac8-bd8d-11e4-a03b-67835b902758 (ufds@master-20150226T075650Z-g9a66af3)
-    Downloading image 2752e4fc-bf0e-11e4-8de7-73e39bcc2a12 (vmapi@master-20150228T054919Z-gb09aea6)
-    Imported image 1ac995dc-bd8d-11e4-89ed-0b706fd9fcfd (napi@master-20150226T074910Z-gbc4a87c)
-    Downloading image cf267ca8-bd91-11e4-941b-5f26cf29c0e5 (sapi@master-20150226T082326Z-g14fa2e4)
-    Imported image 5231245e-bd8d-11e4-9db9-07ccad0e008e (imgapi@master-20150226T074935Z-gf69e4d4)
-    Downloading image 26eb639e-c112-11e4-ada8-ffb116cec9d8 (cloudapi@master-20150302T192040Z-g24cfb4d)
-    Imported image 2752e4fc-bf0e-11e4-8de7-73e39bcc2a12 (vmapi@master-20150228T054919Z-gb09aea6)
-    Downloading image 6ab73f54-bd8d-11e4-83c2-8b81723a3436 (manta-deployment@master-20150226T075408Z-gc8d74a9)
-    Imported image 3862bfbc-c1d7-11e4-8dc0-7b7e574c78b0 (adminui@master-20150303T185212Z-gca114bd)
-    Downloading image 1ccefc72-bd8e-11e4-b163-df2139248aba (assets@master-20150226T080059Z-g6012d50)
-    Imported image 26eb639e-c112-11e4-ada8-ffb116cec9d8 (cloudapi@master-20150302T192040Z-g24cfb4d)
-    Downloading image f1b6b7e0-bd8e-11e4-8ae4-d3a190985286 (amonredis@master-20150226T080620Z-g4bbca77)
-    Imported image 1ccefc72-bd8e-11e4-b163-df2139248aba (assets@master-20150226T080059Z-g6012d50)
-    Downloading image 156647c6-c174-11e4-804f-73c1ba84c2f5 (sdc@master-20150303T070134Z-g997645e)
-    Imported image cf267ca8-bd91-11e4-941b-5f26cf29c0e5 (sapi@master-20150226T082326Z-g14fa2e4)
-    Imported image f1b6b7e0-bd8e-11e4-8ae4-d3a190985286 (amonredis@master-20150226T080620Z-g4bbca77)
-    Imported image 156647c6-c174-11e4-804f-73c1ba84c2f5 (sdc@master-20150303T070134Z-g997645e)
-    Imported image 6ab73f54-bd8d-11e4-83c2-8b81723a3436 (manta-deployment@master-20150226T075408Z-gc8d74a9)
-    Installing image 85157ca0-bd90-11e4-9016-477613964961 (papi@master-20150226T081600Z-g7905a77)
-    Reprovisioning papi VM f36bf6cf-fd0e-457f-8965-edda37e45189
-    Wait (60s) for papi instance f36bf6cf-fd0e-457f-8965-edda37e45189 to come up
-    Installing image f1b6b7e0-bd8e-11e4-8ae4-d3a190985286 (amonredis@master-20150226T080620Z-g4bbca77)
-    Reprovisioning amonredis VM 61d1c261-f7d7-42b6-aa57-64b5660cd5e0
-    Wait (60s) for amonredis instance 61d1c261-f7d7-42b6-aa57-64b5660cd5e0 to come up
-    Installing image 78c965a4-bd8d-11e4-a1bc-2701505c414d (amon@master-20150226T075046Z-g58ecaf8)
-    Reprovisioning amon VM 79681927-a86b-48d7-b65a-d9a069785d25
-    Wait (60s) for amon instance 79681927-a86b-48d7-b65a-d9a069785d25 to come up
-    Installing image 970715a8-c16f-11e4-9fae-3f1afe2afdee (cnapi@master-20150303T063214Z-g0c8f661)
-    Reprovisioning cnapi VM 458f3ec3-eb36-43ba-8833-bfbfba91f88b
-    Wait (60s) for cnapi instance 458f3ec3-eb36-43ba-8833-bfbfba91f88b to come up
-    Installing image 0c589eba-c177-11e4-9be7-b3bfec9244fb (dhcpd@master-20150303T072519Z-g54ca866)
-    Reprovisioning dhcpd VM 3e60a5ce-438d-4497-aa43-7cf6bd8503dd
-    Wait (60s) for dhcpd instance 3e60a5ce-438d-4497-aa43-7cf6bd8503dd to come up
-    Installing image aaba7218-bd8f-11e4-81df-573bd1d77302 (redis@master-20150226T081228Z-g0d6e5b9)
-    Reprovisioning redis VM aba66c50-cdfe-413a-8a10-479a2ca302dd
-    Wait (60s) for redis instance aba66c50-cdfe-413a-8a10-479a2ca302dd to come up
-    Installing image 1ac995dc-bd8d-11e4-89ed-0b706fd9fcfd (napi@master-20150226T074910Z-gbc4a87c)
-    Reprovisioning napi VM 9f3c4cf5-82f6-4dfb-9c85-48129560670e
-    Wait (60s) for napi instance 9f3c4cf5-82f6-4dfb-9c85-48129560670e to come up
-    Installing image 959b6076-bd90-11e4-ae05-6fc0ef56abd1 (workflow@master-20150226T081626Z-g2a160f5)
-    Reprovisioning workflow VM cfd7978b-d6e1-49d3-9673-8265704a1b87
-    Wait (60s) for workflow instance cfd7978b-d6e1-49d3-9673-8265704a1b87 to come up
-    Installing image 1fa4af12-bd90-11e4-b420-dfe5cc431999 (fwapi@master-20150226T081200Z-g8601d56)
-    Reprovisioning fwapi VM ec50f64c-2c4c-44b0-8050-f371d6bb1e49
-    Wait (60s) for fwapi instance ec50f64c-2c4c-44b0-8050-f371d6bb1e49 to come up
-    Installing image 156647c6-c174-11e4-804f-73c1ba84c2f5 (sdc@master-20150303T070134Z-g997645e)
-    Reprovisioning sdc VM d5ae7694-6ad6-4a2c-9675-f19fb075314f
-    Wait (60s) for sdc instance d5ae7694-6ad6-4a2c-9675-f19fb075314f to come up
-    Installing image 3862bfbc-c1d7-11e4-8dc0-7b7e574c78b0 (adminui@master-20150303T185212Z-gca114bd)
-    Reprovisioning adminui VM 75d74108-91a3-4958-a7d8-dedc6feb9cfb
-    Wait (60s) for adminui instance 75d74108-91a3-4958-a7d8-dedc6feb9cfb to come up
-    Installing image 2752e4fc-bf0e-11e4-8de7-73e39bcc2a12 (vmapi@master-20150228T054919Z-gb09aea6)
-    Reprovisioning vmapi VM ead80fc7-7688-4290-9504-440389f836d7
-    Wait (60s) for vmapi instance ead80fc7-7688-4290-9504-440389f836d7 to come up
-    Update "assets" VM b85bf7d8-0473-46eb-845b-967d201b6e85 user-script
-    Installing image 1ccefc72-bd8e-11e4-b163-df2139248aba (assets@master-20150226T080059Z-g6012d50)
-    Reprovisioning assets VM b85bf7d8-0473-46eb-845b-967d201b6e85
-    Wait (60s) for assets instance b85bf7d8-0473-46eb-845b-967d201b6e85 to come up
-    Installing image 5231245e-bd8d-11e4-9db9-07ccad0e008e (imgapi@master-20150226T074935Z-gf69e4d4)
-    Reprovisioning imgapi VM 52aca9c6-8d72-4df5-b44c-e9c496e4a510
-    Wait (60s) for imgapi instance 52aca9c6-8d72-4df5-b44c-e9c496e4a510 to come up
+        download 7 images (352 MiB):
+            image 72e02784-4205-11e5-8716-bf4775f2d122 (cnapi@master-20150813T214711Z-gec7854c)
+            image 37f1ced4-411f-11e5-98c2-7771ebd8c6a8 (adminui@master-20150812T181718Z-g4caebce)
+            image 7098ceb8-3260-11e5-abaa-cfc71813e2f6 (manta-deployment@master-20150724T235719Z-gc13ee4d)
+            image 7460992a-37da-11e5-9a9d-77d0d6309219 (napi@master-20150731T231325Z-g2ac49c8)
+            image b68e6d62-360a-11e5-8927-f39b9ca92d9a (imgapi@master-20150729T155341Z-geeb1af4)
+            image 4677867a-3b8d-11e5-b0b0-bb8491425542 (cloudapi@master-20150805T160959Z-g23d22d6)
+            image 3a5db69e-407d-11e5-a22e-4ff96e942d5d (vmapi@master-20150811T225942Z-g6df1922)
+        update "cnapi" service to image 72e02784-4205-11e5-8716-bf4775f2d122 (cnapi@master-20150813T214711Z-gec7854c)
+        update "adminui" service to image 37f1ced4-411f-11e5-98c2-7771ebd8c6a8 (adminui@master-20150812T181718Z-g4caebce)
+        update "vmapi" service to image 3a5db69e-407d-11e5-a22e-4ff96e942d5d (vmapi@master-20150811T225942Z-g6df1922)
+        update "napi" service to image 7460992a-37da-11e5-9a9d-77d0d6309219 (napi@master-20150731T231325Z-g2ac49c8)
+        update "manta" service to image 7098ceb8-3260-11e5-abaa-cfc71813e2f6 (manta-deployment@master-20150724T235719Z-gc13ee4d)
+        update "cloudapi" service to image 4677867a-3b8d-11e5-b0b0-bb8491425542 (cloudapi@master-20150805T160959Z-g23d22d6)
+        update "imgapi" service to image b68e6d62-360a-11e5-8927-f39b9ca92d9a (imgapi@master-20150729T155341Z-geeb1af4)
+
+    Create work dir: /var/sdcadm/updates/20150814T204832Z
+    Downloading image 72e02784-4205-11e5-8716-bf4775f2d122 (cnapi@master-20150813T214711Z-gec7854c)
+    Downloading image 37f1ced4-411f-11e5-98c2-7771ebd8c6a8 (adminui@master-20150812T181718Z-g4caebce)
+    Downloading image 7098ceb8-3260-11e5-abaa-cfc71813e2f6 (manta-deployment@master-20150724T235719Z-gc13ee4d)
+    Downloading image 7460992a-37da-11e5-9a9d-77d0d6309219 (napi@master-20150731T231325Z-g2ac49c8)
+    Imported image 72e02784-4205-11e5-8716-bf4775f2d122 (cnapi@master-20150813T214711Z-gec7854c)
+    Downloading image b68e6d62-360a-11e5-8927-f39b9ca92d9a (imgapi@master-20150729T155341Z-geeb1af4)
+    Imported image 7460992a-37da-11e5-9a9d-77d0d6309219 (napi@master-20150731T231325Z-g2ac49c8)
+    Downloading image 4677867a-3b8d-11e5-b0b0-bb8491425542 (cloudapi@master-20150805T160959Z-g23d22d6)
+    Imported image 37f1ced4-411f-11e5-98c2-7771ebd8c6a8 (adminui@master-20150812T181718Z-g4caebce)
+    Downloading image 3a5db69e-407d-11e5-a22e-4ff96e942d5d (vmapi@master-20150811T225942Z-g6df1922)
+    Imported image 7098ceb8-3260-11e5-abaa-cfc71813e2f6 (manta-deployment@master-20150724T235719Z-gc13ee4d)
+    Imported image b68e6d62-360a-11e5-8927-f39b9ca92d9a (imgapi@master-20150729T155341Z-geeb1af4)
+    Imported image 4677867a-3b8d-11e5-b0b0-bb8491425542 (cloudapi@master-20150805T160959Z-g23d22d6)
+    Imported image 3a5db69e-407d-11e5-a22e-4ff96e942d5d (vmapi@master-20150811T225942Z-g6df1922)
+    Installing image 72e02784-4205-11e5-8716-bf4775f2d122 (cnapi@master-20150813T214711Z-gec7854c)
+    Reprovisioning cnapi VM 1ede0997-1a1f-405a-bf57-b794c69feb10
+    Waiting for cnapi instance 1ede0997-1a1f-405a-bf57-b794c69feb10 to come up
+    Installing image 37f1ced4-411f-11e5-98c2-7771ebd8c6a8 (adminui@master-20150812T181718Z-g4caebce)
+    Reprovisioning adminui VM 733a6141-5167-42e6-9d8a-ece47974b82d
+    Waiting for adminui instance 733a6141-5167-42e6-9d8a-ece47974b82d to come up
+    Installing image 3a5db69e-407d-11e5-a22e-4ff96e942d5d (vmapi@master-20150811T225942Z-g6df1922)
+    Reprovisioning vmapi VM 09882999-4f41-4519-9d1c-ea1843f8fb36
+    Waiting for vmapi instance 09882999-4f41-4519-9d1c-ea1843f8fb36 to come up
+    Installing image 7460992a-37da-11e5-9a9d-77d0d6309219 (napi@master-20150731T231325Z-g2ac49c8)
+    Reprovisioning napi VM a9ff40ea-5662-4c04-b38c-941757e61a0f
+    Waiting for napi instance a9ff40ea-5662-4c04-b38c-941757e61a0f to come up
+    Installing image 4677867a-3b8d-11e5-b0b0-bb8491425542 (cloudapi@master-20150805T160959Z-g23d22d6)
+    Reprovisioning cloudapi VM fb327364-2308-4f11-a6b1-af39ad3d05fb
+    Waiting for cloudapi instance fb327364-2308-4f11-a6b1-af39ad3d05fb to come up
+    Installing image b68e6d62-360a-11e5-8927-f39b9ca92d9a (imgapi@master-20150729T155341Z-geeb1af4)
+    Reprovisioning imgapi VM 141f8416-5496-4cef-9a0d-b7ab3ffda801
+    Waiting for imgapi instance 141f8416-5496-4cef-9a0d-b7ab3ffda801 to come up
     Disabling imgapi service
     Running IMGAPI migration-008-new-storage-layout.js
     Running IMGAPI migration-009-backfill-archive.js
     Running IMGAPI migration-010-backfill-billing_tags.js
     Running IMGAPI migration-011-backfill-published_at.js
+    Running IMGAPI migration-012-update-docker-image-uuids.js (if exists)
     Enabling imgapi service
-    Running vmadm lookup to get local manatee
-    Running manatee-adm to find primary manatee
-    Creating ufds buckets backup 20150303T201054479.sql
-    Copying backup file to HeadNode
-    Moving backup file to /var/sdcadm/ufds-backup
-    Installing image bfc5dac8-bd8d-11e4-a03b-67835b902758 (ufds@master-20150226T075650Z-g9a66af3)
-    Reprovisioning ufds VM dbb49dbf-b79d-4999-8b3a-00e8e48f6043
-    Wait (60s) for ufds instance dbb49dbf-b79d-4999-8b3a-00e8e48f6043 to come up
-    Installing image 675087da-beb4-11e4-a9b3-8f914417afff (manta-moray@master-20150227T190616Z-gf7607c7)
-    Provisioning Temporary moray VM moray0tmp
-    Wait (sleep) for moray instance a9a4eb48-67b2-4f09-9a43-0bcf2a7ed1c5 to come up
-    Running vmadm lookup to get tmp instance UUID
-    Checking if tmp instace a9a4eb48-67b2-4f09-9a43-0bcf2a7ed1c5 services have errors
-    Waiting until a9a4eb48-67b2-4f09-9a43-0bcf2a7ed1c5 instance is in DNS
-    Disabling registrar on VM 1c3d73be-4e9d-4aac-9a92-8ee85c6edf22
-    Wait until VM 1c3d73be-4e9d-4aac-9a92-8ee85c6edf22 is out of DNS
-    Reprovisioning moray VM 1c3d73be-4e9d-4aac-9a92-8ee85c6edf22
-    Wait (60s) for moray instance 1c3d73be-4e9d-4aac-9a92-8ee85c6edf22 to come up
-    Waiting until 1c3d73be-4e9d-4aac-9a92-8ee85c6edf22 instance is in DNS
-    Disabling registrar on VM a9a4eb48-67b2-4f09-9a43-0bcf2a7ed1c5
-    Wait until VM a9a4eb48-67b2-4f09-9a43-0bcf2a7ed1c5 is out of DNS
-    Stop tmp VM a9a4eb48-67b2-4f09-9a43-0bcf2a7ed1c5
-    Destroying tmp VM a9a4eb48-67b2-4f09-9a43-0bcf2a7ed1c5 (moray0tmp)
-    Get SAPI current mode
-    Installing image cf267ca8-bd91-11e4-941b-5f26cf29c0e5 (sapi@master-20150226T082326Z-g14fa2e4)
-    Updating 'sapi-url' in SAPI
-    Updating 'sapi-url' in VM c9949452-cae6-44c5-826f-13b7f4d1cb1b
-    Verifying if we are on an HA setup
-    Provisioning Temporary sapi VM sapi0tmp
-    Wait (sleep) for sapi instance af8015de-24be-41b3-b1af-b94d337bdc4c to come up
-    Running vmadm lookup to get tmp instance UUID
-    Checking if tmp instace af8015de-24be-41b3-b1af-b94d337bdc4c services have errors
-    Waiting until af8015de-24be-41b3-b1af-b94d337bdc4c instance is in DNS
-    Disabling registrar on VM c9949452-cae6-44c5-826f-13b7f4d1cb1b
-    Wait until VM c9949452-cae6-44c5-826f-13b7f4d1cb1b is out of DNS
-    Reprovisioning sapi VM c9949452-cae6-44c5-826f-13b7f4d1cb1b
-    Wait (60s) for sapi instance c9949452-cae6-44c5-826f-13b7f4d1cb1b to come up
-    Waiting until c9949452-cae6-44c5-826f-13b7f4d1cb1b instance is in DNS
-    Disabling registrar on VM af8015de-24be-41b3-b1af-b94d337bdc4c
-    Wait until VM af8015de-24be-41b3-b1af-b94d337bdc4c is out of DNS
-    Stop tmp VM af8015de-24be-41b3-b1af-b94d337bdc4c
-    Destroying tmp VM af8015de-24be-41b3-b1af-b94d337bdc4c (sapi0tmp)
-    Verifying manatee target version
-    Target version is new enough to avoid setting SAPI back to proto mode
-    get local manatee
-    Running manatee-adm status in local manatee
-    Getting Compute Nodes Information for manatee VMs
-    Getting SDC's moray vms from VMAPI
-    Installing image 6e9b95ec-beb5-11e4-806b-6fc4218e1009 (sdc-postgres@master-20150227T191223Z-gad45608)
-    Disabling moray services
-    Checking manatee-adm version
-    Reprovisioning "primary" manatee
-    Reprovisioning 87686cf6-5211-471f-867c-0ae221911043 VM 564deee0-9ceb-4e0b-999c-e50f74a7b6f3
-    Wait (60s) for manatee instance 87686cf6-5211-471f-867c-0ae221911043 to come up
-    Ensure ONE NODE WRITE MODE
-    Enabling moray services
-    Waiting (2mins) for moray services to be up
-    Looking for zk leader
-    Installing image 30fe9576-bd8f-11e4-9066-63d665bc96ce (manta-nameservice@master-20150226T080343Z-gba090a8)
-    Updating ZK leader
-    Reprovisioning fbbafcc4-b34e-4365-b129-c7ca3c1b7115 VM 564deee0-9ceb-4e0b-999c-e50f74a7b6f3
-    Wait (sleep) for binder instance fbbafcc4-b34e-4365-b129-c7ca3c1b7115 to come up
-    "mahi" VM already has a delegate dataset
-    Installing image a3012cb0-bde9-11e4-8816-57d15d66624e (manta-authcache@master-20150226T185448Z-g4e3f5d9)
-    Reprovisioning mahi VM 0ce580dd-725b-4f80-a341-963359802e90
-    Wait (60s) for mahi instance 0ce580dd-725b-4f80-a341-963359802e90 to come up
-    Updated successfully (elapsed 2297s).
+    Updated successfully (elapsed 615s).
     ```
 
 1. Confirm SDC's health with `sdcadm check-health`.
