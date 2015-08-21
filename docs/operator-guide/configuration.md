@@ -81,6 +81,8 @@ intention is to eventually reduce that overlap.
 | account_allowed_dcs | Boolean | Whether to consider 'allowed_dcs' field on UFDS account entries for cloudapi and sdc-docker authz in this datacenter. See [DOCKER-166](https://smartos.org/bugview/DOCKER-166). |
 | account_allowed_dcs_msg | String | Optional message to include in the "403 Forbidden" response body due to cloudapi or sdc-docker authz failure due to 'allowed_dcs'. |
 | no_rabbit | Boolean | This is a transitional config var. Set to true to switch to the "new" agents (vm-agent, cn-agent) that don't use RabbitMQ for transport -- away from the "old" agents (provisioner, heartbeater) that do. Note: for a clean transition one should ensure no active workflows (`sdcadm experimental dc-maint`) and that configuration has propagated to agents (`sdc-oneachnode -a 'svcadm restart config-agent'`). |
+| http_proxy | String | An HTTP proxy host (including the 'http://'), e.g. 'http://myproxy.example.com:8080', for SDC services to use for external access. This can be useful for a firewalled-off SDC. Facilities using the proxy include: IMGAPI's downloading of SDC and Docker images, `sdcadm`'s usage of https://updates.joyent.com for updates. |
+| docker_registry_insecure | Boolean | Set to true to allow access to Docker registries with self-signed certificates. **Warning: this shouldn't be used in production.**. |
 
 
 Example setting a SDC application config var:
