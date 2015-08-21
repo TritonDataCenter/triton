@@ -544,7 +544,7 @@ the most reliable and secure OS.
 
    Get the version of the latest platform image:
     ```bash
-    [root@headnode (coal-1) ~]# LATEST_PLATFORM=$(sdcadm platform list | grep true | cut -d' ' -f1)
+    [root@headnode (coal-1) ~]# LATEST_PLATFORM=$(sdcadm platform list -j | json -a -c 'latest==true' version)
     [root@headnode (coal-1) ~]# echo $LATEST_PLATFORM
     20150219T182356Z
     ```
