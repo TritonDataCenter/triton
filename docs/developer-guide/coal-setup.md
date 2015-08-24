@@ -423,10 +423,22 @@ services have new images.
 
 1. Update the agents:
 
-    ```bash
-    [root@headnode (coal-1) ~]# sdcadm experimental update-agents --latest -y
-    Downloading agentsshar image 002774ed-e83d-423d-8d25-f133a588f84c (1.0.0-master-20150226T224702Z-gd3c2031) to /var/tmp/agents-002774ed-e83d-423d-8d25-f133a588f84c.sh
-    Executing agents installer across data center
+    ```
+    [root@headnode (coal-1) ~]# sdcadm experimental update-agents --latest -y --all
+    UUID of latest installed agents image is: b38d1458-38d1-4884-ab05-6e36692c1700
+    Ensuring contact with all servers
+    This update will make the following changes:
+        Download and install
+         agentsshar image c9d439e0-494c-4767-9979-dc09725735cb
+        (1.0.0-master-20150821T193800Z-gd067c0e) on 1 servers
+    Downloading agentsshar image to /var/tmp/agents-c9d439e0-494c-4767-9979-dc09725735cb.sh
+    Running agents installer into 1 servers
+    ...494c-4767-9979-dc09725735cb.sh [=================================================================>] 100%        1
+    Ur command run complete
+    Reloading servers sysinfo
+    sysinfo reloaded for all the running servers
+    Refresh config-agent into all the setup and running servers
+    config-agent refresh for all the running servers
     Done.
     ```
 
