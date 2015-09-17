@@ -44,7 +44,7 @@ if [[ -e "/Applications/VMware Fusion.app/Contents/Library/services.sh" ]]; then
     FUSION4=true
 fi
 
-# Detect if Fusion 7 is installed
+# Detect if Fusion 7 or Fusion 8 is installed
 if [[ -e "/Applications/VMware Fusion.app/Contents/Library/vmrun" ]]; then
     BIN_DIR="/Applications/VMware Fusion.app/Contents/Library"
     SETTINGS_DIR="/Library/Preferences/VMware Fusion"
