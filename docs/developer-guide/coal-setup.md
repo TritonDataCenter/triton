@@ -45,7 +45,7 @@ At a high level, setting up CoaL involves:
     curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/coal-latest.tgz
 
 2. Install VMware, if you haven't already.
-    - Mac: [VMware Fusion](http://www.vmware.com/products/fusion) 5 or 7.
+    - Mac: [VMware Fusion](http://www.vmware.com/products/fusion) 5, 7, or 8.
     - Windows or Linux: [VMware Workstation](http://www.vmware.com/products/workstation).
 
 3. Configure VMware virtual networks for CoaL's "external" and "admin"
