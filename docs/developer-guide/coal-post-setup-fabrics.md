@@ -343,15 +343,14 @@ fi
 fabric_cfg=$(/opt/smartdc/bin/sdc-sapi /applications?name=sdc | json -H 0.metadata.fabric_cfg)
 if [[ -z "$fabric_cfg" ]]; then
     cat <<EOM >/tmp/fabrics.cfg
-    {
-        "default_underlay_mtu": 1500,
-        "default_overlay_mtu": 1400,
-        "sdc_nat_pool": "$(sdc-napi /network_pools?name=sdc_nat | json -H 0.uuid)",
-        "sdc_underlay_assignment": "manual",
-        "sdc_underlay_tag": "sdc_underlay"
-    }
-    EOM
-
+{
+    "default_underlay_mtu": 1500,
+    "default_overlay_mtu": 1400,
+    "sdc_nat_pool": "$(sdc-napi /network_pools?name=sdc_nat | json -H 0.uuid)",
+    "sdc_underlay_assignment": "manual",
+    "sdc_underlay_tag": "sdc_underlay"
+}
+EOM
     sdcadm post-setup fabrics -c /tmp/fabrics.cfg
 fi
 
