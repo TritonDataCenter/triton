@@ -341,6 +341,11 @@ compute node for instances is handy. To enable:
 Configuring CNAPI to allow headnode provisioning and over-provisioning (allow a minute to propagate)
 ```
 
+### Setup Fabrics
+
+Fabrics are not required to run CoaL. If you need to setup fabrics for
+development purposes you can refer to [Set up fabrics in CoaL](./coal-post-setup-fabrics.md)
+
 # Update CoaL
 
 ## Set Channel
