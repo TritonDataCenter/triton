@@ -309,7 +309,8 @@ reboot
 
 ### Summary
 
-In summary, all the commands to run are repeated here:
+In summary, all the commands to run are repeated here (with some updates to
+allow re-running this block):
 
 ```bash
 if [[ "$(sdc-napi /nic_tags | json -H -c 'this.name==="sdc_underlay"')" == "[]" ]]; then
@@ -339,32 +340,37 @@ if [[ "$(sdc-napi /network_pools?name=sdc_nat | json -H)" == "[]" ]]; then
 EOM
 fi
 
-cat <<EOM >/tmp/fabrics.cfg
-{
-    "default_underlay_mtu": 1500,
-    "default_overlay_mtu": 1400,
-    "sdc_nat_pool": "$(sdc-napi /network_pools?name=sdc_nat | json -H 0.uuid)",
-    "sdc_underlay_assignment": "manual",
-    "sdc_underlay_tag": "sdc_underlay"
-}
-EOM
+fabric_cfg=$(/opt/smartdc/bin/sdc-sapi /applications?name=sdc | json -H 0.metadata.fabric_cfg)
+if [[ -z "$fabric_cfg" ]]; then
+    cat <<EOM >/tmp/fabrics.cfg
+    {
+        "default_underlay_mtu": 1500,
+        "default_overlay_mtu": 1400,
+        "sdc_nat_pool": "$(sdc-napi /network_pools?name=sdc_nat | json -H 0.uuid)",
+        "sdc_underlay_assignment": "manual",
+        "sdc_underlay_tag": "sdc_underlay"
+    }
+    EOM
 
-sdcadm post-setup fabrics -c /tmp/fabrics.cfg
+    sdcadm post-setup fabrics -c /tmp/fabrics.cfg
+fi
 
-external_nic=$(sdc-sapi /applications?name=sdc | json -H 0.metadata.external_nic)
-sdc-napi /nics/$(echo $external_nic | sed -e 's/://g') \
-    -d '{"nic_tags_provided": ["external","sdc_underlay"]}' -X PUT
+if ! $(nictagadm exists sdc_underlay 2>/dev/null); then
+    external_nic=$(sdc-sapi /applications?name=sdc | json -H 0.metadata.external_nic)
+    sdc-napi /nics/$(echo $external_nic | sed -e 's/://g') \
+        -d '{"nic_tags_provided": ["external","sdc_underlay"]}' -X PUT
 
-sdcadm post-setup underlay-nics \
-    $(sdc-napi /networks?name=sdc_underlay | json -H 0.uuid) \
-    $(sysinfo | json UUID)
+    sdcadm post-setup underlay-nics \
+        $(sdc-napi /networks?name=sdc_underlay | json -H 0.uuid) \
+        $(sysinfo | json UUID)
 
-sdc-usbkey mount
-sdc-login -l dhcpd /opt/smartdc/booter/bin/hn-netfile \
-    > /mnt/usbkey/boot/networking.json
-sdc-usbkey unmount
+    sdc-usbkey mount
+    sdc-login -l dhcpd /opt/smartdc/booter/bin/hn-netfile \
+        > /mnt/usbkey/boot/networking.json
+    sdc-usbkey unmount
 
-reboot
+    reboot
+fi
 ```
 
 
