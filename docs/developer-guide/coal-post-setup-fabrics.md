@@ -8,212 +8,375 @@
     Copyright (c) 2015, Joyent, Inc.
 -->
 
-# Set up fabrics in CoaL
+# CoaL post-setup: fabrics
 
-In order to simplify the process, all the commands are intended to run from
-the Headnode Global Zone. Sample output is provided alongside the commands
-as a quick guide of which are the expected results of the execution of such
-commands.
-
-## Step 1: Get/create `sdc_underlay` Nic Tag
-
-    [root@headnode (coal) ~]# sdc-napi /nic_tags/sdc_underlay
-    HTTP/1.1 404 Not Found
-    Content-Type: application/json
-    Content-Length: 57
-    Date: Thu, 08 Oct 2015 14:35:24 GMT
-    Server: SmartDataCenter Networking API
-    x-request-id: cf9ff950-6dc9-11e5-8849-218c24b1263a
-    x-response-time: 7
-    x-server-name: ba04abb4-05bd-4f8d-9552-622a359445cb
-    Connection: keep-alive
-
-    {
-      "code": "ResourceNotFound",
-      "message": "nic tag not found"
-    }
-
-    [root@headnode (coal) ~]# sdc-napi /nic_tags -X POST -d '{"name": "sdc_underlay"}'
-    HTTP/1.1 200 OK
-    Content-Type: application/json
-    Content-Length: 80
-    Date: Thu, 08 Oct 2015 14:41:01 GMT
-    Server: SmartDataCenter Networking API
-    x-request-id: 98a91f70-6dca-11e5-8849-218c24b1263a
-    x-response-time: 14
-    x-server-name: ba04abb4-05bd-4f8d-9552-622a359445cb
-    Connection: keep-alive
-
-    {
-      "mtu": 1500,
-      "name": "sdc_underlay",
-      "uuid": "95152cf9-8e9b-48a7-aa39-c29c5328a941"
-    }
-
-## Step 2: Get or create `sdc_underlay` Network
-
-    [root@headnode (coal) ~]# sdc-napi /networks?name=sdc_underlay
-    HTTP/1.1 200 OK
-    Content-Type: application/json
-    Content-Length: 2
-    Date: Thu, 08 Oct 2015 14:46:36 GMT
-    Server: SmartDataCenter Networking API
-    x-request-id: 605af2f0-6dcb-11e5-8849-218c24b1263a
-    x-response-time: 8
-    x-server-name: ba04abb4-05bd-4f8d-9552-622a359445cb
-    Connection: keep-alive
-
-    []
-
-    [root@headnode (coal) ~]# sdc-napi /networks -X POST -d "{
-    \"name\": \"sdc_underlay\",
-    \"subnet\": \"10.88.88.0/24\",
-    \"provision_start_ip\": \"10.88.88.205\",
-    \"provision_end_ip\": \"10.88.88.250\",
-    \"nic_tag\": \"sdc_underlay\",
-    \"vlan_id\": 0,
-    \"owner_uuids\": [\"$(sdc-ufds s 'login=admin'|json uuid)\"]
-    }"
-
-    HTTP/1.1 200 OK
-    Content-Type: application/json
-    Content-Length: 308
-    Date: Thu, 08 Oct 2015 15:07:56 GMT
-    Server: SmartDataCenter Networking API
-    x-request-id: 5b57f610-6dce-11e5-8849-218c24b1263a
-    x-response-time: 114
-    x-server-name: ba04abb4-05bd-4f8d-9552-622a359445cb
-    Connection: keep-alive
-
-    {
-      "mtu": 1500,
-      "nic_tag": "sdc_underlay",
-      "name": "sdc_underlay",
-      "provision_end_ip": "10.88.88.250",
-      "provision_start_ip": "10.88.88.205",
-      "vlan_id": 0,
-      "subnet": "10.88.88.0/24",
-      "uuid": "bd0675e7-5f0e-4ad8-8418-92939914f583",
-      "resolvers": [],
-      "owner_uuids": [
-        "930896af-bf8c-48d4-885c-6573a94b1853"
-      ],
-      "netmask": "255.255.255.0"
-    }
+This guide shows you how to setup "fabrics" (Triton's network virtualization
+system) in your CoaL after basic [CoaL headnode setup](./coal-setup.md).
+See also: <https://docs.joyent.com/private-cloud/networks/sdn>.
 
 
-## Step 3: Get/create `sdc_nat` network pool
+## CoaL headnode
 
-    [root@headnode (coal) ~]# sdc-napi /network_pools?name=sdc_nat
-    HTTP/1.1 200 OK
-    Content-Type: application/json
-    Content-Length: 2
-    Date: Thu, 08 Oct 2015 15:11:06 GMT
-    Server: SmartDataCenter Networking API
-    x-request-id: cc978200-6dce-11e5-8849-218c24b1263a
-    x-response-time: 7
-    x-server-name: ba04abb4-05bd-4f8d-9552-622a359445cb
-    Connection: keep-alive
+To setup fabrics on your CoaL **headnode** the process is as follows.
+First an overview is given, then an example run of each command is shown.
 
-    []
-
-    [root@headnode (coal) ~]# sdc-napi /network_pools -X POST -d "{
-    \"name\": \"sdc_nat\",
-    \"networks\": [\"$(sdc-napi /networks?name=external | json -H 0.uuid)\"]
-    }"
-
-    HTTP/1.1 200 OK
-    Content-Type: application/json
-    Content-Length: 137
-    Date: Thu, 08 Oct 2015 15:13:52 GMT
-    Server: SmartDataCenter Networking API
-    x-request-id: 2f7b3650-6dcf-11e5-8849-218c24b1263a
-    x-response-time: 17
-    x-server-name: ba04abb4-05bd-4f8d-9552-622a359445cb
-    Connection: keep-alive
-
-    {
-      "uuid": "ee58eb30-3c65-4504-babf-c556da1ea868",
-      "name": "sdc_nat",
-      "networks": [
-        "919b0eba-3223-4dcd-8f5f-1e1a0181839a"
-      ],
-      "nic_tag": "external"
-    }
+1. Create the `sdc_underlay` *nic tag*.
+2. Create the `sdc_underlay` NAPI *network*.
+3. Create the `sdc_nat` NAPI *network pool*.
+4. Setup the *"portolan" and "nat" SAPI services* and *set the fabric config*.
+5. Add `sdc_underlay` to the headnode's physical external nic tags.
+   (See [Nic Tag
+   Concepts](https://github.com/joyent/sdc-napi/blob/master/docs/index.md#nic-tag-concepts)
+   for background.)) for background.)
+6. Create an underlay nic for the headnode.
+7. Setup the headnode with a boot-time networking file.
+8. Reboot the headnode.
+   (Note: In general SmartOS networking card device drivers don't support
+   increasing the MTU once you already have interfaces plumbed up and using
+   them.)
 
 
-## Step 4: Save the configuration file to run `sdcadm post-setup fabrics`
+### 1. Create the `sdc_underlay` *nic tag*
 
-The network pool UUID for the `sdc_nat` pool is required in order to configure
-fabrics. The configuration file contents can be saved as follows:
 
-    echo "{
-        \"default_underlay_mtu\": 1500,
-        \"default_overlay_mtu\": 1400,
-        \"sdc_nat_pool\": \"$(sdc-napi /network_pools?name=sdc_nat|json -H 0.uuid)\",
-        \"sdc_underlay_assignment\": \"manual\",
-        \"sdc_underlay_tag\": \"sdc_underlay\"
-    }" > /tmp/fabrics.cfg
+```bash
+if [[ "$(sdc-napi /nic_tags | json -H -c 'this.name==="sdc_underlay"')" == "[]" ]]; then
+    sdc-napi /nic_tags -X POST -d '{"name": "sdc_underlay"}'
+fi
+```
 
-## Step 5: Initialize fabrics using sdcadm
+Example:
 
-    [root@headnode (coal) ~]# sdcadm post-setup fabrics -c /tmp/fabrics.cfg
-    Service "portolan" already exists
-    Instance "portolan0" already exists
-    Adding fabric configuration to SAPI
-    Restarting config of services using "fabric_cfg": napi, vmapi, dhcpd
-    Done!
+```
+[root@headnode (coal) ~]# if [[ "$(sdc-napi /nic_tags | json -H -c 'this.name==="sdc_underlay"')" == "[]" ]]; then
+>     sdc-napi /nic_tags -X POST -d '{"name": "sdc_underlay"}'
+> fi
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 80
+Date: Tue, 13 Oct 2015 22:22:56 GMT
+Server: SmartDataCenter Networking API
+x-request-id: f4388100-71f8-11e5-a0e5-db294d29a01e
+x-response-time: 112
+x-server-name: dbd37544-b6b9-4b10-9f8e-1050bdcdd0b2
+Connection: keep-alive
 
-## Step 6: Configure Headnode
+{
+  "mtu": 1500,
+  "name": "sdc_underlay",
+  "uuid": "064cf263-7738-4e7e-b183-59f9c2df6c57"
+}
+```
 
-### Step 6.1: Update Headnode External Nic
+### 2. Create the `sdc_underlay` NAPI *network*
 
-    [root@headnode (coal) ~]# sdc-napi /nics/0050563da795 -d '{"nic_tags_provided": ["external","sdc_underlay"]}' -X PUT
-    HTTP/1.1 200 OK
-    Content-Type: application/json
-    Content-Length: 245
-    Date: Fri, 09 Oct 2015 17:39:04 GMT
-    Server: SmartDataCenter Networking API
-    x-request-id: a2bf3b60-6eac-11e5-9c45-edaf7bd2771c
-    x-response-time: 31
-    x-server-name: ba04abb4-05bd-4f8d-9552-622a359445cb
-    Connection: keep-alive
+```bash
+if [[ "$(sdc-napi /networks?name=sdc_underlay | json -H)" == "[]" ]]; then
+    sdc-napi /networks -X POST -d@- <<EOM
+{
+    "name": "sdc_underlay",
+    "subnet": "10.88.88.0/24",
+    "provision_start_ip": "10.88.88.205",
+    "provision_end_ip": "10.88.88.250",
+    "nic_tag": "sdc_underlay",
+    "vlan_id": 0,
+    "owner_uuids": ["$(sdc-ufds search login=admin | json uuid)"]
+}
+EOM
+fi
+```
 
-    {
-      "belongs_to_type": "server",
-      "belongs_to_uuid": "564dc9e5-fcb0-fed8-570d-ca17753dd0cc",
-      "mac": "00:50:56:3d:a7:95",
-      "owner_uuid": "930896af-bf8c-48d4-885c-6573a94b1853",
-      "primary": false,
-      "state": "running",
-      "nic_tags_provided": [
-        "external",
-        "sdc_underlay"
-      ]
-    }
+Example:
 
-### Step 6.2: Create underlay nic for Headnode using sdcadm:
+```
+[root@headnode (coal) ~]# if [[ "$(sdc-napi /networks?name=sdc_underlay | json -H)" == "[]" ]]; then
+>     sdc-napi /networks -X POST -d@- <<EOM
+> {
+>     "name": "sdc_underlay",
+>     "subnet": "10.88.88.0/24",
+>     "provision_start_ip": "10.88.88.205",
+>     "provision_end_ip": "10.88.88.250",
+>     "nic_tag": "sdc_underlay",
+>     "vlan_id": 0,
+>     "owner_uuids": ["$(sdc-ufds search login=admin | json uuid)"]
+> }
+> EOM
+> fi
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 308
+Date: Tue, 13 Oct 2015 22:30:27 GMT
+Server: SmartDataCenter Networking API
+x-request-id: 00552190-71fa-11e5-a0e5-db294d29a01e
+x-response-time: 797
+x-server-name: dbd37544-b6b9-4b10-9f8e-1050bdcdd0b2
+Connection: keep-alive
 
-    [root@headnode (coal) ~]# sdcadm post-setup underlay-nics \
-        $(sdc-napi /networks?name=sdc_underlay | json -H 0.uuid) \
-        $(sysinfo|json UUID)
-    Checking for minimum NAPI version
-    Verifying the provided network exists
-    Verifying the provided Server(s) UUID(s)
-    Underlay NIC created for CN 564dc9e5-fcb0-fed8-570d-ca17753dd0cc
+{
+  "mtu": 1500,
+  "nic_tag": "sdc_underlay",
+  "name": "sdc_underlay",
+  "provision_end_ip": "10.88.88.250",
+  "provision_start_ip": "10.88.88.205",
+  "vlan_id": 0,
+  "subnet": "10.88.88.0/24",
+  "uuid": "a72863ae-9d76-4b5c-8895-870ab1179b40",
+  "resolvers": [],
+  "owner_uuids": [
+    "930896af-bf8c-48d4-885c-6573a94b1853"
+  ],
+  "netmask": "255.255.255.0"
+}
+```
 
-### Step 6.3: Setup the headnode with a boot-time networking file and reboot
+### 3. Create the `sdc_nat` NAPI *network pool*
 
-    [root@headnode (coal) ~]# /usbkey/scripts/mount-usb.sh
-    [root@headnode (coal) ~]# sdc-login dhcpd /opt/smartdc/booter/bin/hn-netfile > /mnt/usbkey/boot/networking.json
-    [root@headnode (coal) ~]# umount /mnt/usbkey
-    [root@headnode (coal) ~]# reboot
+```bash
+if [[ "$(sdc-napi /network_pools?name=sdc_nat | json -H)" == "[]" ]]; then
+    sdc-napi /network_pools -X POST -d@- <<EOM
+{
+    "name": "sdc_nat",
+    "networks": ["$(sdc-napi /networks?name=external | json -H 0.uuid)"]
+}
+EOM
+fi
+```
 
-## Step 7: Configure the desired Compute Nodes
+Example:
 
-Just use `sdcadm post-setup underlay-nics`:
+```
+[root@headnode (coal) ~]# if [[ "$(sdc-napi /network_pools?name=sdc_nat | json -H)" == "[]" ]]; then
+>     sdc-napi /network_pools -X POST -d@- <<EOM
+> {
+>     "name": "sdc_nat",
+>     "networks": ["$(sdc-napi /networks?name=external | json -H 0.uuid)"]
+> }
+> EOM
+> fi
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 137
+Date: Tue, 13 Oct 2015 22:32:41 GMT
+Server: SmartDataCenter Networking API
+x-request-id: 5087ade0-71fa-11e5-a0e5-db294d29a01e
+x-response-time: 225
+x-server-name: dbd37544-b6b9-4b10-9f8e-1050bdcdd0b2
+Connection: keep-alive
 
-        [root@headnode (coal) ~]# sdcadm post-setup underlay-nics \
-        $(sdc-napi /networks?name=sdc_underlay | json -H 0.uuid) \
-        $CN1_UUID [$CN2_UUID [$CN3_UUID ...]]
+{
+  "uuid": "d8b7fe2e-4461-4964-a484-e585168c3c28",
+  "name": "sdc_nat",
+  "networks": [
+    "079f8d7a-aa72-4c69-8965-be1be0f5247c"
+  ],
+  "nic_tag": "external"
+}
+```
 
+
+### 4. Setup the *"portolan" and "nat" SAPI services* and *set the fabric config*
+
+```bash
+cat <<EOM >/tmp/fabrics.cfg
+{
+    "default_underlay_mtu": 1500,
+    "default_overlay_mtu": 1400,
+    "sdc_nat_pool": "$(sdc-napi /network_pools?name=sdc_nat | json -H 0.uuid)",
+    "sdc_underlay_assignment": "manual",
+    "sdc_underlay_tag": "sdc_underlay"
+}
+EOM
+
+sdcadm post-setup fabrics -c /tmp/fabrics.cfg
+```
+
+Example:
+
+```
+[root@headnode (coal) ~]# cat <<EOM >/tmp/fabrics.cfg
+> {
+>     "default_underlay_mtu": 1500,
+>     "default_overlay_mtu": 1400,
+>     "sdc_nat_pool": "$(sdc-napi /network_pools?name=sdc_nat | json -H 0.uuid)",
+>     "sdc_underlay_assignment": "manual",
+>     "sdc_underlay_tag": "sdc_underlay"
+> }
+> EOM
+
+[root@headnode (coal) ~]# sdcadm post-setup fabrics -c /tmp/fabrics.cfg
+Downloading image c4da1b22-6969-11e5-8926-435b6dfb7da8
+    (portolan@master-20151003T005420Z-g91be53a)
+Imported image c4da1b22-6969-11e5-8926-435b6dfb7da8
+    (portolan@master-20151003T005420Z-g91be53a)
+Creating "portolan" service
+Creating "portolan" instance
+Finished portolan setup
+Adding fabric configuration
+Restarting config of services using "fabric_cfg": napi, vmapi, dhcpd
+Done!
+```
+
+
+### 5. Add `sdc_underlay` to the headnode's physical external nic tags
+
+```bash
+external_nic=$(sdc-sapi /applications?name=sdc | json -H 0.metadata.external_nic)
+sdc-napi /nics/$(echo $external_nic | sed -e 's/://g') \
+    -d '{"nic_tags_provided": ["external","sdc_underlay"]}' -X PUT
+```
+
+Example:
+
+```
+[root@headnode (coal) ~]# external_nic=$(sdc-sapi /applications?name=sdc | json -H 0.metadata.external_nic)
+[root@headnode (coal) ~]# sdc-napi /nics/$(echo $external_nic | sed -e 's/://g') \
+>     -d '{"nic_tags_provided": ["external","sdc_underlay"]}' -X PUT
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 250
+Date: Tue, 13 Oct 2015 22:42:12 GMT
+Server: SmartDataCenter Networking API
+x-request-id: a4d39d90-71fb-11e5-8616-4ba690e7d4ac
+x-response-time: 96
+x-server-name: dbd37544-b6b9-4b10-9f8e-1050bdcdd0b2
+Connection: keep-alive
+
+{
+  "belongs_to_type": "server",
+  "belongs_to_uuid": "564d5814-017e-1bb2-9fcc-859d1ce51ee3",
+  "mac": "00:50:56:3d:a7:95",
+  "owner_uuid": "930896af-bf8c-48d4-885c-6573a94b1853",
+  "primary": false,
+  "state": "provisioning",
+  "nic_tags_provided": [
+    "external",
+    "sdc_underlay"
+  ]
+}
+```
+
+
+### 6. Create an underlay nic for the headnode
+
+```bash
+sdcadm post-setup underlay-nics \
+    $(sdc-napi /networks?name=sdc_underlay | json -H 0.uuid) \
+    $(sysinfo | json UUID)
+```
+
+Example:
+
+```
+[root@headnode (coal) ~]# sdcadm post-setup underlay-nics \
+>     $(sdc-napi /networks?name=sdc_underlay | json -H 0.uuid) \
+>     $(sysinfo | json UUID)
+Checking for minimum NAPI version
+Verifying the provided network exists
+Verifying the provided Server(s) UUID(s)
+Underlay NIC created for CN 564d5814-017e-1bb2-9fcc-859d1ce51ee3
+```
+
+
+### 7. Setup the headnode with a boot-time networking file
+
+```bash
+sdc-usbkey mount
+sdc-login -l dhcpd /opt/smartdc/booter/bin/hn-netfile \
+    > /mnt/usbkey/boot/networking.json
+sdc-usbkey unmount
+```
+
+(TODO: An explanation of this step would be helpful.)
+
+
+Example:
+
+```
+[root@headnode (coal) ~]# sdc-usbkey mount
+/mnt/usbkey
+[root@headnode (coal) ~]# sdc-login -l dhcpd /opt/smartdc/booter/bin/hn-netfile \
+>     > /mnt/usbkey/boot/networking.json
+[root@headnode (coal) ~]# sdc-usbkey unmount
+```
+
+
+### 8. Reboot the headnode
+
+```bash
+reboot
+```
+
+
+### Summary
+
+In summary, all the commands to run are repeated here:
+
+```bash
+if [[ "$(sdc-napi /nic_tags | json -H -c 'this.name==="sdc_underlay"')" == "[]" ]]; then
+    sdc-napi /nic_tags -X POST -d '{"name": "sdc_underlay"}'
+fi
+
+if [[ "$(sdc-napi /networks?name=sdc_underlay | json -H)" == "[]" ]]; then
+    sdc-napi /networks -X POST -d@- <<EOM
+{
+    "name": "sdc_underlay",
+    "subnet": "10.88.88.0/24",
+    "provision_start_ip": "10.88.88.205",
+    "provision_end_ip": "10.88.88.250",
+    "nic_tag": "sdc_underlay",
+    "vlan_id": 0,
+    "owner_uuids": ["$(sdc-ufds search login=admin | json uuid)"]
+}
+EOM
+fi
+
+if [[ "$(sdc-napi /network_pools?name=sdc_nat | json -H)" == "[]" ]]; then
+    sdc-napi /network_pools -X POST -d@- <<EOM
+{
+    "name": "sdc_nat",
+    "networks": ["$(sdc-napi /networks?name=external | json -H 0.uuid)"]
+}
+EOM
+fi
+
+cat <<EOM >/tmp/fabrics.cfg
+{
+    "default_underlay_mtu": 1500,
+    "default_overlay_mtu": 1400,
+    "sdc_nat_pool": "$(sdc-napi /network_pools?name=sdc_nat | json -H 0.uuid)",
+    "sdc_underlay_assignment": "manual",
+    "sdc_underlay_tag": "sdc_underlay"
+}
+EOM
+
+sdcadm post-setup fabrics -c /tmp/fabrics.cfg
+
+external_nic=$(sdc-sapi /applications?name=sdc | json -H 0.metadata.external_nic)
+sdc-napi /nics/$(echo $external_nic | sed -e 's/://g') \
+    -d '{"nic_tags_provided": ["external","sdc_underlay"]}' -X PUT
+
+sdcadm post-setup underlay-nics \
+    $(sdc-napi /networks?name=sdc_underlay | json -H 0.uuid) \
+    $(sysinfo | json UUID)
+
+sdc-usbkey mount
+sdc-login -l dhcpd /opt/smartdc/booter/bin/hn-netfile \
+    > /mnt/usbkey/boot/networking.json
+sdc-usbkey unmount
+
+reboot
+```
+
+
+## CoaL CNs
+
+To configure one or more CoaL CNs, it is assumed that you have run the
+[Coal headnode fabrics setup](#coal-headnode). Then use
+`sdcadm post-setup underlay-nics NETWORK SERVER1 [SERVER2 ...]`.
+For example, to setup for all setup CoaL CNs:
+
+```bash
+network_uuid=$(sdc-napi /networks?name=sdc_underlay | json -H 0.uuid)
+sdc-cnapi '/servers?setup=true&headnode=false' | json -Ha uuid \
+    | xargs -n1 sdcadm post-setup underlay-nics $network_uuid
+```
