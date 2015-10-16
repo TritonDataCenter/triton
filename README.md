@@ -88,7 +88,7 @@ full SDC headnode for development and testing.
 
 The minimum requirements, practically speaking, for a good CoaL experience
 is a **Mac with at least 16 GB RAM and an SSD**. Currently, almost all team
-members using CoaL are on Macs with VMware Fusion. Vmware Workstation for 
+members using CoaL are on Macs with VMware Fusion. Vmware Workstation for
 Linux is used by a few in the community. VMware Workstation for Windows
 should work, but has not recently been tested.
 
@@ -401,6 +401,7 @@ The goals behind the design of SDC services include:
 
 SmartDataCenter uses [SmartOS](http://smartos.org) as the host operating
 system. The SmartOS hypervisor provides both SmartOS zone (container) and
+KVM virtualization.
 
 Joyent's open-source [Manta project](https://github.com/joyent/manta)
 is an HTTP-based object store with built-in support to run arbitrary
