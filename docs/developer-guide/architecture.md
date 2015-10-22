@@ -15,7 +15,7 @@ datacenter should be organized. The overall architecture diagram is as
 follows:
 
 <map name="GraffleExport">
-	<area shape=rect coords="76,112,174,142" href="https://github.com/joyent/sdc-cloudapi/blob/master/docs/index.restdown">
+	<area shape=rect coords="76,112,174,142" href="https://github.com/joyent/sdc-cloudapi/blob/master/docs/index.md">
 	<area shape=rect coords="182,112,280,142" href="https://docs.joyent.com/sdc7/operations-portal-walkthrough">
 </map>
 <img border=0 src="../img/arch.png" usemap="#GraffleExport">

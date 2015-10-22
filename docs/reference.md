@@ -18,7 +18,7 @@ section in the glossary](./glossary.md#service) for details.
 | amonredis | [sdc-amonredis](https://github.com/joyent/sdc-amonredis) | Internal infrastructure for the Amon service |
 | [binder](https://github.com/joyent/binder/blob/master/docs/index.md) | [binder](https://github.com/joyent/binder) | SDC/Manta DNS server over Apache Zookeeper |
 | [ca](https://github.com/joyent/sdc-cloud-analytics/blob/master/docs/index.md) | [sdc-cloud-analytics](https://github.com/joyent/sdc-cloud-analytics) | SDC internal API for gathering real-time metrics across the datacenter |
-| [cloudapi](https://github.com/joyent/sdc-cloudapi/blob/master/docs/index.restdown) | [sdc-cloudapi](https://github.com/joyent/sdc-cloudapi) | SDC Public HTTP API |
+| [cloudapi](https://github.com/joyent/sdc-cloudapi/blob/master/docs/index.md) | [sdc-cloudapi](https://github.com/joyent/sdc-cloudapi) | SDC Public HTTP API |
 | [cnapi](https://github.com/joyent/sdc-cnapi/blob/master/docs/index.md) | [sdc-cnapi](https://github.com/joyent/sdc-cnapi) | SDC compute node API |
 | dhcpd | [sdc-booter](https://github.com/joyent/sdc-booter) | SDC Compute Node DHCP and TFTP server |
 | [fwapi](https://github.com/joyent/sdc-fwapi/blob/master/docs/index.md) | [sdc-fwapi](https://github.com/joyent/sdc-fwapi) | SDC Firewall API |
@@ -67,4 +67,4 @@ compute nodes).
 
 | Name | Description |
 | ---- | ----------- |
-| [sdc-designation](https://github.com/joyent/sdc-designation/blob/master/docs/index.restdown) | A package to select a compute node for VM instance provisioning. The Designation API (DAPI) is used by CNAPI. |
+| [sdc-designation](https://github.com/joyent/sdc-designation/blob/master/docs/index.md) | A package to select a compute node for VM instance provisioning. The Designation API (DAPI) is used by CNAPI. |

@@ -2949,7 +2949,7 @@
 			<key>Link</key>
 			<dict>
 				<key>url</key>
-				<string>https://github.com/joyent/sdc-cloudapi/blob/master/docs/index.restdown</string>
+				<string>https://github.com/joyent/sdc-cloudapi/blob/master/docs/index.md</string>
 			</dict>
 			<key>Magnets</key>
 			<array>
