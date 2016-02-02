@@ -132,7 +132,7 @@ Connection: keep-alive
 ### 3. Create the `sdc_nat` NAPI *network pool*
 
 ```bash
-if [[ "$(sdc-napi /network_pools?name=sdc_nat | json -H)" == "[]" ]]; then
+if [[ "$(sdc-napi /network_pools | json -H -c 'this.name==="sdc_nat"')" == "[]" ]]; then
     sdc-napi /network_pools -X POST -d@- <<EOM
 {
     "name": "sdc_nat",
