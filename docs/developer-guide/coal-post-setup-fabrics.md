@@ -376,12 +376,19 @@ fi
 ## CoaL CNs
 
 To configure one or more CoaL CNs, it is assumed that you have run the
-[Coal headnode fabrics setup](#coal-headnode). Then use
-`sdcadm post-setup underlay-nics NETWORK SERVER1 [SERVER2 ...]`.
-For example, to setup for all setup CoaL CNs:
+[Coal headnode fabrics setup](#coal-headnode). Then do the following
+for each CN:
 
 ```bash
-network_uuid=$(sdc-napi /networks?name=sdc_underlay | json -H 0.uuid)
-sdc-cnapi '/servers?setup=true&headnode=false' | json -Ha uuid \
-    | xargs -n1 sdcadm post-setup underlay-nics $network_uuid
+cn_uuid=<UUID of the CN>
+# See NIC info with: sysinfo | json "Network Interfaces"
+cn_mac=<MAC of the CN NIC to use for fabric traffic>
+
+sdc-server update-nictags -s $cn_uuid sdc_underlay_nic=$cn_mac
+
+underlay_network_uuid=$(sdc-napi /networks?name=sdc_underlay | json -H 0.uuid)
+sdcadm post-setup underlay-nics $underlay_network_uuid $cn_uuid
+
+# Reboot the CN
+sdc-oneachnode -n $cn_uuid reboot
 ```
