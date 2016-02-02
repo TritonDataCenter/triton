@@ -145,7 +145,7 @@ fi
 Example:
 
 ```
-[root@headnode (coal) ~]# if [[ "$(sdc-napi /network_pools?name=sdc_nat | json -H)" == "[]" ]]; then
+[root@headnode (coal) ~]# if [[ "$(sdc-napi /network_pools | json -H -c 'this.name==="sdc_nat"')" == "[]" ]]; then
 >     sdc-napi /network_pools -X POST -d@- <<EOM
 > {
 >     "name": "sdc_nat",
@@ -181,7 +181,7 @@ cat <<EOM >/tmp/fabrics.cfg
 {
     "default_underlay_mtu": 1500,
     "default_overlay_mtu": 1400,
-    "sdc_nat_pool": "$(sdc-napi /network_pools?name=sdc_nat | json -H 0.uuid)",
+    "sdc_nat_pool": "$(sdc-napi /network_pools | json -H -c 'this.name==="sdc_nat"' 0.uuid)",
     "sdc_underlay_assignment": "manual",
     "sdc_underlay_tag": "sdc_underlay"
 }
@@ -197,7 +197,7 @@ Example:
 > {
 >     "default_underlay_mtu": 1500,
 >     "default_overlay_mtu": 1400,
->     "sdc_nat_pool": "$(sdc-napi /network_pools?name=sdc_nat | json -H 0.uuid)",
+>     "sdc_nat_pool": "$(sdc-napi /network_pools | json -H -c 'this.name==="sdc_nat"' 0.uuid)",
 >     "sdc_underlay_assignment": "manual",
 >     "sdc_underlay_tag": "sdc_underlay"
 > }
@@ -331,7 +331,7 @@ if [[ "$(sdc-napi /networks?name=sdc_underlay | json -H)" == "[]" ]]; then
 EOM
 fi
 
-if [[ "$(sdc-napi /network_pools?name=sdc_nat | json -H)" == "[]" ]]; then
+if [[ "$(sdc-napi /network_pools | json -H -c 'this.name==="sdc_nat"')" == "[]" ]]; then
     sdc-napi /network_pools -X POST -d@- <<EOM
 {
     "name": "sdc_nat",
@@ -340,13 +340,14 @@ if [[ "$(sdc-napi /network_pools?name=sdc_nat | json -H)" == "[]" ]]; then
 EOM
 fi
 
+sdc_nat_pool_uuid=$(sdc-napi /network_pools | json -H -c 'this.name==="sdc_nat"' 0.uuid)
 fabric_cfg=$(/opt/smartdc/bin/sdc-sapi /applications?name=sdc | json -H 0.metadata.fabric_cfg)
 if [[ -z "$fabric_cfg" ]]; then
     cat <<EOM >/tmp/fabrics.cfg
 {
     "default_underlay_mtu": 1500,
     "default_overlay_mtu": 1400,
-    "sdc_nat_pool": "$(sdc-napi /network_pools?name=sdc_nat | json -H 0.uuid)",
+    "sdc_nat_pool": "$sdc_nat_pool_uuid",
     "sdc_underlay_assignment": "manual",
     "sdc_underlay_tag": "sdc_underlay"
 }
