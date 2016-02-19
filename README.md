@@ -279,7 +279,7 @@ curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/
 ```
 
 Once you have downloaded the latest release image, you will need to
-[write it to a USB key](https://docs.joyent.com/sdc7/installing-sdc7/creating-a-usb-key-from-a-release-tarball),
+[write it to a USB key](https://docs.joyent.com/private-cloud/install/installation-media),
 boot the headnode server using the USB key, and follow the install prompts. See
 the the Joyent customer documentation "[installing SDC 7](https://docs.joyent.com/sdc7/installing-sdc7)"
 and "[install checklist](https://docs.joyent.com/sdc7/installing-sdc7/install-checklist)"
