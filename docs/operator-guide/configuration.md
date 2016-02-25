@@ -112,7 +112,7 @@ provides links to the relevant documentation for each.
 
 | Service |
 | ------- |
-| [cloudapi](https://github.com/joyent/sdc-cloudapi/blob/master/docs/index.md) |
+| [cloudapi](https://github.com/joyent/sdc-cloudapi/blob/master/docs/admin.md#sapi-configuration) |
 | [cnapi](https://github.com/joyent/sdc-cnapi/blob/master/docs/index.md#sapi-configuration) |
 | [papi](https://github.com/joyent/sdc-papi/blob/master/docs/index.md#sapi-configuration) |
-| [docker](https://github.com/joyent/sdc-docker/tree/master/docs/guide) |
+| [docker](https://github.com/joyent/sdc-docker/tree/master/docs/guide#service-configuration) |
