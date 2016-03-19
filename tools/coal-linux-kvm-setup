@@ -1,0 +1,252 @@
+#!/bin/env bash
+
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+#
+# Copyright (c) 2016, Joyent, Inc.
+#
+
+#
+# This script configures KVM to use Cloud on a Laptop (CoaL), the SDC development environment.
+# The following things need to be installed in order for this script to work:
+# * libvirt
+# * GNU mktemp
+# * GNU grep
+#
+# This script is highly experimental and is community supported (it is not used by anyone at 
+# Joyent). This script has been tested on the following Linux distributions: 
+# * Fedora 23 
+#   * Install required packages: dnf install libvirt virt-manager
+#
+# If you have used this script on a distribution not listed above (and maybe modified it to 
+# get it to work) please add your distribution to the list and submit a pull request.
+#
+# The script can be run multiple times to recreate the config if you somehow broke yours.
+#
+# Changelog:
+# 
+# 19-03-2016 Jasper Siepkes - Initial implementation.
+#
+
+# Fail on any non-zero exit code.
+set -o errexit
+# Fail if an application in an pipe returns a non-zero exit code.
+set -o pipefail
+# Fail on unset variables.	
+set -u
+# Uncomment for debugging.
+#set -x
+
+if [[ "$(uname -s)" != "Linux" ]]; then
+    echo "error: This script is written for GNU/Linux" >&2
+    exit 1
+fi
+
+if [[ $UID -ne 0 ]]; then
+    echo "error: This script must be run as root. Run again using:" >&2
+    echo "    sudo $0" >&2
+    exit 1
+fi
+
+if [ ! -e "/dev/kvm" ]; then
+    echo "Kernel mode virtualization (KVM) needs to be enabled. Exiting."
+    exit 1
+fi
+
+NESTED_KVM_ENABLED=$(</sys/module/kvm_intel/parameters/nested)
+
+# TODO: Add support for AMD.
+if [ ! "${NESTED_KVM_ENABLED}" == "Y" ]; then
+    echo "Nested KVM is not enabled. Enabling."
+
+    rmmod kvm-intel
+    echo 'options kvm-intel nested=y' >> /etc/modprobe.d/kvm-intel.conf
+    modprobe kvm-intel
+fi
+
+
+DOMAIN_NAME="sdc-headnode"
+## Networks ##
+# The admin "host-only" network - vmnet1 (only between the Mac and the headnode)
+ADMIN_NAME=sdc-admin
+ADMIN_NETWORK=10.99.99.0
+ADMIN_NETMASK=255.255.255.0
+ADMIN_HOST_IP=$(echo ${ADMIN_NETWORK} | sed 's/\.[0-9]*$/.254/')
+
+# The external NAT network - vmnet8 (can reach the internet)
+# Note: There isn't currently an "external_network" var in config.coal to use.
+EXTERNAL_NAME=sdc-external
+EXTERNAL_NETWORK=10.88.88.0
+EXTERNAL_NETMASK=255.255.255.0
+EXTERNAL_DHCP_START=10.88.88.10
+EXTERNAL_DHCP_END=10.88.88.254
+EXTERNAL_HOST_IP=10.88.88.2
+
+# Checks if a network exists and is active. Destroys and undefines it as needed.
+#
+# Argument 1: Name of the virsh network.
+#
+function delete_virsh_net() {
+    VIRSH_NET_NAME=$1
+
+    # GNU grep always exits with a non zero exit code if it didn't find the parttern.
+    # This conflicts with out 'set -o errexit' therfor we use '|| true'.
+    VIRSH_NET_ACTIVE=$(virsh net-list --all | grep ${VIRSH_NET_NAME} | grep -c '.\sactive' || true)
+
+    if [ "${VIRSH_NET_ACTIVE}" != "0" ]; then
+        echo "Network '${VIRSH_NET_NAME}' active. Destroying existing network."
+        virsh net-destroy ${VIRSH_NET_NAME}
+    fi
+
+    VIRSH_NET_EXISTS=$(virsh net-list --all | grep -c ${VIRSH_NET_NAME} || true)
+    if [ "${VIRSH_NET_EXISTS}" != "0" ]; then
+        echo "Network '${VIRSH_NET_NAME}' was already defined. Undefining existing network."
+        virsh net-undefine ${VIRSH_NET_NAME}
+    fi
+}
+
+# Checks if a domain exists in virsh and deletes it if exists.
+#
+# Argument 1: Name of the virsh domain.
+#
+function delete_virsh_domain() {
+    VIRSH_DOMAIN_NAME=$1
+
+    VIRSH_DOMIN_EXISTS=$(virsh list --all | grep -c ${VIRSH_DOMAIN_NAME} || true)
+
+    if [ "${VIRSH_DOMIN_EXISTS}" != "0" ]; then
+        echo "Domain '${VIRSH_DOMAIN_NAME}' was already defined. Undefining existing domain."
+        virsh undefine ${VIRSH_DOMAIN_NAME}
+    fi
+}
+
+echo "Admin network:    network=\"${ADMIN_NETWORK}\", host ip=\"${ADMIN_HOST_IP}\", netmask=\"${ADMIN_NETMASK}\""
+echo "External network: network=\"${EXTERNAL_NETWORK}\", host ip=\"${EXTERNAL_HOST_IP}\", netmask=\"${EXTERNAL_NETMASK}\""
+
+# Generate a temporary XML file which we will use to configure our network with.
+VIRSH_NET_ADMIN_XML=$(mktemp /tmp/virsh-sdc.XXXXXXXXXXX)
+cat > ${VIRSH_NET_ADMIN_XML} << EOF
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<network ipv6='no'>
+     <name>${ADMIN_NAME}</name>
+     <bridge name="sdc-adm" />
+     <ip address="${ADMIN_HOST_IP}" netmask="${ADMIN_NETMASK}" />
+</network>
+EOF
+
+VIRSH_NET_EXTERNAL_XML=$(mktemp /tmp/virsh-sdc.XXXXXXXXXXX)
+cat > ${VIRSH_NET_EXTERNAL_XML} << EOF
+<network ipv6='no'>
+     <name>${EXTERNAL_NAME}</name>
+     <bridge name="sdc-ext" />
+     <forward mode="nat" />
+     <ip address="${EXTERNAL_HOST_IP}" netmask="${EXTERNAL_NETMASK}">
+          <dhcp>
+              <range start="${EXTERNAL_DHCP_START}" end="${EXTERNAL_DHCP_END}" />
+          </dhcp>
+     </ip>
+</network>
+EOF
+
+delete_virsh_net ${ADMIN_NAME}
+delete_virsh_net ${EXTERNAL_NAME}
+
+echo "Defining networks."
+virsh net-define ${VIRSH_NET_ADMIN_XML}
+virsh net-define ${VIRSH_NET_EXTERNAL_XML}
+
+echo "Deleting temporary network configuration files."
+rm -f ${VIRSH_NET_ADMIN_XML} ${VIRSH_NET_EXTERNAL_XML}
+
+# Default location for VM images is: '/var/lib/libvirt/images'.
+VIRSH_DOMAIN_XML=$(mktemp /tmp/virsh-sdc.XXXXXXXXXXX)
+cat > ${VIRSH_DOMAIN_XML} << EOF
+<domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
+    <name>${DOMAIN_NAME}</name>
+    <title>SDC / Triton headnode</title>
+    <memory unit='GB'>4</memory>
+    <vcpu>2</vcpu>
+    <cpu mode='host-passthrough'>
+        <!--<feature policy='require' name='hyperv' />-->
+    </cpu>
+    <feature policy='require' name='vmx'/>
+    <feature policy='require' name='acpi'/>
+    <input type='keyboard' bus='usb'/>
+    <os>
+        <type arch='x86_64'>hvm</type>
+        <boot dev='hd' />
+    </os>
+    <clock sync="localtime"/>
+    <devices>
+        <emulator>/usr/bin/qemu-kvm</emulator>
+        <disk type='file' device='disk'>
+            <driver name='qemu' type='raw' cache='none' io='native'/>
+            <source file='/var/lib/libvirt/images/sdc-headnode-usb.raw'/>
+            <target dev='hda' bus='virtio' />
+            <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+        </disk>
+        <disk type='file' device='disk'>
+            <driver name='qemu' type='raw' cache='none' io='native'/>
+            <source file='/var/lib/libvirt/images/sdc-headnode-zpool.raw'/>
+            <target dev='hdb' bus='virtio' />
+            <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
+        </disk>
+        <interface type='network'>
+            <source network='${EXTERNAL_NAME}'/>
+            <mac address='6a:9f:78:a7:0c:2f'/>
+        </interface>
+        <interface type='network'>
+            <source network='${ADMIN_NAME}'/>
+            <mac address='3a:0d:fc:6f:ec:e7'/>
+        </interface>
+        <!-- Serial ports are exposed in host OS as /dev/pts/* -->
+        <serial type='pty'>
+            <target port='0'/>
+        </serial>
+        <serial type='pty'>
+            <target port='1'/>
+        </serial>
+    <graphics type='vnc' port='-1' autoport='yes' keymap='en-us' />
+  </devices>
+  <qemu:commandline>
+    <qemu:arg value='-set'/>
+    <qemu:arg value='device.virtio-disk0.scsi=off'/>
+  </qemu:commandline>
+  <qemu:commandline>
+    <qemu:arg value='-set'/>
+    <qemu:arg value='device.virtio-disk0.x-data-plane=on'/>
+   </qemu:commandline>
+  <qemu:commandline>
+    <qemu:arg value='-set'/>
+    <qemu:arg value='device.virtio-disk1.scsi=off'/>
+  </qemu:commandline>
+  <qemu:commandline>
+    <qemu:arg value='-set'/>
+    <qemu:arg value='device.virtio-disk1.x-data-plane=on'/>
+   </qemu:commandline>
+</domain>
+EOF
+
+delete_virsh_domain ${DOMAIN_NAME}
+virsh define ${VIRSH_DOMAIN_XML}
+
+echo "Starting networks."
+virsh net-autostart ${ADMIN_NAME}
+virsh net-autostart ${EXTERNAL_NAME}
+virsh net-start ${ADMIN_NAME}
+virsh net-start ${EXTERNAL_NAME}
+
+echo ""
+echo "Prepare the unpacked VMWare CoaL images:"
+echo " # cp 4gb.img /var/lib/libvirt/images/sdc-headnode-usb.raw"
+echo " # qemu-img convert -f vmdk zpool.vmdk -O raw /var/lib/libvirt/images/sdc-headnode-zpool.raw"
+echo ""
+echo "When using SELinux make sure the following options are configured:"
+echo " # setsebool -P virt_use_execmem 1"
+echo ""
+echo "You can now use the GUI tool 'virt-manager' (recommended) to start the SDC headnode."
+echo ""
