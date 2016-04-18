@@ -3,7 +3,7 @@
 This document tries to capture some of the less known SmartDataCenter
 troubleshooting steps and fixes. A more comprehensive troubleshooting guide
 can be found here:
-[Troubleshooting SDC7](https://docs.joyent.com/sdc7/troubleshooting-sdc7)
+[Troubleshooting](https://docs.joyent.com/private-cloud/troubleshooting)
 
 ## Upgrade
 

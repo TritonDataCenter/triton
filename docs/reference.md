@@ -13,7 +13,7 @@ section in the glossary](./glossary.md#service) for details.
 
 | Name | Repo | Description |
 | ---- | ---- | ----------- |
-| [adminui](https://docs.joyent.com/sdc7/operations-portal-walkthrough) | [sdc-adminui](https://github.com/joyent/sdc-adminui) | SDC Operations Portal |
+| [adminui](https://docs.joyent.com/private-cloud/install/operations-setup) | [sdc-adminui](https://github.com/joyent/sdc-adminui) | SDC Operations Portal |
 | [amon](https://github.com/joyent/sdc-amon/blob/master/docs/index.md) | [sdc-amon](https://github.com/joyent/sdc-amon) | SDC monitoring and alarming |
 | amonredis | [sdc-amonredis](https://github.com/joyent/sdc-amonredis) | Internal infrastructure for the Amon service |
 | [binder](https://github.com/joyent/binder/blob/master/docs/index.md) | [binder](https://github.com/joyent/binder) | SDC/Manta DNS server over Apache Zookeeper |

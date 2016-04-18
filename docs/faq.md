@@ -18,7 +18,7 @@ new SDC environment and provision new instances there. Once an SDC headnode is
 setup, you may convert a SmartOS node to an SDC compute node by booting into
 "noinstall" mode, destroying the storage pool, and attaching the system to the
 SDC networks [as
-documented](https://docs.joyent.com/sdc7/overview-of-smartdatacenter-7).  This
+documented](https://docs.joyent.com/private-cloud/install/compute-node-setup).  This
 will destroy all existing instances and result in a new, empty SDC compute node
 ready for provisioning.  Migration of instances from SmartOS to SDC compute
 nodes and between SDC compute nodes may be possible using
