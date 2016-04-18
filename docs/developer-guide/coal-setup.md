@@ -371,7 +371,7 @@ is resolved, you should also run `sdc-healthcheck`.
     ```bash
     [root@headnode (coal-1) ~]# sdcadm --version
     sdcadm 1.4.4 (release-20150205-20150205T060457Z-g7d76790)
-    [root@headnode (coal-1) ~]# sdcadm self-update
+    [root@headnode (coal-1) ~]# sdcadm self-update --latest
     Update to sdcadm 1.5.0 (master-20150211T134112Z-gef31015)
     Download update from https://updates.joyent.com
     Run sdcadm installer (log at /var/sdcadm/self-updates/20150217T234531Z/install.log)
