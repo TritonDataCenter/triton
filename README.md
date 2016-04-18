@@ -56,7 +56,7 @@ SDC consists of the following components:
 
 For more details, see:
 
-- The [Overview of SmartDataCenter 7](https://docs.joyent.com/sdc7/overview-of-smartdatacenter-7)
+- The [Overview of Triton Elastic Container Infrastructure](https://docs.joyent.com/private-cloud)
   in the Joyent customer documentation.
 - [SmartDataCenter Architecture](./docs/developer-guide/architecture.md) for
   overall architecture.
@@ -279,24 +279,10 @@ curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/
 ```
 
 Once you have downloaded the latest release image, you will need to
-[write it to a USB key](https://docs.joyent.com/private-cloud/install/installation-media),
-boot the headnode server using the USB key, and follow the install prompts. See
-the the Joyent customer documentation "[installing SDC 7](https://docs.joyent.com/sdc7/installing-sdc7)"
-and "[install checklist](https://docs.joyent.com/sdc7/installing-sdc7/install-checklist)"
-for information.
-
-After installation, you will probably want to perform some
-[additional configuration](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration).
-The most common of these include:
-
-- [Adding external nics to the imgapi and adminui zones](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration#AddingExternalNICstoHeadNodeVMs)
-  to give them internet access. This enables simple import of VM images.
-- [Provision a CloudAPI zone](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration#CreatingCloudAPI)
-  to allow users to create and administer their VMs without an operator.
-
-See the
-[post-installation configuration documentation](https://docs.joyent.com/sdc7/installing-sdc7/post-installation-configuration)
-for the complete list.
+[write it to a USB key](https://docs.joyent.com/private-cloud/install/installation-media)
+boot the headnode server using the USB key, and follow the install prompts. All steps necessary
+to plan, install, and configure SmartDataCenter (Triton) are available in the Joyent 
+customer documenation [Installing Triton Elastic Container Infrastructure](https://docs.joyent.com/private-cloud/install).
 
 
 ## Building
