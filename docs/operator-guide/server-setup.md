@@ -19,6 +19,10 @@ the point where the new empty CN first boots.
  * server-setup runs joysetup to create zpool and setup files
  * server-setup runs agentsetup to setup more files and install agents
  * agentsetup marks setup as complete on the CN
+ * server-setup refreshes sysinfo
+ * server-setup reboots the CN (if hostname was set) and waits for it to come
+   back up
+ * server-setup restarts Ur agent on CN
  * server-setup marks setup complete at CNAPI
  * Operator cheers
 
@@ -317,8 +321,7 @@ This job then:
  * grabs the NICs from NAPI
  * sets up nic tags
  * marks the server as setting_up: true
- * downloads: node.config,
- * [joysetup.sh](https://github.com/joyent/sdc-headnode/blob/release-20160526/scripts/joysetup.sh), [agentsetup.sh](https://github.com/joyent/sdc-headnode/blob/release-20160526/scripts/agentsetup.sh) on the CN from <ASSETS>
+ * downloads: node.config, [joysetup.sh](https://github.com/joyent/sdc-headnode/blob/release-20160526/scripts/joysetup.sh), [agentsetup.sh](https://github.com/joyent/sdc-headnode/blob/release-20160526/scripts/agentsetup.sh) on the CN from <ASSETS>
 
 where <ASSETS> is the admin IP of the assets zone. The files at this point are
 downloaded using a small shell script:
@@ -360,6 +363,24 @@ setting_up: false
 
 and the setup is complete. The CN should at this point be ready to be part of
 the fleet.
+
+There are a few more things that server-setup does worth noting that happen
+after the 'setup: true' step. One of these is that it restarts the Ur agent on
+the CN. It does this because up to this point Ur will have been logging to
+/etc/svc/volatile since there was no zpool. Restarting the agent causes it to
+reopen the log in /var/svc/log on restart.
+
+Another thing that's done post-setup while still in the server-setup job, is
+to reload the sysinfo. This is done from the cnapi.refresh_server_sysinfo task
+which calls /servers/<uuid>/sysinfo-refresh which loads the latest sysinfo from
+the CN (including the 'setup: true' value set earlier).
+
+It's also possible that server-setup will reboot the CN after setup is complete.
+This is necessary if the operator has specified a hostname for this CN as part
+of their setup payload. In this case we need to reboot the CN in order that
+everything can come up correctly with the new hostname. The next task after the
+reboot (if reboot was required) will be to wait for the reboot to complete.
+
 
 ## Debugging
 
