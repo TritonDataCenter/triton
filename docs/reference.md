@@ -1,9 +1,9 @@
-# SmartDataCenter Reference
+# Triton DataCenter Reference
 
-SmartDataCenter is a large and complex beast. Many of the components that make
-up SDC (REST APIs, agents, the SmartOS platform, important libraries) have their
-own reference documentation. This page links to those, with a brief description
-of each. See also the [overview of SDC repositories](./repos.md).
+Triton DataCenter is a large and complex beast. Many of the components that make
+up Triton (REST APIs, agents, the SmartOS platform, important libraries) have
+their own reference documentation. This page links to those, with a brief
+description of each. See also the [overview of Triton repositories](./repos.md).
 
 
 ## Services

@@ -5,20 +5,20 @@
 -->
 
 <!--
-    Copyright (c) 2015, Joyent, Inc.
+    Copyright (c) 2016, Joyent, Inc.
 -->
 
 
 # Triton DataCenter
 
-Triton DataCenter (just "Triton" for short, formerly "SmartDataCenter" and "SDC") is an open-source cloud management platform, optimized
-to deliver next generation, container-based, service-oriented infrastructure
-across one or more data centers. With an emphasis on ease of installation
-and operation, Triton is proven at scale: it is the software that runs
-the [Joyent public cloud](https://www.joyent.com/public-cloud)
-and powers
-[private clouds](https://www.joyent.com/products/private-cloud)
-at organizations of all size and industry.
+Triton DataCenter (just "Triton" for short, formerly "SmartDataCenter" and
+"SDC") is an open-source cloud management platform that delivers next
+generation, container-based, service-oriented infrastructure across one or more
+data centers. With an emphasis on ease of installation and operation, Triton is
+proven at scale: Triton powers the [Triton
+Cloud](https://www.joyent.com/datacenter/docs/cloud) and private data centers
+([Triton Enterprise]( https://www.joyent.com/datacenter/docs/enterprise)
+worldwide.
 
 This repository provides documentation for the overall Triton project and
 pointers to the other repositories that make up a complete Triton deployment.
@@ -34,7 +34,8 @@ For additional resources, you can visit the
 A Triton DataCenter installation consists of two or more servers. All servers run
 [SmartOS](http://smartos.org). One server acts as the management server, the
 headnode, which houses the initial set of core services that drive Triton. The
-remainder are compute nodes (CNs) which run instances (virtual machines).
+remainder are compute nodes (CNs) which run instances (containers and
+virtual machines).
 
 Triton features:
 
@@ -56,8 +57,7 @@ Triton consists of the following components:
 
 For more details, see:
 
-- The [Overview of Triton Elastic Container Infrastructure](https://docs.joyent.com/private-cloud)
-  in the Joyent customer documentation.
+- The [Triton Enterprise](https://docs.joyent.com/private-cloud) documentation.
 - [Triton DataCenter Architecture](./docs/developer-guide/architecture.md) for
   overall architecture.
 - [Triton DataCenter Reference](./docs/reference.md) for an
@@ -281,7 +281,7 @@ curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/
 Once you have downloaded the latest release image, you will need to
 [write it to a USB key](https://docs.joyent.com/private-cloud/install/installation-media)
 boot the headnode server using the USB key, and follow the install prompts. All steps necessary
-to plan, install, and configure Triton DataCenter (Triton) are available in the Joyent 
+to plan, install, and configure Triton DataCenter (Triton) are available in the Joyent
 customer documenation [Installing Triton Elastic Container Infrastructure](https://docs.joyent.com/private-cloud/install).
 
 
@@ -317,38 +317,13 @@ for details on building each of the Triton components.
 ## Contributing
 
 To report bugs or request features, submit issues here on
-GitHub, [joyent/triton/issues](https://github.com/joyent/triton/issues).
-If you're contributing code, make pull requests to the appropriate
-repositories (see [the repo overview](./docs/developer-guide/repos.md)).
-If you're contributing something substantial, you should first contact
-developers on the [sdc-discuss mailing list](mailto:sdc-discuss@lists.smartdatacenter.org)
-([subscribe](https://www.listbox.com/subscribe/?list_id=247449),
-[archives](http://www.listbox.com/member/archive/247449/=now)).
-
+GitHub, [joyent/triton/issues](https://github.com/joyent/triton/issues)
+(or on the GitHub issue tracker for the relevant project).
 For support of Joyent products and services, please contact [Joyent customer
 support](https://help.joyent.com/home) instead.
 
-Triton repositories follow the [Joyent Engineering Guidelines](https://github.com/joyent/eng/blob/master/docs/index.md).
-Notably:
-
-- The #master branch should be first-customer-ship (FCS) quality at all times.
-  Don't push anything until it's tested.
-- All repositories should be `make check` clean at all times.
-- All repositories should have tests that run cleanly at all times.
-
-`make check` checks both JavaScript style and lint. Style is checked with
-[jsstyle](https://github.com/davepacheco/jsstyle). The specific style rules are
-somewhat repo-specific. Style is somewhat repo-specific. See the jsstyle
-configuration file or `JSSTYLE_FLAGS` in Makefiles in each repo for exceptions
-to the default jsstyle rules.
-
-Lint is checked with
-[javascriptlint](https://github.com/davepacheco/javascriptlint).
-([Don't conflate lint with style!](http://dtrace.org/blogs/dap/2011/08/23/javascriptlint/)
-There are gray areas, but generally speaking, style rules are arbitrary, while
-lint warnings identify potentially broken code. Repos sometimes have
-repo-specific lint rules -- look for "tools/jsl.web.conf" and
-"tools/jsl.node.conf" for per-repo exceptions to the default rules.
+See the [Contribution Guidelines](CONTRIBUTING.md) for information about
+contributing changes to the project.
 
 
 ## Design Principles
