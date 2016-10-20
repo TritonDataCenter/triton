@@ -21,6 +21,8 @@
 # Joyent). This script has been tested on the following Linux distributions: 
 # * Fedora 23 
 #   * Install required packages: dnf install libvirt virt-manager
+# * Ubuntu 14.04, 16.04
+#   * Install required packages: apt install qemu-kvm libvirt-bin virt-manager
 #
 # If you have used this script on a distribution not listed above (and maybe modified it to 
 # get it to work) please add your distribution to the list and submit a pull request.
@@ -57,6 +59,15 @@ if [ ! -e "/dev/kvm" ]; then
     exit 1
 fi
 
+if [ -e "/usr/bin/qemu-kvm" ]; then
+    EMULATOR=/usr/bin/qemu-kvm
+elif [ -e "/usr/bin/kvm" ]; then
+    EMULATOR=/usr/bin/kvm
+else
+    echo "KVM cannot be found. Exiting."
+    exit 1
+fi
+
 NESTED_KVM_ENABLED=$(</sys/module/kvm_intel/parameters/nested)
 
 # TODO: Add support for AMD.
@@ -68,6 +79,35 @@ if [ ! "${NESTED_KVM_ENABLED}" == "Y" ]; then
     modprobe kvm-intel
 fi
 
+# parse argument
+if [[ ("$#" -eq 1) && ("${1}" == "--use-raw-image") ]]; then
+    QEMU_IMAGE_FORMAT="raw"
+    DATA_PLANE_ENABLED=$(${EMULATOR} -device virtio-blk-pci,? |& grep -c x-data-plane || true)
+    if [[ "${DATA_PLANE_ENABLED}" != "0" ]]; then
+         QEMU_COMMANDLINE="
+           <qemu:commandline>
+             <qemu:arg value='-set'/>
+             <qemu:arg value='device.virtio-disk0.scsi=off'/>
+           </qemu:commandline>
+           <qemu:commandline>
+             <qemu:arg value='-set'/>
+             <qemu:arg value='device.virtio-disk0.x-data-plane=on'/>
+            </qemu:commandline>
+           <qemu:commandline>
+             <qemu:arg value='-set'/>
+             <qemu:arg value='device.virtio-disk1.scsi=off'/>
+           </qemu:commandline>
+           <qemu:commandline>
+             <qemu:arg value='-set'/>
+             <qemu:arg value='device.virtio-disk1.x-data-plane=on'/>
+           </qemu:commandline>\n"
+    else
+        QEMU_COMMANDLINE=""
+    fi
+else
+    QEMU_IMAGE_FORMAT="qcow2"
+    QEMU_COMMANDLINE=""
+fi
 
 DOMAIN_NAME="sdc-headnode"
 ## Networks ##
@@ -182,26 +222,28 @@ cat > ${VIRSH_DOMAIN_XML} << EOF
     </os>
     <clock sync="localtime"/>
     <devices>
-        <emulator>/usr/bin/qemu-kvm</emulator>
+        <emulator>${EMULATOR}</emulator>
         <disk type='file' device='disk'>
-            <driver name='qemu' type='raw' cache='none' io='native'/>
-            <source file='/var/lib/libvirt/images/sdc-headnode-usb.raw'/>
+            <driver name='qemu' type='${QEMU_IMAGE_FORMAT}' cache='none' io='native'/>
+            <source file='/var/lib/libvirt/images/sdc-headnode-usb.${QEMU_IMAGE_FORMAT}'/>
             <target dev='hda' bus='virtio' />
             <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
         </disk>
         <disk type='file' device='disk'>
-            <driver name='qemu' type='raw' cache='none' io='native'/>
-            <source file='/var/lib/libvirt/images/sdc-headnode-zpool.raw'/>
+            <driver name='qemu' type='${QEMU_IMAGE_FORMAT}' cache='none' io='native'/>
+            <source file='/var/lib/libvirt/images/sdc-headnode-zpool.${QEMU_IMAGE_FORMAT}'/>
             <target dev='hdb' bus='virtio' />
             <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
         </disk>
         <interface type='network'>
             <source network='${EXTERNAL_NAME}'/>
             <mac address='6a:9f:78:a7:0c:2f'/>
+            <model type='e1000'/>
         </interface>
         <interface type='network'>
             <source network='${ADMIN_NAME}'/>
             <mac address='3a:0d:fc:6f:ec:e7'/>
+            <model type='e1000'/>
         </interface>
         <!-- Serial ports are exposed in host OS as /dev/pts/* -->
         <serial type='pty'>
@@ -212,22 +254,7 @@ cat > ${VIRSH_DOMAIN_XML} << EOF
         </serial>
     <graphics type='vnc' port='-1' autoport='yes' keymap='en-us' />
   </devices>
-  <qemu:commandline>
-    <qemu:arg value='-set'/>
-    <qemu:arg value='device.virtio-disk0.scsi=off'/>
-  </qemu:commandline>
-  <qemu:commandline>
-    <qemu:arg value='-set'/>
-    <qemu:arg value='device.virtio-disk0.x-data-plane=on'/>
-   </qemu:commandline>
-  <qemu:commandline>
-    <qemu:arg value='-set'/>
-    <qemu:arg value='device.virtio-disk1.scsi=off'/>
-  </qemu:commandline>
-  <qemu:commandline>
-    <qemu:arg value='-set'/>
-    <qemu:arg value='device.virtio-disk1.x-data-plane=on'/>
-   </qemu:commandline>
+  ${QEMU_COMMANDLINE}
 </domain>
 EOF
 
@@ -241,9 +268,12 @@ virsh net-start ${ADMIN_NAME}
 virsh net-start ${EXTERNAL_NAME}
 
 echo ""
+echo "When you want to use raw image format for better disk performance than default qcow2:"
+echo " # ${0} --use-raw-image"
+echo ""
 echo "Prepare the unpacked VMWare CoaL images:"
-echo " # cp 4gb.img /var/lib/libvirt/images/sdc-headnode-usb.raw"
-echo " # qemu-img convert -f vmdk zpool.vmdk -O raw /var/lib/libvirt/images/sdc-headnode-zpool.raw"
+echo " # qemu-img convert -f raw -O ${QEMU_IMAGE_FORMAT} 4gb.img /var/lib/libvirt/images/sdc-headnode-usb.${QEMU_IMAGE_FORMAT}"
+echo " # qemu-img create -f ${QEMU_IMAGE_FORMAT} /var/lib/libvirt/images/sdc-headnode-zpool.${QEMU_IMAGE_FORMAT} 60G"
 echo ""
 echo "When using SELinux make sure the following options are configured:"
 echo " # setsebool -P virt_use_execmem 1"
