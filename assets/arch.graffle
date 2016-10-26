@@ -48,6 +48,88 @@
 	<array>
 		<dict>
 			<key>Bounds</key>
+			<string>{{197.0679931640625, 348}, {98.931999206542969, 30}}</string>
+			<key>Class</key>
+			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>b</key>
+					<string>1</string>
+					<key>g</key>
+					<string>1</string>
+					<key>r</key>
+					<string>1</string>
+				</dict>
+			</dict>
+			<key>ID</key>
+			<integer>41469</integer>
+			<key>Magnets</key>
+			<array>
+				<string>{0, 1}</string>
+				<string>{0, -1}</string>
+				<string>{1, 0}</string>
+				<string>{-1, 0}</string>
+				<string>{1, 1}</string>
+				<string>{1, -1}</string>
+				<string>{-1, 1}</string>
+				<string>{-1, -1}</string>
+			</array>
+			<key>Style</key>
+			<dict>
+				<key>fill</key>
+				<dict>
+					<key>Color</key>
+					<dict>
+						<key>b</key>
+						<real>0.237155</real>
+						<key>g</key>
+						<real>0.52182200000000001</real>
+						<key>r</key>
+						<real>0.26123600000000002</real>
+						<key>space</key>
+						<string>srgb</string>
+					</dict>
+				</dict>
+				<key>shadow</key>
+				<dict>
+					<key>Fuzziness</key>
+					<real>7.464907169342041</real>
+				</dict>
+			</dict>
+			<key>Text</key>
+			<dict>
+				<key>RTFD</key>
+				<data>
+				BAtzdHJlYW10eXBlZIHoA4QBQISEhBJOU0F0dHJpYnV0
+				ZWRTdHJpbmcAhIQITlNPYmplY3QAhZKEhIQITlNTdHJp
+				bmcBlIQBKxZDb250YWluZXIgTmFtaW5nCihjbnMphoQC
+				aUkBFpKEhIQMTlNEaWN0aW9uYXJ5AJSEAWkDkoSWlgdO
+				U0NvbG9yhpKEhIQHTlNDb2xvcgCUhAFjAYQEZmZmZgEB
+				AQGGkoSWlhBOU1BhcmFncmFwaFN0eWxlhpKEhIQXTlNN
+				dXRhYmxlUGFyYWdyYXBoU3R5bGUAhIQQTlNQYXJhZ3Jh
+				cGhTdHlsZQCUhARDQ0BTAgCEhIQHTlNBcnJheQCUmQyS
+				hISECU5TVGV4dFRhYgCUhAJDZgAchpKEo6IAOIaShKOi
+				AFSGkoSjogBwhpKEo6IAgYwAhpKEo6IAgagAhpKEo6IA
+				gcQAhpKEo6IAgeAAhpKEo6IAgfwAhpKEo6IAgRgBhpKE
+				o6IAgTQBhpKEo6IAgVABhoYAhpKElpYGTlNGb250hpKE
+				hIQGTlNGb250HpSZHIQFWzI4Y10GAAAAFAAAAP/+SABl
+				AGwAdgBlAHQAaQBjAGEAhAFmC5sAmwGbAJsAhoaG
+				</data>
+				<key>Text</key>
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red255\green255\blue255;}
+{\*\expandedcolortbl;\csgray\c100000;\csgenericrgb\c100000\c100000\c100000;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc\partightenfactor0
+
+\f0\fs22 \cf2 Container Naming\
+(cns)}</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Bounds</key>
 			<string>{{279, 613.69152685972551}, {88, 18}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
@@ -4681,7 +4763,7 @@ AaBb}</string>
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2016-10-26 15:43:02 +0000</string>
+	<string>2016-10-26 15:58:21 +0000</string>
 	<key>Modifier</key>
 	<string>Wyatt Lyon Preul</string>
 	<key>NotesVisible</key>
@@ -4769,15 +4851,15 @@ AaBb}</string>
 		<key>TopSlabHeight</key>
 		<real>33</real>
 		<key>VisibleRegion</key>
-		<string>{{-179.99999999999997, 0}, {938.53211009174322, 575.6880733944954}}</string>
+		<string>{{-180, 0}, {938.53208135147895, 575.68805576544776}}</string>
 		<key>Zoom</key>
-		<real>2.1800000000000002</real>
+		<real>2.1800000667572021</real>
 		<key>ZoomValues</key>
 		<array>
 			<array>
 				<string>Canvas 1</string>
+				<real>2.1800000667572021</real>
 				<real>2.1800000000000002</real>
-				<real>2.2000000000000002</real>
 			</array>
 		</array>
 	</dict>
