@@ -87,14 +87,6 @@ if [[ ("$#" -eq 1) && ("${1}" == "--use-raw-image") ]]; then
          QEMU_COMMANDLINE="
            <qemu:commandline>
              <qemu:arg value='-set'/>
-             <qemu:arg value='device.virtio-disk0.scsi=off'/>
-           </qemu:commandline>
-           <qemu:commandline>
-             <qemu:arg value='-set'/>
-             <qemu:arg value='device.virtio-disk0.x-data-plane=on'/>
-            </qemu:commandline>
-           <qemu:commandline>
-             <qemu:arg value='-set'/>
              <qemu:arg value='device.virtio-disk1.scsi=off'/>
            </qemu:commandline>
            <qemu:commandline>
@@ -226,8 +218,8 @@ cat > ${VIRSH_DOMAIN_XML} << EOF
         <disk type='file' device='disk'>
             <driver name='qemu' type='${QEMU_IMAGE_FORMAT}' cache='none' io='native'/>
             <source file='/var/lib/libvirt/images/sdc-headnode-usb.${QEMU_IMAGE_FORMAT}'/>
-            <target dev='hda' bus='virtio' />
-            <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+            <target dev='hda' bus='ide' />
+            <address type='drive' controller='0' bus='1' target='0' unit='0'/>
         </disk>
         <disk type='file' device='disk'>
             <driver name='qemu' type='${QEMU_IMAGE_FORMAT}' cache='none' io='native'/>
