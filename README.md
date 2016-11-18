@@ -112,7 +112,7 @@ available disks on install. You'll want much more storage if you're working with
 images and instances.
 
 If setting up a Triton DataCenter pilot then you'll want to review
-the [Minimum Requirements](https://docs.joyent.com/private-cloud/install/site-and-network-requirements)
+the [Minimum Requirements](https://docs.joyent.com/private-cloud/install/hardware-selection)
 and [Installation Prerequisites](https://docs.joyent.com/private-cloud/install/deployment-planning)
 which include IPMI and at least 10 gigabit Ethernet. The supported hardware
 components for SmartOS are described in the [SmartOS Hardware Requirements](http://wiki.smartos.org/display/DOC/Hardware+Requirements).
