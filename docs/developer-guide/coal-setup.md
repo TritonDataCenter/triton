@@ -147,8 +147,8 @@ configuration file.
 |---|---|---|
 |*Instructions*|↵||
 |Company Name|Clavius||
-|Region of Datacenter|orbit||
-|Name of Datacenter|coal-1|(Availability zone.) |
+|Region of Datacenter|orbit|Enter aphanumeric characters. Do not use space or special characters.|
+|Name of Datacenter|coal-1|Enter aphanumeric characters. Do not use space or special characters.|
 |Location of DataCenter|Moon, Earth||
 |*Instructions*|↵||
 |'admin' interface|2|The second NIC is set up as the admin network by the CoaL networking script|
@@ -166,12 +166,12 @@ configuration file.
 |Default gateway IP address:|↵|Use the default.|
 |Primary DNS Server|↵|Use the default.|
 |Secondary DNS Server|↵|Use the default.|
-|Head node domain name|example.com||
+|Head node domain name|example.com|Make sure you choose a domain name that is not pingable, or resolved to an unrecognized IP address.|
 |DNS Search Domain|example.com||
 |NTP Server IP Address|↵|Use the default.|
-|"root" password|rootpass||
+|"root" password|rootpass|Enter aphanumeric characters. Do not use space or special characters.|
 |Confirm "root" password|||
-|"admin" password|adminpass1||
+|"admin" password|adminpass1|Enter aphanumeric characters. Do not use space or special characters.|
 |Confirm "admin" password|||
 |Administrator's email|↵|Use the default.|
 |Support email|↵|Use the default.|
@@ -313,8 +313,7 @@ global                               running         smartlogin          online
     adminui0 10.99.99.31 10.88.88.3
     ```
 
-   We can now access access the operations portal, "SDC ADMINUI", in a web
-   browser on the host computer at https://10.88.88.3/ .
+   You can now access the Operations Portal (SDC ADMINUI) in a web browser on the host computer at <https://10.88.88.3>.
 
 2. Set up CloudAPI
 
@@ -345,6 +344,45 @@ Configuring CNAPI to allow headnode provisioning and over-provisioning (allow a 
 
 Fabrics are not required to run CoaL. If you need to setup fabrics for
 development purposes you can refer to [Set up fabrics in CoaL](./coal-post-setup-fabrics.md)
+
+### Setup SDC-Docker
+
+SDC-Docker is not required to run CoaL. If you need to set up SDC-Docker with your CoaL, refer to the [Installation Instructions for SDC-Docker](https://github.com/joyent/sdc-docker#installation).
+
+### Configure Client Access to CloudAPI
+
+If you want to set up CLI on your laptop to access the CloudAPI on your CoaL, then follow the instructions for [Setting up CLI for CloudAPI](https://github.com/joyent/sdc-cloudapi/blob/master/docs/index.md#getting-started).
+
+But first, you need to perform a couple of steps on your headnode.
+
+1. Find the IP address of the CloudAPI zone by doing:
+
+   ```bash
+   [root@headnode (coal-1) ~]# sdc-vmapi /vms?alias=cloudapi | json -H -ga alias nics.1.ip
+   ```
+
+   For example, if you get the following returned values "cloudapi0 10.88.88.5", then the URL of your CloudAPI endpoint is <https://10.88.88.5>.
+
+2. Create a user:
+
+   ```bash
+   [root@headnode (coal-1) ~]# sdc-useradm create -A login={username} email={emailaddress} userpassword={password}
+   ```
+
+   Substiture real values for _{username}_, _{emailaddress}_ and _{password}_.
+
+When configuring CLI on your laptop, set the SDC_URL environment variable to <https://10.88.88.5>, and the SDC_ACCOUNT environment variable to _{username}_.  Also, remember to add the SSH key that you created to the _{username}_.  To do this:
+
+   ```bash
+   # Copy the SSH public key from your laptop to CoaL
+   scp ~/.ssh/id_rsa.pub root@10.88.88.200:/var/tmp/
+   
+   # ssh to the CoaL headnode
+   ssh root@10.88.88.200
+   
+   # Add the SSH key. Substiture real value for {username}.
+   sdc-useradm add-key {username} /var/tmp/id_rsa.pub
+   ```
 
 # Update CoaL
 
