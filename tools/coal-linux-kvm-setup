@@ -19,6 +19,8 @@
 #
 # This script is highly experimental and is community supported (it is not used by anyone at 
 # Joyent). This script has been tested on the following Linux distributions: 
+# * CentOS 7
+#   * Install required packages: yum install qemu-kvm libvirt virt-manager
 # * Fedora 23 
 #   * Install required packages: dnf install libvirt virt-manager
 # * Ubuntu 14.04, 16.04
@@ -63,6 +65,8 @@ if [ -e "/usr/bin/qemu-kvm" ]; then
     EMULATOR=/usr/bin/qemu-kvm
 elif [ -e "/usr/bin/kvm" ]; then
     EMULATOR=/usr/bin/kvm
+elif [ -e "/usr/libexec/qemu-kvm" ]; then
+    EMULATOR=/usr/libexec/qemu-kvm
 else
     echo "KVM cannot be found. Exiting."
     exit 1
