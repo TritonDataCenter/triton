@@ -118,8 +118,6 @@ ADMIN_HOST_IP=$(echo ${ADMIN_NETWORK} | sed 's/\.[0-9]*$/.254/')
 EXTERNAL_NAME=sdc-external
 EXTERNAL_NETWORK=10.88.88.0
 EXTERNAL_NETMASK=255.255.255.0
-EXTERNAL_DHCP_START=10.88.88.10
-EXTERNAL_DHCP_END=10.88.88.254
 EXTERNAL_HOST_IP=10.88.88.2
 
 # Checks if a network exists and is active. Destroys and undefines it as needed.
@@ -180,11 +178,7 @@ cat > ${VIRSH_NET_EXTERNAL_XML} << EOF
      <name>${EXTERNAL_NAME}</name>
      <bridge name="sdc-ext" />
      <forward mode="nat" />
-     <ip address="${EXTERNAL_HOST_IP}" netmask="${EXTERNAL_NETMASK}">
-          <dhcp>
-              <range start="${EXTERNAL_DHCP_START}" end="${EXTERNAL_DHCP_END}" />
-          </dhcp>
-     </ip>
+     <ip address="${EXTERNAL_HOST_IP}" netmask="${EXTERNAL_NETMASK}" />
 </network>
 EOF
 
