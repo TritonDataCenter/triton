@@ -96,9 +96,17 @@ At a high level, setting up CoaL involves:
         1. Launch VMware Fusion
         2. File > Open... `coal-<branch>-<build_date_time>-<git_sha1_hash>-4gb.vmwarevm`
         3. Virtual Machine > Settings
-        4. Processes & Memory > set memory to 8192 MB or greater. Be sure to
-           leave Mac OS X with at least 8 GB.
-
+        4. Processes & Memory > Default memory is set to 8192 MB, but be sure
+	   to leave Mac OS X with at least 8 GB.  If you prefer not to use the
+	   VMWare GUI, the place to change this default is in the CoaL
+	   `USB-headnode.vmx` file, where you can set `memsize = "6144"`, for
+	   example.
+	   WARNING: If you choose to allocate less than 6 GB this may cause
+	   problems, and if you go as low as 4 GB it certainly will. As the
+	   CoaL VM hits its memory limit, it will page rapidly and operations
+	   will contend for resources.  In this situation, the VM will attempt
+	   to perform massive amounts of disk I/O to keep up with the system's
+	   demands, and will slow down and eventually fail to meet them.
 
 1. When you are prompted with the GRUB menu press the down arrow.
 
@@ -742,7 +750,8 @@ the most reliable and secure OS.
      - SmartOS Live Image v0.147+ build: 20150219T182356Z
     ```
 
-1. Run `sdc-healthcheck` until all services go from "error" or "svc-err" to "online".
+1. Run `sdc-healthcheck` until all services go from "error" or "svc-err" to
+   "online".
 
    You have successfully updated CoaL.
 
