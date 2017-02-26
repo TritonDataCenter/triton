@@ -706,18 +706,11 @@ the most reliable and secure OS.
 
 1. Update the headnode to use the latest platform image.
 
-   Get the version of the latest platform image:
-    ```bash
-    [root@headnode (coal-1) ~]# LATEST_PLATFORM=$(sdcadm platform list -j | json -a -c 'latest===true' version)
-    [root@headnode (coal-1) ~]# echo $LATEST_PLATFORM
-    20150219T182356Z
-    ```
-
    Assign the latest platform image to the headnode which is included with
    the "--all" servers option on the "sdc platform assign" command:
 
     ```bash
-    [root@headnode (coal-1) ~]# sdcadm platform assign $LATEST_PLATFORM --all
+    [root@headnode (coal-1) ~]# sdcadm platform assign --latest --all
     updating headnode 564dc5bc-f596-6234-8041-bab9c76c2509 to 20150205T055835Z
     Setting boot params for 564dc5bc-f596-6234-8041-bab9c76c2509
     Updating booter cache for servers
