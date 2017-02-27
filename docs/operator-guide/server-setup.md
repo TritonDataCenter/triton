@@ -173,7 +173,8 @@ module tftp://${next-server}/os/20160517T105654Z/platform/i86pc/amd64/boot_archi
 module tftp://${next-server}/os/20160517T105654Z/platform/i86pc/amd64/boot_archive.hash type=hash name=ramdisk
 module tftp://${next-server}/bootfs/000c29e97b8f/networking.json type=file name=networking.json
 module tftp://${next-server}/bootfs/000c29e97b8f/networking.json.hash type=file name=networking.json.hash
-boot[root@223e92e3-233b-499d-8093-2715c686a398 (coal:dhcpd0) ~]# cat /tftpboot/menu.lst.01000C29E97B8F
+boot
+[root@223e92e3-233b-499d-8093-2715c686a398 (coal:dhcpd0) ~]# cat /tftpboot/menu.lst.01000C29E97B8F
 default 0
 timeout 5
 min_mem64 1024
