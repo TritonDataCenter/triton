@@ -40,7 +40,7 @@ At a high level, setting up CoaL involves:
 ### Download CoaL and Configure VMware
 
 1. Start the download of the latest CoaL build. The tarball is
-   approximately 2 GB.
+   approximately 3 GB.
 
     curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/coal-latest.tgz
 
