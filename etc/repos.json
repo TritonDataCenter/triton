@@ -492,10 +492,6 @@
     "desc": "Compute node designation library"
   },
   {
-    "git": "git@github.com:joyent/node-task-agent.git",
-    "desc": "Node.js library to implement AMQP task agents"
-  },
-  {
     "git": "git@github.com:joyent/sdc-wf-client.git",
     "desc": "Client for the SDC Workflow API",
     "tags": [
@@ -535,21 +531,10 @@
     ]
   },
   {
-    "git": "git@github.com:joyent/node-ufds-controls.git",
-    "desc": "UFDS LDAP Controls"
-  },
-  {
     "git": "git@github.com:joyent/oid-docs.git",
     "desc": "Document the Joyent OID tree (1.3.6.1.4.1.38678)",
     "tags": [
       "docs"
-    ]
-  },
-  {
-    "git": "git@github.com:joyent/sdc-ufds-replicator.git",
-    "desc": "Replicate changes from one or more UFDS instances",
-    "tags": [
-      "sync"
     ]
   },
   {

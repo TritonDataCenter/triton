@@ -117,7 +117,6 @@ There are also services responsible for syncing data between datacenters or
 to manta:
 
 * [sdc-hermes](https://github.com/joyent/sdc-hermes): Centralised tool to upload SDC logs to Manta
-* [sdc-ufds-replicator](https://github.com/joyent/sdc-ufds-replicator): Replicate changes from one or more UFDS instances
 
 
 Documentation repos:
@@ -145,7 +144,5 @@ The other repos are used by one of the other repos above:
 * [node-tracker](https://github.com/joyent/node-tracker): Node.js library list vm details, watch for status changes
 * [node-zfs](https://github.com/joyent/node-zfs): Node.js library to interface with ZFS utilities
 * [sdc-designation](https://github.com/joyent/sdc-designation): Compute node designation library
-* [node-task-agent](https://github.com/joyent/node-task-agent): Node.js library to implement AMQP task agents
 * [sdc-wf-shared](https://github.com/joyent/sdc-wf-shared): SmartDataCenter workflow shared code.
-* [node-ufds-controls](https://github.com/joyent/node-ufds-controls): UFDS LDAP Controls
 * [cloud-tycoon](https://github.com/joyent/cloud-tycoon): DC simulation package
