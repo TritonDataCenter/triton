@@ -1,0 +1,1073 @@
+{
+    "jrVersion": 1,
+    "description": "Triton Data Center public repositories",
+    "repoCandidateSearch": {
+        "description": "public github.com/joyent repos directly relevant to development of TritonDC",
+        "type": "public",
+        "includeArchived": false
+    },
+    "blessedLabels": [
+        {
+            "name": "meta",
+            "type": "boolean",
+            "description": "a repo that isn't code, but is relevant for product development"
+        },
+        {
+            "name": "release",
+            "type": "boolean",
+            "description": "a top-level repo for a Triton release component"
+        },
+        {
+            "name": "image",
+            "type": "string",
+            "description": "the image name for repos that produce a VM image"
+        },
+        {
+            "name": "tritonservice",
+            "type": "string",
+            "description": "the top-level repo for a Triton core service, e.g. tritonservice=imgapi"
+        },
+        {
+            "name": "customerimages",
+            "type": "boolean",
+            "description": "PROPOSED a repo involved in base and customer image creation"
+        }
+    ],
+    "defaults": {
+        "labels": {
+            "triton": true,
+            "public": true
+        }
+    },
+    "repositories": [
+        {
+            "name": "aperture-config"
+        },
+        {
+            "name": "binder",
+            "labels": {
+                "release": true,
+                "tritonservice": "binder",
+                "image": "manta-nameservice",
+                "mg": "binder",
+                "vm": true
+            }
+        },
+        {
+            "name": "cloud-init",
+            "labels": {
+                "customerimages": true
+            }
+        },
+        {
+            "name": "eng",
+            "labels": {
+                "meta": true
+            }
+        },
+        {
+            "name": "java-triton"
+        },
+        {
+            "name": "keyapi"
+        },
+        {
+            "name": "mahi",
+            "labels": {
+                "release": true,
+                "tritonservice": "mahi",
+                "image": "manta-authcache",
+                "mg": "mahi",
+                "vm": true
+            }
+        },
+        {
+            "name": "manatee"
+        },
+        {
+            "name": "mname-balancer"
+        },
+        {
+            "name": "moray",
+            "labels": {
+                "release": true,
+                "tritonservice": "moray",
+                "image": "manta-moray",
+                "mg": "moray",
+                "vm": true
+            }
+        },
+        {
+            "name": "mountain-gorilla"
+        },
+        {
+            "name": "node-aperture"
+        },
+        {
+            "name": "node-cueball"
+        },
+        {
+            "name": "node-docker-file-parser"
+        },
+        {
+            "name": "node-docker-registry-client"
+        },
+        {
+            "name": "node-fast"
+        },
+        {
+            "name": "node-fast-messages"
+        },
+        {
+            "name": "node-imgmanifest"
+        },
+        {
+            "name": "node-mahi"
+        },
+        {
+            "name": "node-manatee"
+        },
+        {
+            "name": "node-mdata-client"
+        },
+        {
+            "name": "node-mname"
+        },
+        {
+            "name": "node-mname-client"
+        },
+        {
+            "name": "node-moray"
+        },
+        {
+            "name": "node-moray-filter"
+        },
+        {
+            "name": "node-moray-sandbox"
+        },
+        {
+            "name": "node-sdc-changefeed"
+        },
+        {
+            "name": "node-sdc-clients"
+        },
+        {
+            "name": "node-smartdc"
+        },
+        {
+            "name": "node-smartdc-auth"
+        },
+        {
+            "name": "node-triton"
+        },
+        {
+            "name": "node-triton-merci-buckets"
+        },
+        {
+            "name": "node-triton-metrics"
+        },
+        {
+            "name": "node-triton-package-boilerplate"
+        },
+        {
+            "name": "node-triton-tags"
+        },
+        {
+            "name": "node-ufds"
+        },
+        {
+            "name": "node-urclient"
+        },
+        {
+            "name": "node-vmadm"
+        },
+        {
+            "name": "node-workflow"
+        },
+        {
+            "name": "node-workflow-moray-backend"
+        },
+        {
+            "name": "node-zkstream"
+        },
+        {
+            "name": "registrar",
+            "labels": {
+                "release": true,
+                "mg": "registrar"
+            }
+        },
+        {
+            "name": "restdown-brand-remora"
+        },
+        {
+            "name": "rfd",
+            "labels": {
+                "meta": true
+            }
+        },
+        {
+            "name": "rfe",
+            "labels": {
+                "meta": true
+            }
+        },
+        {
+            "name": "schemas"
+        },
+        {
+            "name": "sdc-adminui",
+            "labels": {
+                "release": true,
+                "tritonservice": "adminui",
+                "image": "adminui",
+                "mg": "adminui",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-agents-core",
+            "labels": {
+                "release": true,
+                "tritonservice": "agents_core",
+                "mg": "agents_core",
+                "agent": true
+            }
+        },
+        {
+            "name": "sdc-agents-installer",
+            "labels": {
+                "release": true,
+                "mg": "agentsshar"
+            }
+        },
+        {
+            "name": "sdc-amon",
+            "labels": {
+                "release": true,
+                "tritonservice": "amon",
+                "image": "amon",
+                "mg": "amon",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-amonadm"
+        },
+        {
+            "name": "sdc-amonredis",
+            "labels": {
+                "release": true,
+                "tritonservice": "amonredis",
+                "image": "amonredis",
+                "mg": "amonredis",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-assets",
+            "labels": {
+                "release": true,
+                "tritonservice": "assets",
+                "image": "assets",
+                "mg": "assets",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-booter",
+            "labels": {
+                "release": true,
+                "tritonservice": "dhcpd",
+                "image": "dhcpd",
+                "mg": "dhcpd",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-bunyan-serializers"
+        },
+        {
+            "name": "sdc-cloud-analytics",
+            "labels": {
+                "release": true,
+                "tritonservice": "ca",
+                "image": "ca",
+                "mg": "ca",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-cloudapi",
+            "labels": {
+                "release": true,
+                "tritonservice": "cloudapi",
+                "image": "cloudapi",
+                "mg": "cloudapi",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-cn-agent",
+            "labels": {
+                "release": true,
+                "tritonservice": "cn-agent",
+                "mg": "cn-agent",
+                "agent": true
+            }
+        },
+        {
+            "name": "sdc-cnapi",
+            "labels": {
+                "release": true,
+                "tritonservice": "cnapi",
+                "image": "cnapi",
+                "mg": "cnapi",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-config-agent",
+            "labels": {
+                "release": true,
+                "tritonservice": "config-agent",
+                "mg": "config-agent",
+                "agent": true
+            }
+        },
+        {
+            "name": "sdc-designation"
+        },
+        {
+            "name": "sdc-docker",
+            "labels": {
+                "release": true,
+                "tritonservice": "docker",
+                "image": "docker",
+                "mg": "docker",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-docker-build"
+        },
+        {
+            "name": "sdc-docker-build-dl"
+        },
+        {
+            "name": "sdc-dockerlogger",
+            "labels": {
+                "release": true,
+                "tritonservice": "dockerlogger",
+                "mg": "dockerlogger",
+                "agent": true
+            }
+        },
+        {
+            "name": "sdc-events"
+        },
+        {
+            "name": "sdc-firewaller-agent",
+            "labels": {
+                "release": true,
+                "tritonservice": "firewaller",
+                "mg": "firewaller",
+                "agent": true
+            }
+        },
+        {
+            "name": "sdc-fwapi",
+            "labels": {
+                "release": true,
+                "tritonservice": "fwapi",
+                "image": "fwapi",
+                "mg": "fwapi",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-fwrule"
+        },
+        {
+            "name": "sdc-hagfish-watcher",
+            "labels": {
+                "release": true,
+                "tritonservice": "hagfish-watcher",
+                "mg": "hagfish-watcher",
+                "agent": true
+            }
+        },
+        {
+            "name": "sdc-headnode",
+            "labels": {
+                "release": true,
+                "mg": "headnode-joyent"
+            }
+        },
+        {
+            "name": "sdc-hermes"
+        },
+        {
+            "name": "sdc-imgapi",
+            "labels": {
+                "release": true,
+                "tritonservice": "imgapi",
+                "image": "imgapi",
+                "mg": "imgapi",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-imgapi-cli"
+        },
+        {
+            "name": "sdc-manatee",
+            "labels": {
+                "release": true,
+                "tritonservice": "manatee",
+                "image": "sdc-postgres",
+                "mg": "sdc-manatee",
+                "vm": true
+            }
+        },
+        {
+            "name": "manta-manatee"
+        },
+        {
+            "name": "sdc-manta",
+            "labels": {
+                "release": true,
+                "tritonservice": "manta",
+                "image": "manta-deployment",
+                "mg": "manta-deployment",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-mockcloud",
+            "labels": {
+                "release": true,
+                "image": "mockcloud",
+                "mg": "mockcloud"
+            }
+        },
+        {
+            "name": "sdc-napi",
+            "labels": {
+                "release": true,
+                "tritonservice": "napi",
+                "image": "napi",
+                "mg": "napi",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-napi-ufds-watcher"
+        },
+        {
+            "name": "sdc-nat",
+            "labels": {
+                "release": true,
+                "tritonservice": "nat",
+                "image": "nat",
+                "mg": "nat",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-net-agent",
+            "labels": {
+                "release": true,
+                "tritonservice": "net-agent",
+                "mg": "net-agent",
+                "agent": true
+            }
+        },
+        {
+            "name": "sdc-nfs"
+        },
+        {
+            "name": "sdc-nfsserver",
+            "labels": {
+                "release": true,
+                "image": "nfsserver",
+                "mg": "nfsserver",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-papi",
+            "labels": {
+                "release": true,
+                "vm": true,
+                "tritonservice": "papi",
+                "mg": "papi",
+                "image": "papi"
+            }
+        },
+        {
+            "name": "sdc-portolan",
+            "labels": {
+                "release": true,
+                "tritonservice": "portolan",
+                "image": "portolan",
+                "mg": "portolan",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-portolan-moray"
+        },
+        {
+            "name": "sdc-rabbitmq",
+            "labels": {
+                "release": true,
+                "tritonservice": "rabbitmq",
+                "image": "rabbitmq",
+                "mg": "rabbitmq",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-sapi",
+            "labels": {
+                "release": true,
+                "tritonservice": "sapi",
+                "image": "sapi",
+                "mg": "sapi",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-scripts"
+        },
+        {
+            "name": "sdc-sdc",
+            "labels": {
+                "release": true,
+                "mg": "sdc",
+                "tritonservice": "sdc",
+                "image": "sdc",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-securetoken"
+        },
+        {
+            "name": "sdc-smart-login",
+            "labels": {
+                "release": true,
+                "tritonservice": "smartlogin",
+                "mg": "smartlogin",
+                "agent": true
+            }
+        },
+        {
+            "name": "sdc-system-tests",
+            "labels": {
+                "release": true,
+                "mg": "sdc-system-tests"
+            }
+        },
+        {
+            "name": "sdc-ufds",
+            "labels": {
+                "release": true,
+                "tritonservice": "ufds",
+                "image": "ufds",
+                "mg": "ufds",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-ufds-replicator"
+        },
+        {
+            "name": "sdc-vm-agent",
+            "labels": {
+                "release": true,
+                "tritonservice": "vm-agent",
+                "mg": "vm-agent",
+                "agent": true
+            }
+        },
+        {
+            "name": "sdc-vmapi",
+            "labels": {
+                "release": true,
+                "tritonservice": "vmapi",
+                "image": "vmapi",
+                "mg": "vmapi",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-volapi",
+            "labels": {
+                "release": true,
+                "tritonservice": "volapi",
+                "image": "volapi",
+                "mg": "volapi",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdc-wf-client"
+        },
+        {
+            "name": "sdc-wf-shared"
+        },
+        {
+            "name": "sdc-workflow",
+            "labels": {
+                "release": true,
+                "tritonservice": "workflow",
+                "image": "workflow",
+                "mg": "workflow",
+                "vm": true
+            }
+        },
+        {
+            "name": "sdcadm",
+            "labels": {
+                "release": true,
+                "mg": "sdcadm"
+            }
+        },
+        {
+            "name": "sdcboot",
+            "labels": {
+                "release": true,
+                "mg": "sdcboot"
+            }
+        },
+        {
+            "name": "sdcnode"
+        },
+        {
+            "name": "triton",
+            "labels": {
+                "meta": true
+            }
+        },
+        {
+            "name": "triton-cmon",
+            "labels": {
+                "release": true,
+                "tritonservice": "cmon",
+                "image": "cmon",
+                "mg": "cmon",
+                "vm": true
+            }
+        },
+        {
+            "name": "triton-cmon-agent",
+            "labels": {
+                "release": true,
+                "tritonservice": "cmon-agent",
+                "mg": "cmon-agent",
+                "agent": true
+            }
+        },
+        {
+            "name": "triton-cns",
+            "labels": {
+                "release": true,
+                "tritonservice": "cns",
+                "image": "cns",
+                "mg": "cns",
+                "vm": true
+            }
+        },
+        {
+            "name": "triton-docker-cli"
+        },
+        {
+            "name": "triton-go"
+        },
+        {
+            "name": "triton-origin-image"
+        },
+        {
+            "name": "triton-tracer"
+        },
+        {
+            "name": "zfs_snapshot_tar"
+        },
+        {
+            "name": "zoneinit",
+            "labels": {
+                "customerimages": true
+            }
+        },
+        {
+            "name": "zookeeper-common"
+        }
+    ],
+    "excludedRepositories": [
+        "Manta-Client",
+        "Rbunyan",
+        "UpdatablePriorityQueue.js",
+        "acpica",
+        "alpine-lx-brand-image-builder",
+        "ayyaz-tests-networks",
+        "blip",
+        "bugview",
+        "buildymcbuildface",
+        "catest",
+        "cbstatsmon",
+        "centos-image-tests",
+        "centos-lx-brand-image-builder",
+        "certificate-expiry-monitor",
+        "chef",
+        "chyves",
+        "cloud-perf-labs",
+        "cloud-tycoon",
+        "cloudapi-gql",
+        "commons-vfs-manta",
+        "conch",
+        "conch-shell",
+        "conch-stats",
+        "conch-ui",
+        "consul",
+        "containerpilot",
+        "containersummit-workshop",
+        "convertvm",
+        "cosbench",
+        "cosbench-manta",
+        "cosbench2csv",
+        "cr-update-reviewers",
+        "daggr",
+        "debian-image-tests",
+        "debian-lx-brand-image-builder",
+        "docker-machine-driver-triton",
+        "dogpatch",
+        "dragnet",
+        "dtrace-runner",
+        "dtracetools",
+        "dtracetools-lx",
+        "dtruss-osx",
+        "electric-moray",
+        "erlang-manta",
+        "eslint-config-joyent-portal",
+        "evttool",
+        "fedora-kvm-image-builder",
+        "fedora-kvm-image-tests",
+        "fedora-lx-brand-image-builder",
+        "fishbulb",
+        "freebsd",
+        "freebsd-image-tests",
+        "freebsd-kvm-image-builder",
+        "freebsd-live",
+        "freebsd-vpc",
+        "gcc",
+        "gerrit",
+        "gerrit-test",
+        "gerrit-test-rewind",
+        "gerritbot",
+        "git-apply-pr",
+        "go-conch",
+        "gocommon",
+        "gomanta",
+        "gosdc",
+        "gosign",
+        "grr",
+        "hackathon-nvtool",
+        "hadoop-manta",
+        "hapi-triton-auth",
+        "hapi-webconsole-nav",
+        "haproxy-1.4",
+        "haproxy-1.5",
+        "haproxy-1.8",
+        "hogan.js",
+        "homebrew-tap",
+        "httpmd5",
+        "hwgrok",
+        "illumos-extra",
+        "illumos-joyent",
+        "illumos-kvm",
+        "illumos-kvm-cmd",
+        "illumos-libavl",
+        "illumos-list",
+        "illumos-virtio",
+        "image-converter",
+        "imagetools",
+        "innovator-workshop",
+        "ipxe",
+        "java-fast-md5",
+        "java-http-signature",
+        "java-manta",
+        "javascriptlint",
+        "jenkins-terraform-triton",
+        "joyent-gerrit",
+        "jsstyle",
+        "kafka-connect-manta",
+        "kirby-preview-base",
+        "knife-joyent",
+        "leveldown",
+        "libfaketime",
+        "libunwind",
+        "lx-brand-image-tests",
+        "lx-tests",
+        "machine",
+        "manatee-state-machine",
+        "manifest-creator",
+        "manta",
+        "manta-archiver",
+        "manta-compute-bin",
+        "manta-finder",
+        "manta-genazconfig",
+        "manta-hk",
+        "manta-mackerel",
+        "manta-madtom",
+        "manta-mako",
+        "manta-marlin",
+        "manta-marlin-dashboard",
+        "manta-mdshovel",
+        "manta-medusa",
+        "manta-minnow",
+        "manta-mlive",
+        "manta-mola",
+        "manta-mprune",
+        "manta-munistats",
+        "manta-muskie",
+        "manta-nfs",
+        "manta-physusage",
+        "manta-propeller",
+        "manta-reshard",
+        "manta-scripts",
+        "manta-shortener-client",
+        "manta-show-changes",
+        "manta-thoth",
+        "manta-tools-deck",
+        "manta-wrasse",
+        "mantaRSDK",
+        "manufacturing",
+        "mdata-client",
+        "mdb_go",
+        "mdb_v8",
+        "me-centos",
+        "me-freebsd",
+        "mesos",
+        "mesos-dockerfiles",
+        "mesoscon-eu-2015-hackathon",
+        "mfsbsd",
+        "mi-cassandra",
+        "mi-centos",
+        "mi-centos-7",
+        "mi-centos-bhyve-6",
+        "mi-centos-bhyve-7",
+        "mi-chefserver",
+        "mi-debian",
+        "mi-debian-8",
+        "mi-debian-9",
+        "mi-example",
+        "mi-freebsd-10",
+        "mi-hadoop",
+        "mi-java",
+        "mi-mongodb",
+        "mi-nodejs",
+        "mi-percona",
+        "mi-percona-cluster",
+        "mi-postgresql",
+        "mi-riak",
+        "mi-standard",
+        "mibe",
+        "mill",
+        "milld-nginx",
+        "minecrab",
+        "minio",
+        "mjob-cost",
+        "mock-docker-registry",
+        "mod_usdt",
+        "moray-etl-jsonb",
+        "moray-test-suite",
+        "muppet",
+        "nginx",
+        "nhttpsnoop",
+        "nic-audit",
+        "node-amqp",
+        "node-amqp-joyent",
+        "node-artedi",
+        "node-asn1",
+        "node-assert-plus",
+        "node-bcrypt-pbkdf",
+        "node-bunyan-syslog",
+        "node-camp",
+        "node-catstreams",
+        "node-checker",
+        "node-cmdutil",
+        "node-codel",
+        "node-consulite",
+        "node-contract",
+        "node-debug-school",
+        "node-dns",
+        "node-documentation-generator",
+        "node-eslint-plugin-joyent",
+        "node-exeunt",
+        "node-extsprintf",
+        "node-fash",
+        "node-fdleakcheck",
+        "node-force10",
+        "node-forkexec",
+        "node-fuzzstream",
+        "node-gerritbot",
+        "node-haproxy-log",
+        "node-http-signature",
+        "node-httpstream",
+        "node-hyprlofs",
+        "node-in-the-industry",
+        "node-infra",
+        "node-ip6addr",
+        "node-ipd",
+        "node-ipmi",
+        "node-jsprim",
+        "node-juju",
+        "node-krill",
+        "node-kstat",
+        "node-ldapjs",
+        "node-libdtrace-async",
+        "node-libmanta",
+        "node-lockfd",
+        "node-lomstream",
+        "node-macaddr",
+        "node-manta",
+        "node-manta-dir-watcher",
+        "node-manta-mutex",
+        "node-mantafs",
+        "node-meta-d",
+        "node-metajob",
+        "node-mooremachine",
+        "node-nfs",
+        "node-oncrpc",
+        "node-pg-lsn",
+        "node-pg_dump",
+        "node-pgtrigger",
+        "node-piloted",
+        "node-png-joyent",
+        "node-progbar",
+        "node-remote-tester-drone",
+        "node-restify",
+        "node-restify-warden",
+        "node-skinner",
+        "node-snmpjs",
+        "node-splitduplex",
+        "node-sshpk",
+        "node-sshpk-agent",
+        "node-stackvis",
+        "node-statvfs",
+        "node-strsplit",
+        "node-tab",
+        "node-tar",
+        "node-timefilter",
+        "node-timeseries-heatmap",
+        "node-trace-event",
+        "node-tracing",
+        "node-vasync",
+        "node-verror",
+        "node-vmapi-resolver",
+        "node-vstream",
+        "node-vstream-json-parser",
+        "node-watershed",
+        "node-wfq",
+        "node-whyyoulittle",
+        "node-zfile",
+        "node-zfs",
+        "node-zonename",
+        "node-zookeeper-client",
+        "node-zsock",
+        "node-zuora-rest",
+        "node-zutil",
+        "node_zuora",
+        "node_zuora_aqua",
+        "nodejs-advisory-board",
+        "ohai",
+        "oid-docs",
+        "openbsd-kvm-image-builder",
+        "openbsd-kvm-image-tests",
+        "packer",
+        "packer-builder-triton",
+        "pg_prefaulter",
+        "pg_sample",
+        "pglockanalyze",
+        "pgsqlstat",
+        "pgstatsmon",
+        "php-manta",
+        "pkgbuild",
+        "pkgin",
+        "pkgin-test-suite",
+        "pkgsrc",
+        "pkgsrc-joyent",
+        "pkgsrc-legacy",
+        "pkgsrc-wip",
+        "pkgsrc.joyent.com",
+        "portsnoop",
+        "postgres",
+        "presto-manta",
+        "promstat",
+        "prsigset",
+        "publicsuffix-list",
+        "python-manta",
+        "ruby-manta",
+        "s3-manta-bridge",
+        "sdc-hammer",
+        "sdc-redis",
+        "sdc-ur-agent",
+        "sdc-vmtools",
+        "sdc-vmtools-lx-brand",
+        "sdc-vmtools-windows",
+        "sdev-tests",
+        "smartmachine_cookbooks",
+        "smartos-dev-tools",
+        "smartos-image-tests",
+        "smartos-live",
+        "smartos-vmtools",
+        "smartos_cookbooks",
+        "smfgen",
+        "smtools",
+        "snoopdump",
+        "spc-caprep",
+        "statemap",
+        "summit-workshop",
+        "sup-im-notices",
+        "sup-new-ufds-users",
+        "sup-notify",
+        "sup-toolbox",
+        "syslinux",
+        "teamcity-manta-artifact-storage-plugin",
+        "terraform",
+        "terraform-triton-bastion",
+        "terraform-triton-grafana",
+        "terraform-triton-kafka",
+        "terraform-triton-presto",
+        "terraform-triton-prometheus",
+        "terraform-triton-redash",
+        "terraform-triton-zookeeper",
+        "toshstomp",
+        "triton-dcapi",
+        "triton-kubernetes",
+        "triton-report",
+        "triton-terraform",
+        "tsg-graphql",
+        "ubuntu-certified-image-tests",
+        "ubuntu-lx-brand-image-builder",
+        "ursa",
+        "uvxbridge",
+        "v8plus",
+        "vera",
+        "vmss",
+        "vnodestats",
+        "webconsole-cloudapi-client",
+        "webconsole-images",
+        "webconsole-instances",
+        "webconsole-navigation",
+        "webconsole-nginx",
+        "webconsole-node",
+        "webconsole-tsg",
+        "webrev",
+        "zendesk",
+        "ziploader",
+        "zookeeper"
+    ]
+}
