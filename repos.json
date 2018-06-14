@@ -60,6 +60,18 @@
             }
         },
         {
+            "name": "cloud-init-debian",
+            "labels": {
+                "customerimages": true
+            }
+        },
+        {
+            "name": "cloud-init-ubuntu",
+            "labels": {
+                "customerimages": true
+            }
+        },
+        {
             "name": "eng",
             "labels": {
                 "meta": true
@@ -85,6 +97,15 @@
             "name": "manatee"
         },
         {
+            "name": "manta-manatee"
+        },
+        {
+            "name": "mi-debian-bhyve-8",
+            "labels": {
+                "customerimages": true
+            }
+        },
+        {
             "name": "mname-balancer"
         },
         {
@@ -101,7 +122,25 @@
             "name": "mountain-gorilla"
         },
         {
+            "name": "node-amqp-joyent"
+        },
+        {
             "name": "node-aperture"
+        },
+        {
+            "name": "node-artedi"
+        },
+        {
+            "name": "node-asn1"
+        },
+        {
+            "name": "node-assert-plus"
+        },
+        {
+            "name": "node-bunyan-syslog"
+        },
+        {
+            "name": "node-cmdutil"
         },
         {
             "name": "node-cueball"
@@ -113,19 +152,67 @@
             "name": "node-docker-registry-client"
         },
         {
+            "name": "node-eslint-plugin-joyent"
+        },
+        {
+            "name": "node-exeunt"
+        },
+        {
+            "name": "node-extsprintf"
+        },
+        {
+            "name": "node-fash"
+        },
+        {
             "name": "node-fast"
         },
         {
             "name": "node-fast-messages"
         },
         {
+            "name": "node-forkexec"
+        },
+        {
             "name": "node-imgmanifest"
+        },
+        {
+            "name": "node-ip6addr"
+        },
+        {
+            "name": "node-jsprim"
+        },
+        {
+            "name": "node-krill"
+        },
+        {
+            "name": "node-kstat"
+        },
+        {
+            "name": "node-ldapjs"
+        },
+        {
+            "name": "node-libmanta"
+        },
+        {
+            "name": "node-lockfd"
+        },
+        {
+            "name": "node-lomstream"
+        },
+        {
+            "name": "node-macaddr"
         },
         {
             "name": "node-mahi"
         },
         {
             "name": "node-manatee"
+        },
+        {
+            "name": "node-manta"
+        },
+        {
+            "name": "node-manta-dir-watcher"
         },
         {
             "name": "node-mdata-client"
@@ -137,6 +224,9 @@
             "name": "node-mname-client"
         },
         {
+            "name": "node-mooremachine"
+        },
+        {
             "name": "node-moray"
         },
         {
@@ -144,6 +234,24 @@
         },
         {
             "name": "node-moray-sandbox"
+        },
+        {
+            "name": "node-nfs"
+        },
+        {
+            "name": "node-oncrpc"
+        },
+        {
+            "name": "node-pg-lsn"
+        },
+        {
+            "name": "node-png-joyent"
+        },
+        {
+            "name": "node-progbar"
+        },
+        {
+            "name": "node-restify-warden"
         },
         {
             "name": "node-sdc-changefeed"
@@ -156,6 +264,30 @@
         },
         {
             "name": "node-smartdc-auth"
+        },
+        {
+            "name": "node-sshpk"
+        },
+        {
+            "name": "node-sshpk-agent"
+        },
+        {
+            "name": "node-statvfs"
+        },
+        {
+            "name": "node-strsplit"
+        },
+        {
+            "name": "node-tab"
+        },
+        {
+            "name": "node-tar"
+        },
+        {
+            "name": "node-timeseries-heatmap"
+        },
+        {
+            "name": "node-trace-event"
         },
         {
             "name": "node-triton"
@@ -179,7 +311,28 @@
             "name": "node-urclient"
         },
         {
+            "name": "node-vasync"
+        },
+        {
+            "name": "node-verror"
+        },
+        {
             "name": "node-vmadm"
+        },
+        {
+            "name": "node-vmapi-resolver"
+        },
+        {
+            "name": "node-vstream"
+        },
+        {
+            "name": "node-vstream-json-parser"
+        },
+        {
+            "name": "node-watershed"
+        },
+        {
+            "name": "node-whyyoulittle"
         },
         {
             "name": "node-workflow"
@@ -188,7 +341,31 @@
             "name": "node-workflow-moray-backend"
         },
         {
+            "name": "node-zfs"
+        },
+        {
             "name": "node-zkstream"
+        },
+        {
+            "name": "node-zonename"
+        },
+        {
+            "name": "node-zookeeper-client"
+        },
+        {
+            "name": "node-zsock"
+        },
+        {
+            "name": "node-zutil"
+        },
+        {
+            "name": "oid-docs",
+            "labels": {
+                "meta": true
+            }
+        },
+        {
+            "name": "postgres"
         },
         {
             "name": "registrar",
@@ -431,9 +608,6 @@
             }
         },
         {
-            "name": "manta-manatee"
-        },
-        {
             "name": "sdc-manta",
             "labels": {
                 "release": true,
@@ -581,7 +755,7 @@
             }
         },
         {
-            "name": "sdc-ufds-replicator"
+            "name": "sdc-ur-agent"
         },
         {
             "name": "sdc-vm-agent",
@@ -693,6 +867,13 @@
             "name": "triton-tracer"
         },
         {
+            "name": "waferlock",
+            "labels": {
+                "release": true,
+                "mg": "waferlock"
+            }
+        },
+        {
             "name": "zfs_snapshot_tar"
         },
         {
@@ -706,6 +887,8 @@
         }
     ],
     "excludedRepositories": [
+        "Cassandra-Operator",
+        "MALT",
         "Manta-Client",
         "Rbunyan",
         "UpdatablePriorityQueue.js",
@@ -723,10 +906,10 @@
         "chef",
         "chyves",
         "cloud-perf-labs",
-        "cloud-tycoon",
         "cloudapi-gql",
         "commons-vfs-manta",
         "conch",
+        "conch-reporter-smartos",
         "conch-shell",
         "conch-stats",
         "conch-ui",
@@ -766,7 +949,7 @@
         "gerrit-test",
         "gerrit-test-rewind",
         "gerritbot",
-        "git-apply-pr",
+        "github-enterprise-triton-image",
         "go-conch",
         "gocommon",
         "gomanta",
@@ -888,29 +1071,16 @@
         "nhttpsnoop",
         "nic-audit",
         "node-amqp",
-        "node-amqp-joyent",
-        "node-artedi",
-        "node-asn1",
-        "node-assert-plus",
         "node-bcrypt-pbkdf",
-        "node-bunyan-syslog",
-        "node-camp",
         "node-catstreams",
         "node-checker",
-        "node-cmdutil",
         "node-codel",
         "node-consulite",
         "node-contract",
         "node-debug-school",
         "node-dns",
-        "node-documentation-generator",
-        "node-eslint-plugin-joyent",
-        "node-exeunt",
-        "node-extsprintf",
-        "node-fash",
         "node-fdleakcheck",
         "node-force10",
-        "node-forkexec",
         "node-fuzzstream",
         "node-gerritbot",
         "node-haproxy-log",
@@ -918,72 +1088,31 @@
         "node-httpstream",
         "node-hyprlofs",
         "node-in-the-industry",
-        "node-infra",
-        "node-ip6addr",
         "node-ipd",
         "node-ipmi",
-        "node-jsprim",
         "node-juju",
-        "node-krill",
-        "node-kstat",
-        "node-ldapjs",
         "node-libdtrace-async",
-        "node-libmanta",
-        "node-lockfd",
-        "node-lomstream",
-        "node-macaddr",
-        "node-manta",
-        "node-manta-dir-watcher",
         "node-manta-mutex",
         "node-mantafs",
         "node-meta-d",
         "node-metajob",
-        "node-mooremachine",
-        "node-nfs",
-        "node-oncrpc",
-        "node-pg-lsn",
         "node-pg_dump",
         "node-pgtrigger",
         "node-piloted",
-        "node-png-joyent",
-        "node-progbar",
         "node-remote-tester-drone",
         "node-restify",
-        "node-restify-warden",
         "node-skinner",
         "node-snmpjs",
         "node-splitduplex",
-        "node-sshpk",
-        "node-sshpk-agent",
         "node-stackvis",
-        "node-statvfs",
-        "node-strsplit",
-        "node-tab",
-        "node-tar",
         "node-timefilter",
-        "node-timeseries-heatmap",
-        "node-trace-event",
-        "node-tracing",
-        "node-vasync",
-        "node-verror",
-        "node-vmapi-resolver",
-        "node-vstream",
-        "node-vstream-json-parser",
-        "node-watershed",
         "node-wfq",
-        "node-whyyoulittle",
         "node-zfile",
-        "node-zfs",
-        "node-zonename",
-        "node-zookeeper-client",
-        "node-zsock",
         "node-zuora-rest",
-        "node-zutil",
         "node_zuora",
         "node_zuora_aqua",
         "nodejs-advisory-board",
         "ohai",
-        "oid-docs",
         "openbsd-kvm-image-builder",
         "openbsd-kvm-image-tests",
         "packer",
@@ -1000,20 +1129,19 @@
         "pkgsrc",
         "pkgsrc-joyent",
         "pkgsrc-legacy",
+        "pkgsrc-wiki",
         "pkgsrc-wip",
         "pkgsrc.joyent.com",
         "portsnoop",
-        "postgres",
         "presto-manta",
         "promstat",
         "prsigset",
         "publicsuffix-list",
+        "pyserial",
         "python-manta",
         "ruby-manta",
         "s3-manta-bridge",
         "sdc-hammer",
-        "sdc-redis",
-        "sdc-ur-agent",
         "sdc-vmtools",
         "sdc-vmtools-lx-brand",
         "sdc-vmtools-windows",
@@ -1030,6 +1158,7 @@
         "spc-caprep",
         "statemap",
         "summit-workshop",
+        "sup",
         "sup-im-notices",
         "sup-new-ufds-users",
         "sup-notify",
