@@ -855,6 +855,12 @@
             }
         },
         {
+            "name": "triton-dashboards",
+            "labels": {
+                "meta": true
+            }
+        },
+        {
             "name": "triton-docker-cli"
         },
         {
