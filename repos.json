@@ -81,6 +81,18 @@
             "name": "java-triton"
         },
         {
+            "name": "javascriptlint",
+            "labels": {
+                "meta": true
+            }
+        },
+        {
+            "name": "jsstyle",
+            "labels": {
+                "meta": true
+            }
+        },
+        {
             "name": "keyapi"
         },
         {
@@ -894,6 +906,7 @@
     ],
     "excludedRepositories": [
         "Cassandra-Operator",
+        "Deployment-Audit-Tool",
         "MALT",
         "Manta-Client",
         "Rbunyan",
@@ -915,6 +928,7 @@
         "cloudapi-gql",
         "commons-vfs-manta",
         "conch",
+        "conch-docs",
         "conch-reporter-smartos",
         "conch-shell",
         "conch-stats",
@@ -956,7 +970,6 @@
         "gerrit-test-rewind",
         "gerritbot",
         "github-enterprise-triton-image",
-        "go-conch",
         "gocommon",
         "gomanta",
         "gosdc",
@@ -987,10 +1000,8 @@
         "java-fast-md5",
         "java-http-signature",
         "java-manta",
-        "javascriptlint",
         "jenkins-terraform-triton",
         "joyent-gerrit",
-        "jsstyle",
         "kafka-connect-manta",
         "kirby-preview-base",
         "knife-joyent",
@@ -1006,6 +1017,7 @@
         "manta-archiver",
         "manta-compute-bin",
         "manta-finder",
+        "manta-garbage-collector",
         "manta-genazconfig",
         "manta-hk",
         "manta-mackerel",
@@ -1145,6 +1157,7 @@
         "publicsuffix-list",
         "pyserial",
         "python-manta",
+        "reboot_scheduler",
         "ruby-manta",
         "s3-manta-bridge",
         "sdc-hammer",
