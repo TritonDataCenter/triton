@@ -630,14 +630,6 @@
             }
         },
         {
-            "name": "sdc-mockcloud",
-            "labels": {
-                "release": true,
-                "image": "mockcloud",
-                "mg": "mockcloud"
-            }
-        },
-        {
             "name": "sdc-napi",
             "labels": {
                 "release": true,
@@ -879,6 +871,15 @@
             "name": "triton-go"
         },
         {
+            "name": "triton-mockcloud",
+            "labels": {
+                "release": true,
+                "image": "mockcloud",
+                "mg": "mockcloud",
+                "vm": true
+            }
+        },
+        {
             "name": "triton-origin-image"
         },
         {
@@ -908,6 +909,7 @@
         "Cassandra-Operator",
         "Deployment-Audit-Tool",
         "MALT",
+        "MANTA-3788",
         "Manta-Client",
         "Rbunyan",
         "UpdatablePriorityQueue.js",
@@ -1016,6 +1018,7 @@
         "manta",
         "manta-archiver",
         "manta-compute-bin",
+        "manta-debugging-guide",
         "manta-finder",
         "manta-garbage-collector",
         "manta-genazconfig",
@@ -1174,14 +1177,8 @@
         "smfgen",
         "smtools",
         "snoopdump",
-        "spc-caprep",
         "statemap",
         "summit-workshop",
-        "sup",
-        "sup-im-notices",
-        "sup-new-ufds-users",
-        "sup-notify",
-        "sup-toolbox",
         "syslinux",
         "teamcity-manta-artifact-storage-plugin",
         "terraform",
