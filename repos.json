@@ -859,16 +859,27 @@
             }
         },
         {
-            "name": "triton-dashboards",
-            "labels": {
-                "meta": true
-            }
+            "name": "triton-dehydrated"
         },
         {
             "name": "triton-docker-cli"
         },
         {
             "name": "triton-go"
+        },
+        {
+            "name": "triton-grafana",
+            "labels": {
+                "tritonservice": "grafana",
+                "vm": true
+            }
+        },
+        {
+            "name": "triton-kbmapi",
+            "labels": {
+                "tritonservice": "kbmapi",
+                "vm": true
+            }
         },
         {
             "name": "triton-mockcloud",
@@ -881,6 +892,13 @@
         },
         {
             "name": "triton-origin-image"
+        },
+        {
+            "name": "triton-prometheus",
+            "labels": {
+                "tritonservice": "prometheus",
+                "vm": true
+            }
         },
         {
             "name": "triton-tracer"
@@ -931,6 +949,8 @@
         "commons-vfs-manta",
         "conch",
         "conch-docs",
+        "conch-json-schemas",
+        "conch-locker",
         "conch-reporter-smartos",
         "conch-shell",
         "conch-stats",
@@ -944,6 +964,7 @@
         "cosbench2csv",
         "cr-update-reviewers",
         "daggr",
+        "dcim_agent",
         "debian-image-tests",
         "debian-lx-brand-image-builder",
         "docker-machine-driver-triton",
@@ -1041,6 +1062,7 @@
         "manta-propeller",
         "manta-reshard",
         "manta-scripts",
+        "manta-sharkspotter",
         "manta-shortener-client",
         "manta-show-changes",
         "manta-thoth",
@@ -1099,6 +1121,7 @@
         "node-consulite",
         "node-contract",
         "node-debug-school",
+        "node-debugging-methodologies",
         "node-dns",
         "node-fdleakcheck",
         "node-force10",
@@ -1154,14 +1177,16 @@
         "pkgsrc-wip",
         "pkgsrc.joyent.com",
         "portsnoop",
+        "postgres-loadgen",
         "presto-manta",
         "promstat",
         "prsigset",
         "publicsuffix-list",
         "pyserial",
         "python-manta",
-        "reboot_scheduler",
         "ruby-manta",
+        "rust-fast",
+        "rust-manta",
         "s3-manta-bridge",
         "sdc-hammer",
         "sdc-vmtools",
@@ -1169,6 +1194,7 @@
         "sdc-vmtools-windows",
         "sdev-tests",
         "smartmachine_cookbooks",
+        "smartos-changelog",
         "smartos-dev-tools",
         "smartos-image-tests",
         "smartos-live",
