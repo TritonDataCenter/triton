@@ -78,6 +78,9 @@
             }
         },
         {
+            "name": "fsnotify"
+        },
+        {
             "name": "java-triton"
         },
         {
@@ -378,6 +381,9 @@
         },
         {
             "name": "postgres"
+        },
+        {
+            "name": "prometheus"
         },
         {
             "name": "registrar",
