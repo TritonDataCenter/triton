@@ -81,6 +81,9 @@
             "name": "fsnotify"
         },
         {
+            "name": "grafana"
+        },
+        {
             "name": "java-triton"
         },
         {
@@ -897,6 +900,9 @@
             }
         },
         {
+            "name": "triton-mockcloud-common"
+        },
+        {
             "name": "triton-origin-image"
         },
         {
@@ -931,7 +937,6 @@
     ],
     "excludedRepositories": [
         "Cassandra-Operator",
-        "Deployment-Audit-Tool",
         "MALT",
         "MANTA-3788",
         "Manta-Client",
@@ -969,10 +974,12 @@
         "cosbench-manta",
         "cosbench2csv",
         "cr-update-reviewers",
+        "ctf2json",
         "daggr",
         "dcim_agent",
         "debian-image-tests",
         "debian-lx-brand-image-builder",
+        "deployment-audit-tool",
         "docker-machine-driver-triton",
         "dogpatch",
         "dragnet",
@@ -1040,6 +1047,7 @@
         "lx-brand-image-tests",
         "lx-tests",
         "machine",
+        "mako-regional-report",
         "manatee-state-machine",
         "manifest-creator",
         "manta",
@@ -1126,6 +1134,7 @@
         "node-codel",
         "node-consulite",
         "node-contract",
+        "node-ctype",
         "node-debug-school",
         "node-debugging-methodologies",
         "node-dns",
