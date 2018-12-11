@@ -161,6 +161,9 @@
             "name": "node-cmdutil"
         },
         {
+            "name": "node-ctype"
+        },
+        {
             "name": "node-cueball"
         },
         {
@@ -315,6 +318,9 @@
         },
         {
             "name": "node-triton-metrics"
+        },
+        {
+            "name": "node-triton-netconfig"
         },
         {
             "name": "node-triton-package-boilerplate"
@@ -1134,7 +1140,6 @@
         "node-codel",
         "node-consulite",
         "node-contract",
-        "node-ctype",
         "node-debug-school",
         "node-debugging-methodologies",
         "node-dns",
