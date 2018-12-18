@@ -314,6 +314,9 @@
             "name": "node-triton"
         },
         {
+            "name": "node-triton-audit-logger"
+        },
+        {
             "name": "node-triton-merci-buckets"
         },
         {
@@ -886,6 +889,7 @@
             "name": "triton-grafana",
             "labels": {
                 "tritonservice": "grafana",
+                "mg": "grafana",
                 "vm": true
             }
         },
@@ -893,6 +897,7 @@
             "name": "triton-kbmapi",
             "labels": {
                 "tritonservice": "kbmapi",
+                "mg": "kbmapi",
                 "vm": true
             }
         },
@@ -915,6 +920,7 @@
             "name": "triton-prometheus",
             "labels": {
                 "tritonservice": "prometheus",
+                "mg": "prometheus",
                 "vm": true
             }
         },
@@ -970,7 +976,6 @@
         "conch-locker",
         "conch-reporter-smartos",
         "conch-shell",
-        "conch-stats",
         "conch-ui",
         "consul",
         "containerpilot",
