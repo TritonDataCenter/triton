@@ -8,240 +8,216 @@
     Copyright (c) 2015, Joyent, Inc.
 -->
 
-# Set Up CoaL
+# Cloud on a Laptop (CoaL)
 
-CoaL stands for "Cloud on a Laptop". It is a VMware virtual appliance
-for a SmartDataCenter headnode. It's useful for developing and testing
-SmartDataCenter (SDC). This document walks through setting up CoaL.
+CoaL is a VMware appliance that is a full (Triton)[https://docs.joyent.com/private-cloud) head node for development and testing. Because most Joyent developers work on Macs, this document walks through the process of setting up CoaL on a Mac. Read this document carefully before installing CoaL.
 
-**WARNING: these steps and command options are not appropriate for
-production deployments.**
+**Note**: Developers in the community have set up CoaL successfully on Windows and on Linux using these instructions as general guidelines, modifying them as needed.
 
-The minimum requirements, practically speaking, for a good CoaL
-experience is a **Mac with at least 16 GB RAM and an SSD with at least
-45 GB disk available**. Currently, almost all team members using CoaL
-are on Macs with VMware Fusion. Vmware Workstation for Linux is used by
-a few in the community. VMware Workstation for Windows should work, but
-has not recently been tested.
-
-At a high level, setting up CoaL involves:
-
-1. Downloading the latest build.
-1. Booting the VMware appliance (virtual machine).
-2. Configuring SmartDataCenter.
-3. Waiting for the SDC services to automatically install and setup in
-   the SDC headnode virtual machine. This can take from 10 to 20 minutes
-   on a Mac laptop.
-4. Test and develop.
+**WARNING**: The installation procedure and configuration options in this document are not appropriate for production deployments.
 
 
-## Run CoaL on VMware
+## Minimum Requirements
 
-### Download CoaL and Configure VMware
+The minimum requirements for a good CoaL experience are a Mac with  16 GB RAM and an SSD with 45 GB disk available.
 
-1. Start the download of the latest CoaL build. The tarball is
-   approximately 2 GB.
+## Overview
 
-    curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/coal-latest.tgz
+The high-level steps for setting up CoaL are:
 
-2. Install VMware, if you haven't already.
-    - Mac: [VMware Fusion](http://www.vmware.com/products/fusion) 5, 7, or 8.
-    - Windows or Linux: [VMware Workstation](http://www.vmware.com/products/workstation).
+1. Downloading the latest CoaL build.
+2. Downloading, installing, and configuring VMware.
+3. Extracting and loading CoaL.
+4. Booting the VMware appliance (virtual machine).
+5. Configuring the head node.
+6. Installing Triton (10 to 20 minutes).
+7. Testing and developing.
 
-3. Configure VMware virtual networks for CoaL's "external" and "admin"
-   networks. This is a one time configuration for a VMware installation.
+## Downloading CoaL
 
-    1. Launch VMware at least once after installing VMware.
+The CoaL tarball is approximately 2 GB and will take some time to download.
 
-    2. Run the OS specific CoaL set up script for VMware:
+To download the latest CoaL build:
 
-         - Mac:
+	```
+	curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/release-20180927-20180927T130527Z/headnode/coal-release-20180927-20180927T130527Z-g34dbd8a-4gb.tgz
+	```
 
-            ```bash
-            curl -s https://raw.githubusercontent.com/joyent/sdc/master/tools/coal-mac-vmware-setup | sudo bash
-            ```
+While you wait for the tarball download to complete, you can configure and install VMware.
 
-         - Linux:
+## Downloading installing, and configuring VMware
 
-            ```bash
-            curl -s https://raw.githubusercontent.com/joyent/sdc/master/tools/coal-linux-vmware-setup | sudo bash
-            ```
+Most Joyent team members run CoaL from VMware Fusion. We recommend VMware version 8.5.3., but users have had success with v5 and v8.
 
-         - Windows:
+1. Download [VMware Fusion](http://www.vmware.com/products/fusion).
 
-            ```
-            Download https://raw.githubusercontent.com/joyent/sdc/master/tools/coal-windows-vmware-setup.bat
-            Run coal-windows-vmware-setup.bat
-            ```
+**Note**: For Windows or Linux, download VMware Workstation from [VMware Workstation](http://www.vmware.com/products/workstation.
 
-1. Extract the CoaL virtual machine:
+2. Install VMware.
+3. When complete, launch the application to confirm that installed correctly.
+4. Close VMware.
+5. To configure CoaL's external and admin networks:
 
-    - Mac example:
+	```bash
+	curl -s https://raw.githubusercontent.com/joyent/sdc/master/tools/coal-mac-vmware-setup | sudo bash
+	```
 
-        ```bash
-        $ tar -zxvf coal-latest.tgz -C ~/Documents/Virtual\ Machines.localized
-        x root.password.20140911t161518z
-        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/
-        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmx
-        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/zpool.vmdk
-        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmdk
-        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/4gb.img
-        ...
-        ```
+	**Note**: CoaL network setup scripts are available for Windows and Linux.
 
-1. Set memory and run.
+	For Windows, download https://raw.githubusercontent.com/joyent/sdc/master/tools/coal-windows-vmware-setup.bat and run `coal-windows-vmware-setup.bat`.
 
-    - Mac example:
+	On Linux, run:
+	```bash
+	curl -s https://raw.githubusercontent.com/joyent/sdc/master/tools/coal-linux-vmware-setup | sudo bash
+	```
 
-        1. Launch VMware Fusion
-        2. File > Open... `coal-<branch>-<build_date_time>-<git_sha1_hash>-4gb.vmwarevm`
-        3. Virtual Machine > Settings
-        4. Processes & Memory > Default memory is set to 8192 MB, but be sure
-	   to leave Mac OS X with at least 8 GB.  If you prefer not to use the
-	   VMWare GUI, the place to change this default is in the CoaL
-	   `USB-headnode.vmx` file, where you can set `memsize = "6144"`, for
-	   example.
-	   WARNING: If you choose to allocate less than 6 GB this may cause
-	   problems, and if you go as low as 4 GB it certainly will. As the
-	   CoaL VM hits its memory limit, it will page rapidly and operations
-	   will contend for resources.  In this situation, the VM will attempt
-	   to perform massive amounts of disk I/O to keep up with the system's
-	   demands, and will slow down and eventually fail to meet them.
+## Extracting and loading CoaL
 
-1. When you are prompted with the GRUB menu press the down arrow.
+1. To extract the CoaL virtual machine:
 
-  1. Press the down arrow key to highlight "Live 64-bit".
+	```bash
+	$ tar -zxvf coal-latest.tgz -C ~/Documents/Virtual\ Machines.localized
+	x root.password.20140911t161518z
+	x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/
+	x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmx
+	x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/zpool.vmdk
+	x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmdk
+	x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/4gb.img
+	...
+	```
 
-  2. Press 'c' to go to the command line for GRUB.
+2. To load the CoaL appliance:
+    1. Launch **VMware Fusion**.
+    2. Select **File** and then click **Open**.
+    3. Navigate to and select the `.vmwarevm` file that contains the CoaL build.
 
-     ![CoaL Grub Boot Menu](../img/coal-grub-menu.png)
+**Note**: If you are working from the command line instead of the VMware GUI, run:
 
-     By default, the OS will redirect the console to ttyb which is fine
-     for production but needs to be changed for CoaL. At the command line enter
-     "variable os_console vga":
+	```
+	open coal-<branch>-<build_date_time>-<git_sha1_hash>-4gb.vmwarevm
+	```
 
-        ```
-        grub> variable os_console vga
-        ```
+**Note**: To configure memory:
+    1. Select **Virtual Machine** and then click **Settings**.
+	The **USB-headnode Settings** dialog displays.
+    2. Click **Processes & Memory**. Change the memory settings, if needed.
+	**Note**: The default memory is set to 8192 MB. You can change this setting, but *be sure to leave Mac OS X with at least 8 GB to avoid resource allocation problems*.
+	If you are not using the VMware GUI, you can change the default memory in the CoaL `USB-headnode.vmx` file.  You can set memsize = "6144", or according to your preference.
+3. If you changed the memory settings, restart VMware.
 
-  1. Press enter.
+The GRUB boot loader menu displays.
 
-  1. Press esc to get back to the GRUB menu.
+##GRUB menu navigation alert
 
-  1. Boot "Live 64-bit" by pressing enter.
+GRUB intervenes in the boot process, enabling you to specify the environment to load. The default is for the console to use ttyb. This is fine for production but not for our use.
 
-     If while booting it stays just showing a cursor then you might have
-     forgotten to redirect the console, see instructions above.
+Immediately after highlighting **Live 64-bit** using the arrow keys, press **c** quickly in order to direct the console to use **vga**.
+
+	![CoaL Grub Boot Menu](../img/coal-grub-menu.png)
+
+If you are too slow, the **Live 64-bit** option loads instead of the GRUB command line. If needed, press **Esc** to redirect the console back to the GRUB menu and try again.
+
+## Booting the head node
+
+When you are prompted with the GRUB menu:
+
+1. Press the down arrow key to highlight **Live 64-bit**.
+2. Quickly press **c** to load the GRUB command line.
+	If you miss this step, press **Esc** to redirect the console back to the GRUB menu and try again.
+3. At the **GRUB command prompt**, type `variable os_console vga`, and press **Enter**.
+4. Press **Esc** to return to the GRUB menu.
+5. Press **Enter** to boot **Live 64-bit**.
+
+**Note**: If you see a blank screen with a cursor at the top left while the head node is booting, you may have forgotten to redirect the console. If so, press Esc to return to the GRUB menu.
 
      ![kvm warning on boot](../img/coal-only-cursor.png)
 
-     On boot, being in a virtual environment without Intel VT-x support
-     enabled, you'll receive cpu and kvm warnings:
+**Note**: Because you are in a virtual environment without Intel VT-x support enabled, you'll receive cpu and kvm warnings. You can safely ignore them:
 
      ![kvm warning on boot](../img/coal-boot-warnings.png)
 
+## Configuring the head node
 
-### Configure the Headnode
+Use the following table to configure the development settings for CoaL. In many cases, you will choose the default values. In others, you must type the literal value provided. Variables are in *italics*. You can set any value for variables.
 
-Use the following table to configure your CoaL with settings that are
-fine for development. The table is followed by screenshots.
-
-If you make a mistake while entering the configuration you can restart
-the VMware virtual machine. Also, as the onscreen instructions describe,
-the last step in configuration allows editing the resulting
-configuration file.
+The final prompt asks that you verify the configuration settings. If you have made a mistake, you can reject the settings and restart the configuration process.
 
 |Setting|Value|Notes|
 |---|---|---|
 |*Instructions*|↵||
-|Company Name|Clavius||
-|Region of Datacenter|orbit||
-|Name of Datacenter|coal-1|(Availability zone.) |
-|Location of DataCenter|Moon, Earth||
-|*Instructions*|↵||
-|'admin' interface|2|The second NIC is set up as the admin network by the CoaL networking script|
-|(admin) headnode IP address|10.99.99.7|Must use this value.|
-|(admin) headnode netmask:|↵|Use the default.|
-|(admin) Zone's starting IP address:|↵|Use the default.|
-|Add external network now? (Y/n)|↵|Must use this value.|
-|'external' interface|1|The first NIC is set up as the external network by the CoaL networking script|
-|(external) headnode IP address|10.88.88.200|Must use this value.|
-|(external) headnode netmask:|↵|Use the default.|
-|(external) gateway IP address:|10.88.88.2|Must use this value.|
-|(external) network VLAN ID|↵|Use default. The external network is not on a VLAN in CoaL|
-|Starting Provisionable IP address for external Network|↵|Use the default.|
-|Ending Provisionable IP address for external Network|↵|Use the default.|
-|Default gateway IP address:|↵|Use the default.|
-|Primary DNS Server|↵|Use the default.|
-|Secondary DNS Server|↵|Use the default.|
-|Head node domain name|example.com||
-|DNS Search Domain|example.com||
-|NTP Server IP Address|↵|Use the default.|
-|"root" password|rootpass||
-|Confirm "root" password|||
-|"admin" password|adminpass1||
-|Confirm "admin" password|||
-|Administrator's email|↵|Use the default.|
-|Support email|↵|Use the default.|
-|Enable telemetry|↵|Defaults to false.|
-|Verify Configuration||Review the configuration before proceeding.|
-|Verify Configuration Again|||
+|Company Name|*Clavius*|You can give the company name any value.|
+|Data center region|*orbit*||
+|Data center name|*coal-1*|Also known as the availability zone (AZ).|
+|Data center location|*Moon*, *Earth*||
+|admin interface|**2**|Type **2**. The second NIC is set up as the admin network by the CoaL networking script|
+|(admin) headnode IP address|**10.99.99.7**|Type **10.99.99.7** to specify the IP address.|
+|(admin) headnode netmask:|↵|Press **Enter** to select the default.|
+|(admin) Zone's starting IP address:|↵|Press **Enter** to select the default.|
+|Add external network now?|**Y**|Type **Y** to add the external network, or press **Enter** to select the default.|
+|'external' interface|**1**|Type **1**. The first NIC is set up as the external network by the CoaL networking script|
+|(external) headnode IP address|**10.88.88.200**|Type **10.88.88.200** to specify the IP address.|
+|(external) headnode netmask:|↵|Press **Enter** to select the default.|
+|(external) gateway IP address:|**10.88.88.2**|Type **10.88.88.2** to specify the gateway IP address.|
+|(external) network VLAN ID|↵|Press **Enter** to select the default. The external network is not on a VLAN in CoaL|
+|Starting Provisionable IP address for external Network|↵|Press **Enter** to select the default.|
+|Ending Provisionable IP address for external Network|↵|Press **Enter** to select the default.|
+|Default gateway IP address:|↵|Press **Enter** to select the default.|
+|Primary DNS Server|↵|Press **Enter** to select the default.|
+|Secondary DNS Server|↵|Press **Enter** to select the default.|
+|Head node domain name|*example.com*|The domain name should be unique. You can ping the domain to verify if its a valid website. If it already exists, select a different domain name.|
+|DNS Search Domain|*example.com*|The search domain should be a unique,  non-reachable web domain name that doesn’t exist.You can ping the domain to verify if its a valid website. If it already exists, select a different domain name|
+|NTP Server IP Address|↵|Press **Enter** to select the default.|
+|Set root password|**rootpass**|Type **rootpass** to set the root password.|
+|Confirm root password|||
+|Set admin password|**adminpass1**|Type **adminpass1** to set the admin password.|
+|Confirm admin password|||
+|Administrator email|↵|Press **Enter** to select the default.|
+|Support email|↵|Press **Enter** to select the default.|
+|Enable telemetry|↵|Press **Enter** to select the default, false.|
+|Verify configuration settings||Review the configuration before proceeding. If the configuration is not correct, type **n** to reject the settings and restart the process.|
+|Confirm configuration||If you verified the configuration settings, you are prompted to confirm them.|
 
-Verify configuration:
+The Verify Configuration prompt looks something like:
 
 ![Configuration displayed on console for verification.](../img/coal-verify-configuration.png)
 
+## Installing Triton
 
-## Installation
+CoaL will now install the Triton head node based on the  configuration. The installation can take up to 20 minutes. Installation isn’t complete until the **Setup complete** message displays.
 
-CoaL will now install based on the configuration parameters entered
-above. Installation has been observed to take up to 20 minutes,
-particularly if installing on a laptop hard disk drive. It is not
-complete **until you see "Setup complete"**.
-
-On a Mac, you will be prompted to enter your admin password, so that the
-VM can monitor all network traffic. You may receive this popup a few
-times:
+On a Mac, you will be prompted to enter your admin password several times to enable the VM to monitor all network traffic:
 
 ![Mac system dialog confirming VM can monitor all network traffic.](../img/coal-mac-vm-monitor-all-network-traffic.png)
 
-The next phase of installation completes with notification of a reboot:
+A reboot notification displays when the next phase of installation completes:
 
 ![Reboot message shown on console.](../img/coal-will-reboot.png)
 
-The final phase of installation, setup, is the longest and does not show
-the progress at the beginning of it. You may see either just a cursor on
-the login page or a login prompt:
+The final phase of installation, setup, is the longest but does not display its progress. You may see either just a cursor on the login page or a login prompt.
 
-!["Welcome to SDC7!" message on console.](../img/coal-welcome-sdc7.png)
+A message on the console welcomes you to Triton. After some time, a **preparing for setup** message displays:
 
-or
+![preparing for setup on console.](../img/coal-preparing-for-setup.png)
 
-![Login prompt on console.](../img/coal-headnode-login-prompt.png)
+When the installation completes, **completing setup** displays.
 
-After sometime you will see "preparing for setup":
+![Setup complete on console.](../img/coal-setup-complete.png)
 
-!["preparing for setup..." on console.](../img/coal-preparing-for-setup.png)
-
-Finally, you'll see "Setup complete":
-
-!["Setup complete on console."](../img/coal-setup-complete.png)
-
-
-## Post Installation
+## Testing and Developing
 
 ### Root Access
 
-After setup is complete you should be able to ssh into your CoaL using
-the admin network headnode IP address you configured.
+After setup is complete you should be able to SSH into CoaL using the admin network headnode IP address you configured. For example:
 
 ```bash
 ssh root@10.88.88.200  # password 'rootpass'
 ```
 
-### Health
+### Health checks
 
-Let's confirm the health of SDC services:
+Performing health checks is a best practice. You can check the health of CoaL using `sdcadm check-health` before each step. Until [TOOLS-1001](https://smartos.org/bugview/TOOLS-1001) is resolved, you should also run `sdc-healthcheck`.
+
+To confirm the health of the services:
 
 ```bash
 root@headnode (coal-1) ~]# sdc-healthcheck
@@ -275,25 +251,21 @@ global                               running         ur                  online
 global                               running         smartlogin          online
 ```
 
+### Adding external Nics
 
-### Additional Plumbing
+External NICs are required to access remote update sources and the AdminUI via a browser.
 
-1. Add external nics to imgapi and adminui
+1. To add external nics to `imgapi` and `adminui`:
 
-   These are required in order to be able to access remote update sources, and
-   in order to be able to access AdminUI using a browser:
+	```bash
+	[root@headnode (coal-1) ~]# sdcadm post-setup common-external-nics
+	Added external nic to adminui
+	Added external nic to imgapi
+	```
 
-    ```bash
-    [root@headnode (coal-1) ~]# sdcadm post-setup common-external-nics
-    Added external nic to adminui
-    Added external nic to imgapi
-    ```
+	**Note**: This command does not wait for the `add nics` jobs to complete. Once you submit the command, you might need to wait after the command exits until you are sure that the jobs really finish.
 
-   Please note that this command didn't wait for the "add nics" jobs to be
-   completed, just submitted, so you might need to give it some extra time
-   after the command exits until these jobs really finish.
-
-   Let's use "sdc-vmapi" to confirm which services have an external IP:
+2. To confirm which services have an external IP, run `sdc-vmapi`:
 
     ```bash
     root@headnode (coal-1) ~]# sdc-vmapi /vms?state=running | json -H -ga alias nics.0.ip nics.1.ip
@@ -321,60 +293,50 @@ global                               running         smartlogin          online
     adminui0 10.99.99.31 10.88.88.3
     ```
 
-   We can now access access the operations portal, "SDC ADMINUI", in a web
-   browser on the host computer at https://10.88.88.3/ .
+3. To test whether you can access the operations portal, `SDC ADMINUI` in a web browser on the host computer, navigate to https://10.88.88.3/.
 
-2. Set up CloudAPI
+### Setting up CloudAPI for development
 
-   CloudAPI provides the self-serve API access to SDC. If you are developing or
-   testing verses CloudAPI then create the CloudAPI zone:
+CloudAPI provides the self-serve API access to Triton. If you are developing or testing against CloudAPI then create the CloudAPI zone.
+
+1. To create the CloudAPI zone, run:
 
     ```bash
     root@headnode (coal-1) ~]# sdcadm post-setup cloudapi
     cloudapi0 zone created
     ```
 
-### Configure for Development
+If you plan to use CloudAPI in CoaL and to provision VMs, you will need to enable the head node to act as a compute node for instances. The head node is excluded from the set of servers used for provisioning customer instances. For development and testing, allowing the head node to act as a compute node for instances is useful.
 
-If you are setting up CloudAPI in your CoaL and attempting to provision
-VMs using that, you'll probably hit an error that there are no
-provisionable servers. That's because the headnode is excluded from the
-set of servers used for provisioning customer instances.
-
-However, for development and testing, allowing the headnode to act as a
-compute node for instances is handy. To enable:
+2. To enable the head node to act as a compute node for instances:
 
 ```bash
 [root@headnode (coal-1) ~]# sdcadm post-setup dev-headnode-prov
 Configuring CNAPI to allow headnode provisioning and over-provisioning (allow a minute to propagate)
 ```
 
-### Setup Fabrics
+### Fabrics
 
-Fabrics are not required to run CoaL. If you need to setup fabrics for
-development purposes you can refer to [Set up fabrics in CoaL](./coal-post-setup-fabrics.md)
+Fabrics are not required to run CoaL. If you need to setup fabrics for development purposes, you can refer to [Set up fabrics in CoaL](./coal-post-setup-fabrics.md)
 
-# Update CoaL
+## Maintaining CoaL
 
-## Set Channel
+### Set Channel
 
-If this is your first time updating CoaL, then you'll want to set the [update
-channel](../operator-guide/update.md):
+The first time you update CoaL, set the [updatechannel](../operator-guide/update.md).
+
+1. To set the update channel, run:
 
 ```bash
 [root@headnode (coal-1) ~]# sdcadm channel set dev
 Update channel has been successfully set to: 'dev'
 ```
 
-## Check Health
+2. Check health by running `sdcadm check-health` and `sdc-healthcheck`.
 
-It's a good idea to check the health of CoaL using `sdcadm check-health`
-before each step. Until [TOOLS-1001](https://smartos.org/bugview/TOOLS-1001)
-is resolved, you should also run `sdc-healthcheck`.
+### Self Update
 
-## Self Update
-
-1. Update sdcadm:
+1. To update `sdcadm`:
 
     ```bash
     [root@headnode (coal-1) ~]# sdcadm --version
@@ -386,13 +348,13 @@ is resolved, you should also run `sdc-healthcheck`.
     Updated to sdcadm 1.5.0 (master-20150211T134112Z-gef31015, elapsed 7s)
     ```
 
-1. Confirm the updated sdcadm reports SDC as healthy using
-   `sdcadm check-health`.
+2. Run `sdcadm check-health` to confirm the that updated `sdcadm` reports a healthy state.
 
-## Back Up SDC's Brain
+### Backing up the manatee zone
 
-Take a ZFS snapsnot of the manatee zone and temporarily store on
-headnode's drive:
+Most services store in information in Manatee. None of the other services keep any permanent data locally. (`imgapi` is the occasional exception.)
+
+To take a ZFS snapshot of the manatee zone and temporarily store on head node's drive:
 
 ```bash
 MANATEE0_UUID=$(vmadm lookup -1 alias=~manatee)
@@ -401,13 +363,11 @@ zfs send zones/$MANATEE0_UUID/data/manatee@backup > /var/tmp/manatee-backup.zfs
 zfs destroy zones/$MANATEE0_UUID/data/manatee@backup
 ```
 
-## Update SDC
+### Updating Services
 
-You've backed up the Manatee zone, now download and install the updated images
-for SDC services. This process can take up to 60 minutes depending on how many
-services have new images.
+Now that you have backed up the Manatee zone, download and install the updated images for the services. This process can take up to 60 minutes depending on how many services have new images.
 
-1. Update global zone tools:
+1. To update global zone tools, run:
 
     ```bash
     [root@headnode (coal-1) ~]# sdcadm experimental update-gz-tools --latest
@@ -422,7 +382,7 @@ services have new images.
     Updated gz-tools successfully (elapsed 13s).
     ```
 
-1. Update domain name services:
+2. To update domain name services:
 
     ```bash
     [root@headnode (coal-1) ~]# sdcadm experimental update-other
@@ -434,7 +394,7 @@ services have new images.
     Done.
     ```
 
-1. Update the agents:
+3. To update the agents:
 
     ```
     [root@headnode (coal-1) ~]# sdcadm experimental update-agents --latest -y --all
@@ -455,8 +415,7 @@ services have new images.
     Done.
     ```
 
-1. Update all the services. This step can take up to 45 minutes
-   depending on how many services have new images.
+3. To update all the services, run the command below. This step can take up to 45 minutes depending on how many services have new images.
 
     ```bash
     [root@headnode (coal-1) /var/tmp]# sdcadm update --all -y
@@ -672,18 +631,15 @@ services have new images.
     Updated successfully (elapsed 2297s).
     ```
 
-1. Confirm SDC's health with `sdcadm check-health`.
+4. To confirm health, run `sdcadm check-health`.
 
-## Update Platform
+### Updating the Platform
 
-[SmartOS](https://smartos.org/) is the operating system, the platform, of
-SmartDataCenter. You'll often update the platform image (PI) at the same
-time you install SDC updates. You might not reboot the headnode or
-compute nodes (CN) right away. You will likely "install" new PI more
-freqently than the rest of SDC, so that on reboot you benefit from
-the most reliable and secure OS.
+[Triton SmartOS](https://smartos.org/) is the operating system, or the platform. You'll find occasional references to SDC in the code, which is an abbreviate for one of the previous versions of the platform. 
 
-1. Download and "install" the latest platform image:
+You may update the platform image (PI) at the same time you install SDC updates. You might not reboot the head node or compute nodes (CN) right away. You will likely install a new PI more frequently than the rest of Triton, so that on reboot you benefit from the most reliable and secure OS.
+
+1. To download and install the latest platform image:
 
     ```bash
     [root@headnode (coal-1) ~]# sdcadm platform install --latest
@@ -704,10 +660,7 @@ the most reliable and secure OS.
     Installation complete
     ```
 
-1. Update the headnode to use the latest platform image.
-
-   Assign the latest platform image to the headnode which is included with
-   the "--all" servers option on the "sdc platform assign" command:
+2. To update the head node to use the latest platform image, run:
 
     ```bash
     [root@headnode (coal-1) ~]# sdcadm platform assign --latest --all
@@ -716,8 +669,9 @@ the most reliable and secure OS.
     Updating booter cache for servers
     Done updating booter caches
     ```
+	This command assigns the latest platform image to the head node, which is included with the `--all` servers option on the `sdc platform assign` command.
 
-   Confirm:
+3. To confirm the update:
 
     ```bash
     [root@headnode (coal-1) ~]# sdcadm platform list
@@ -726,7 +680,7 @@ the most reliable and secure OS.
     20150205T055835Z  1                 0              false
     ```
 
-1. Reboot the headnode:
+4. To reboot the head node:
 
     ```bash
     [root@headnode (coal-1) ~]# reboot
@@ -734,7 +688,7 @@ the most reliable and secure OS.
     Connection to 10.88.88.200 closed by remote host.
     ```
 
-1. Log back in and confirm the platform version:
+5. To log in again and confirm the platform version:
 
     ```bash
     % ssh root@10.88.88.200
@@ -743,11 +697,12 @@ the most reliable and secure OS.
      - SmartOS Live Image v0.147+ build: 20150219T182356Z
     ```
 
-1. Run `sdc-healthcheck` until all services go from "error" or "svc-err" to
-   "online".
+5. To confirm health: `sdc-healthcheck`
 
-   You have successfully updated CoaL.
+Repeat these steps until the state of all services change from `error` or `svc-err` to `online`. Once you are finished, you have successfully updated CoaL.
 
-## Additional Operations
+## Related Documentation
 
-See [the Joyent customer documentation](https://docs.joyent.com/sdc7).
+ For more information on updating Triton, see [Updating a Triton standup using sdcadm](https://github.com/joyent/sdcadm/blob/master/docs/update.md)
+ 
+ For general Joyent customer information, see [Joyent customer documentation](https://docs.joyent.com/public-cloud).
