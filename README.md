@@ -33,7 +33,7 @@ For additional resources, you can visit the
 
 A Triton DataCenter installation consists of two or more servers. All servers run
 [SmartOS](http://smartos.org). One server acts as the management server, the
-headnode, which houses the initial set of core services that drive Triton. The
+head node, which houses the initial set of core services that drive Triton. The
 remainder are compute nodes (CNs) which run instances (containers and
 virtual machines).
 
@@ -82,163 +82,15 @@ Twitter for updates.
 
 ### Cloud on a Laptop (CoaL)
 
-An easy way to try Triton DataCenter is by downloading a Cloud on a Laptop
-(CoaL) build. This is a VMware virtual appliance providing a
-full Triton headnode for development and testing.
+An easy way to try Triton DataCenter is by downloading and installing a Cloud on a Laptop
+(CoaL) build. CoaL is a VMware virtual appliance that provides a full Triton head node for
+development and testing.
 
-The minimum requirements, practically speaking, for a good CoaL experience
-is a **Mac with at least 16 GB RAM and an SSD**. Currently, almost all team
-members using CoaL are on Macs with VMware Fusion. Vmware Workstation for
-Linux is used by a few in the community. VMware Workstation for Windows
-should work, but has not recently been tested.
+The [CoaL Setup document](./docs/developer-guide/coal-setup.md) contains detailed instructions for
+downloading and installing the virtual appliance.
 
-See [CoaL Setup](./docs/developer-guide/coal-setup.md) for a thorough
-walkthrough including updating CoaL and enabling provisioning on the
-headnode.
-
-1. Start the download of the latest CoaL build. The tarball is
-   approximately 2 GB.
-
-    ```bash
-    curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/coal-latest.tgz
-    ```
-
-2. Install VMware, if you haven't already.
-    - Mac: [VMware Fusion](http://www.vmware.com/products/fusion) 5, 7, or 8.
-    - Windows or Linux: [VMware Workstation](http://www.vmware.com/products/workstation).
-
-3. Configure VMware virtual networks for CoaL's "external" and "admin"
-   networks. This is a one time configuration for a VMware installation.
-
-    1. Launch VMware at least once after installing VMware.
-
-    2. Run Triton set up script for VMware:
-
-         - Mac:
-
-            ```bash
-            curl -s https://raw.githubusercontent.com/joyent/triton/master/tools/coal-mac-vmware-setup | sudo bash
-            ```
-
-         - Linux:
-
-            ```bash
-            curl -s https://raw.githubusercontent.com/joyent/triton/master/tools/coal-linux-vmware-setup | sudo bash
-            ```
-
-         - Windows:
-
-            ```
-            Download https://raw.githubusercontent.com/joyent/triton/master/tools/coal-windows-vmware-setup.bat
-            Run coal-windows-vmware-setup.bat
-            ```
-
-4. Unpack the CoaL build that you downloaded in step 1.
-
-    - Mac:
-
-        ```bash
-        $ tar -zxvf coal-latest.tgz
-        x root.password.20140911t161518z
-        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/
-        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmx
-        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/zpool.vmdk
-        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmdk
-        x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/4gb.img
-        ...
-        ```
-
-5. Start VMware and load the appliance.
-
-    - Mac: 'open'ing the folder will start VMware and "open and run" the vm:
-
-            open coal-<branch>-<build_date_time>-<git_sha1_hash>-4gb.vmwarevm
-
-6. Boot the headnode.
-
-  When you are prompted with the GRUB menu press the "down" arrow.
-
-  1. Press the down arrow key to highlight "Live 64-bit".
-
-  1. Press 'c' to go to the command line for GRUB.
-
-     By default, the OS will redirect the console to ttyb which is fine
-     for production but needs to be changed for CoaL. While in the command line:
-
-            grub> variable os_console vga
-
-  1. Press enter.
-
-  1. Press esc to get back to the GRUB menu.
-
-  1. Boot "Live 64-bit" by pressing enter.
-
-7. Configure the headnode.
-
-Use the following table to configure your CoaL with settings that
-are fine for development.
-
-If you make a mistake while entering the configuration you can restart
-the VMware virtual machine. Also, as the onscreen instructions describe,
-the last step in configuration allows editing the resulting configuration file.
-
-|Setting|Value|Notes|
-|---|---|---|
-|*Instructions*|↵||
-|Company Name|Clavius|*Can substitute with your choice.*|
-|Region of Datacenter|orbit|*Can substitute with your choice.*|
-|Name of Datacenter|coal-1|(Availability zone.) *Can substitute with your choice.* |
-|Location of DataCenter|Moon, Earth|*Can substitute with your choice.*|
-|*Instructions*|↵||
-|'admin' interface|2|The second NIC is set up as the admin network by the CoaL networking script|
-|(admin) headnode IP address|10.99.99.7|Must use this value.|
-|(admin) headnode netmask:|↵|Use the default.|
-|(admin) Zone's starting IP address:|↵|Use the default.|
-|Add external network now? (Y/n)|Y|Must use this value.|
-|'external' interface|1|The first NIC is set up as the external network by the CoaL networking script|
-|(external) headnode IP address|10.88.88.200|Must use this value.|
-|(external) headnode netmask:|↵|Use the default.|
-|(external) gateway IP address:|10.88.88.2|Must use this value.|
-|(external) network VLAN ID|↵|Use default. The external network is not on a VLAN in CoaL|
-|Starting Provisionable IP address for external Network|↵|Use the default.|
-|Ending Provisionable IP address for external Network|↵|Use the default.|
-|Default gateway IP address:|↵|Use the default.|
-|Primary DNS Server|↵|Use the default.|
-|Secondary DNS Server|↵|Use the default.|
-|Head node domain name|example.com|*Can substitute with your choice.*|
-|DNS Search Domain|example.com|*Can substitute with your choice.*|
-|NTP Server IP Address|↵|Use the default.|
-|"root" password|rootpass|*Can substitute with your choice.*|
-|Confirm "root" password|||
-|"admin" password|adminpass1|*Can substitute with your choice.*|
-|Confirm "admin" password|||
-|Administrator's email|↵|Use the default.|
-|Support email|↵|Use the default.|
-|Confirm password|||
-|Enable telemetry|"true" or "false"|*Can use your choice*|
-|Verify Configuration|||
-|Verify Configuration Again|||
-
-- CoaL will now install based on the configuration parameters entered
-  above. Installation has been observed to take up to 20 minutes,
-  particularly if slow laptop HDD.
-
-After setup is complete you should be able to SSH into your CoaL on the
-"admin" network. Example:
-
-```bash
-ssh root@10.99.99.7  # password 'rootpass'
-```
-
-For just a taste run `svcs` to see running [SMF
-services](http://wiki.smartos.org/display/DOC/Using+the+Service+Management+Facility).
-Run `vmadm list` to see a list of current VMs (SmartOS
-[zones](http://wiki.smartos.org/display/DOC/Zones)). Each Triton service runs in
-its own zone. See [the Joyent customer documentation](https://docs.joyent.com/private-cloud).
-
-As mentioned previously, see [CoaL Setup](./docs/developer-guide/coal-setup.md)
-for a thorough walkthrough.
-
+If you already have a CoaL and would like to update the installation, follow the instructions
+for [updating a Triton standup using `sdcadm`](https://github.com/joyent/sdcadm/blob/master/docs/update.md).
 
 ### Installing Triton on a Physical Server
 
@@ -280,9 +132,9 @@ curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/
 
 Once you have downloaded the latest release image, you will need to
 [write it to a USB key](https://docs.joyent.com/private-cloud/install/installation-media)
-boot the headnode server using the USB key, and follow the install prompts. All steps necessary
+boot the head node server using the USB key, and follow the install prompts. All steps necessary
 to plan, install, and configure Triton DataCenter (Triton) are available in the Joyent
-customer documenation [Installing Triton Elastic Container Infrastructure](https://docs.joyent.com/private-cloud/install).
+customer documentation [Installing Triton Elastic Container Infrastructure](https://docs.joyent.com/private-cloud/install).
 
 
 ## Building
@@ -347,7 +199,7 @@ The goals behind the design of Triton services include:
 
 - All parts of the stack should be observable.
 - The state of the running service should be simple to obtain.
-- The internals of the system should make it straightfoward to debug from a
+- The internals of the system should make it straightforward to debug from a
   core file (from a crash or taken from a running process using
   [gcore(1)](http://smartos.org/man/1/gcore)).
 - Services should be RESTful and accept JSON unless there is a compelling
