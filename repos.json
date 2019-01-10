@@ -118,6 +118,9 @@
             "name": "manta-manatee"
         },
         {
+            "name": "mdb_v8"
+        },
+        {
             "name": "mi-debian-bhyve-8",
             "labels": {
                 "customerimages": true
@@ -972,8 +975,8 @@
         "commons-vfs-manta",
         "conch",
         "conch-docs",
-        "conch-json-schemas",
         "conch-locker",
+        "conch-report-card",
         "conch-reporter-smartos",
         "conch-shell",
         "conch-ui",
@@ -990,7 +993,6 @@
         "dcim_agent",
         "debian-image-tests",
         "debian-lx-brand-image-builder",
-        "deployment-audit-tool",
         "docker-machine-driver-triton",
         "dogpatch",
         "dragnet",
@@ -1079,6 +1081,7 @@
         "manta-minnow",
         "manta-mlive",
         "manta-mola",
+        "manta-monitor",
         "manta-mprune",
         "manta-munistats",
         "manta-muskie",
@@ -1097,7 +1100,6 @@
         "manufacturing",
         "mdata-client",
         "mdb_go",
-        "mdb_v8",
         "me-centos",
         "me-freebsd",
         "mesos",
