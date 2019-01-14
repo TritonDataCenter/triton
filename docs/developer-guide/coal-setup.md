@@ -5,21 +5,27 @@
 -->
 
 <!--
-    Copyright (c) 2015, Joyent, Inc.
+    Copyright (c) 2019, Joyent, Inc.
 -->
 
 # Cloud on a Laptop (CoaL)
 
-CoaL is a VMware appliance that is a full (Triton)[https://docs.joyent.com/private-cloud) head node for development and testing. Because most Joyent developers work on Macs, this document walks through the process of setting up CoaL on a Mac. Read this document carefully before installing CoaL.
+CoaL is a VMware appliance that is a full [Triton](https://docs.joyent.com/private-cloud)
+head node for development and testing. Because most Joyent developers work on Macs,
+this document walks through the process of setting up CoaL on a Mac. Read this
+document carefully before installing CoaL.
 
-**Note**: Developers in the community have set up CoaL successfully on Windows and on Linux using these instructions as general guidelines, modifying them as needed.
+**Note**: Developers in the community have set up CoaL successfully on Windows and
+on Linux using these instructions as general guidelines, modifying them as needed.
 
-**WARNING**: The installation procedure and configuration options in this document are not appropriate for production deployments.
+**WARNING**: The installation procedure and configuration options in this document
+are not appropriate for production deployments.
 
 
 ## Minimum Requirements
 
-The minimum requirements for a good CoaL experience are a Mac with  16 GB RAM and an SSD with 45 GB disk available.
+The minimum requirements for a good CoaL experience are a Mac with 16 GB RAM and
+an SSD with 45 GB disk available.
 
 ## Overview
 
@@ -35,112 +41,130 @@ The high-level steps for setting up CoaL are:
 
 ## Downloading CoaL
 
-The CoaL tarball is approximately 2 GB and will take some time to download.
+The CoaL tarball is approximately 3 GB and will take some time to download.
 
 To download the latest CoaL build:
 
-	```
-	curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/release-20180927-20180927T130527Z/headnode/coal-release-20180927-20180927T130527Z-g34dbd8a-4gb.tgz
-	```
+```
+curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/coal-latest.tgz
+```
 
-While you wait for the tarball download to complete, you can configure and install VMware.
+While you wait for the tarball download to complete, you can configure and
+install VMware.
 
-## Downloading installing, and configuring VMware
+## Downloading, installing, and configuring VMware
 
-Most Joyent team members run CoaL from VMware Fusion. We recommend VMware version 8.5.3., but users have had success with v5 and v8.
+Most Joyent team members run CoaL from VMware Fusion. We recommend VMware
+version 8.5.3, but users have had success with v5 and v8.
 
-1. Download [VMware Fusion](http://www.vmware.com/products/fusion).
+1. Download [VMware Fusion](http://www.vmware.com/products/fusion).  
+**Note**: For Windows or Linux, download VMware Workstation from
+[VMware Workstation](http://www.vmware.com/products/workstation).
+1. Install VMware.
+1. When complete, launch the application to confirm that it installed correctly.
+1. Close VMware.
 
-**Note**: For Windows or Linux, download VMware Workstation from [VMware Workstation](http://www.vmware.com/products/workstation.
+To configure CoaL's external and admin networks:
 
-2. Install VMware.
-3. When complete, launch the application to confirm that installed correctly.
-4. Close VMware.
-5. To configure CoaL's external and admin networks:
+- Mac
+    ```bash
+    curl -s https://raw.githubusercontent.com/joyent/triton/master/tools/coal-mac-vmware-setup | sudo bash
+    ```
 
-	```bash
-	curl -s https://raw.githubusercontent.com/joyent/sdc/master/tools/coal-mac-vmware-setup | sudo bash
-	```
+- Linux
+    ```bash
+    curl -s https://raw.githubusercontent.com/joyent/sdc/master/tools/coal-linux-vmware-setup | sudo bash
+    ```
 
-	**Note**: CoaL network setup scripts are available for Windows and Linux.
+- Windows
 
-	For Windows, download https://raw.githubusercontent.com/joyent/sdc/master/tools/coal-windows-vmware-setup.bat and run `coal-windows-vmware-setup.bat`.
-
-	On Linux, run:
-	```bash
-	curl -s https://raw.githubusercontent.com/joyent/sdc/master/tools/coal-linux-vmware-setup | sudo bash
-	```
+    Download https://raw.githubusercontent.com/joyent/triton/master/tools/coal-windows-vmware-setup.bat
+    and run `coal-windows-vmware-setup.bat`.
 
 ## Extracting and loading CoaL
 
-1. To extract the CoaL virtual machine:
+To extract the CoaL virtual machine:
 
-	```bash
-	$ tar -zxvf coal-latest.tgz -C ~/Documents/Virtual\ Machines.localized
-	x root.password.20140911t161518z
-	x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/
-	x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmx
-	x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/zpool.vmdk
-	x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmdk
-	x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/4gb.img
-	...
-	```
+```bash
+$ tar -zxvf coal-latest.tgz -C ~/Documents/Virtual\ Machines.localized
+x root.password.20140911t161518z
+x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/
+x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmx
+x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/zpool.vmdk
+x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmdk
+x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/4gb.img
+...
+```
 
-2. To load the CoaL appliance:
-    1. Launch **VMware Fusion**.
-    2. Select **File** and then click **Open**.
-    3. Navigate to and select the `.vmwarevm` file that contains the CoaL build.
+To load the CoaL appliance:
+1. Launch **VMware Fusion**.
+1. Select **File** and then click **Open**.
+1. Navigate to and select the `.vmwarevm` file that contains the CoaL build.  
+   **Note**: If you are working from the command line instead of the GUI, run:
+   ```
+   open coal-<branch>-<build_date_time>-<git_sha1_hash>-4gb.vmwarevm
+   ```
 
-**Note**: If you are working from the command line instead of the VMware GUI, run:
+To configure memory:
 
-	```
-	open coal-<branch>-<build_date_time>-<git_sha1_hash>-4gb.vmwarevm
-	```
-
-**Note**: To configure memory:
-    1. Select **Virtual Machine** and then click **Settings**.
-	The **USB-headnode Settings** dialog displays.
-    2. Click **Processes & Memory**. Change the memory settings, if needed.
-	**Note**: The default memory is set to 8192 MB. You can change this setting, but *be sure to leave Mac OS X with at least 8 GB to avoid resource allocation problems*.
-	If you are not using the VMware GUI, you can change the default memory in the CoaL `USB-headnode.vmx` file.  You can set memsize = "6144", or according to your preference.
-3. If you changed the memory settings, restart VMware.
+1. Select **Virtual Machine** and then click **Settings**.  
+   The **USB-headnode Settings** dialog displays.
+1. Click **Processes & Memory**. Change the memory settings, if needed.  
+   **Note**: The default memory is set to 8192 MB. You can change this setting,
+   but be sure to leave Mac OS X with at least 8 GB to avoid resource allocation
+   problems. If you are not using the VMware GUI, you can change the default
+   memory in the CoaL `USB-headnode.vmx` file. You can set memsize = "6144",
+   or according to your preference.
+1. If you have changed the memory settings, restart the VM.
 
 The GRUB boot loader menu displays.
 
-##GRUB menu navigation alert
+## GRUB menu navigation alert
 
-GRUB intervenes in the boot process, enabling you to specify the environment to load. The default is for the console to use ttyb. This is fine for production but not for our use.
+GRUB intervenes in the boot process, enabling you to specify the environment to
+load. The default is for the console to use ttyb. This is fine for production but
+not for our use.
 
-Immediately after highlighting **Live 64-bit** using the arrow keys, press **c** quickly in order to direct the console to use **vga**.
+Immediately after highlighting **Live 64-bit** using the arrow keys, press **c**
+quickly in order to direct the console to use **vga**.
 
-	![CoaL Grub Boot Menu](../img/coal-grub-menu.png)
+![CoaL Grub Boot Menu](../img/coal-grub-menu.png)
 
-If you are too slow, the **Live 64-bit** option loads instead of the GRUB command line. If needed, press **Esc** to redirect the console back to the GRUB menu and try again.
+If you are too slow, the **Live 64-bit** option loads instead of the GRUB command
+line. If needed, press **Esc** to redirect the console back to the GRUB menu and
+try again.
 
 ## Booting the head node
 
 When you are prompted with the GRUB menu:
 
 1. Press the down arrow key to highlight **Live 64-bit**.
-2. Quickly press **c** to load the GRUB command line.
-	If you miss this step, press **Esc** to redirect the console back to the GRUB menu and try again.
-3. At the **GRUB command prompt**, type `variable os_console vga`, and press **Enter**.
-4. Press **Esc** to return to the GRUB menu.
-5. Press **Enter** to boot **Live 64-bit**.
+1. Quickly press **c** to load the GRUB command line.  
+   If you miss this step, press **Esc** to redirect the console back to the GRUB
+   menu and try again.
+1. At the **GRUB command prompt**, type `variable os_console vga`, and press **Enter**.
+1. Press **Esc** to return to the GRUB menu.
+1. Press **Enter** to boot **Live 64-bit**.
 
-**Note**: If you see a blank screen with a cursor at the top left while the head node is booting, you may have forgotten to redirect the console. If so, press Esc to return to the GRUB menu.
+**Note**: If you see a blank screen with a cursor at the top left while the head
+node is booting, you may have forgotten to redirect the console. If so, press
+`Esc` to return to the GRUB menu.
 
-     ![kvm warning on boot](../img/coal-only-cursor.png)
+![cursor_only](../img/coal-only-cursor.png)
 
-**Note**: Because you are in a virtual environment without Intel VT-x support enabled, you'll receive cpu and kvm warnings. You can safely ignore them:
+**Note**: Because you are in a virtual environment without Intel VT-x support
+enabled, you'll receive cpu and kvm warnings. You can safely ignore them:
 
-     ![kvm warning on boot](../img/coal-boot-warnings.png)
+![kvm warning on boot](../img/coal-boot-warnings.png)
 
 ## Configuring the head node
 
-Use the following table to configure the development settings for CoaL. In many cases, you will choose the default values. In others, you must type the literal value provided. Variables are in *italics*. You can set any value for variables.
+Use the following table to configure the development settings for CoaL. In many
+cases, you will choose the default values. In others, you must type the literal
+value provided. Variables are in *italics*. You can set any value for variables.
 
-The final prompt asks that you verify the configuration settings. If you have made a mistake, you can reject the settings and restart the configuration process.
+The final prompt asks that you verify the configuration settings. If you have
+made a mistake, you can reject the settings and restart the configuration process.
 
 |Setting|Value|Notes|
 |---|---|---|
@@ -164,8 +188,8 @@ The final prompt asks that you verify the configuration settings. If you have ma
 |Default gateway IP address:|↵|Press **Enter** to select the default.|
 |Primary DNS Server|↵|Press **Enter** to select the default.|
 |Secondary DNS Server|↵|Press **Enter** to select the default.|
-|Head node domain name|*example.com*|The domain name should be unique. You can ping the domain to verify if its a valid website. If it already exists, select a different domain name.|
-|DNS Search Domain|*example.com*|The search domain should be a unique,  non-reachable web domain name that doesn’t exist.You can ping the domain to verify if its a valid website. If it already exists, select a different domain name|
+|Head node domain name|*example.com*|The domain name should be unique.|
+|DNS Search Domain|*example.com*|The search domain should be unique.|
 |NTP Server IP Address|↵|Press **Enter** to select the default.|
 |Set root password|**rootpass**|Type **rootpass** to set the root password.|
 |Confirm root password|||
@@ -174,8 +198,9 @@ The final prompt asks that you verify the configuration settings. If you have ma
 |Administrator email|↵|Press **Enter** to select the default.|
 |Support email|↵|Press **Enter** to select the default.|
 |Enable telemetry|↵|Press **Enter** to select the default, false.|
-|Verify configuration settings||Review the configuration before proceeding. If the configuration is not correct, type **n** to reject the settings and restart the process.|
-|Confirm configuration||If you verified the configuration settings, you are prompted to confirm them.|
+|Default channel|**release**|Enter **release** to download stable versions by default, or enter another preferred channel.|
+|Verify configuration settings|↵|Review the configuration before proceeding. If the configuration is not correct, type **n** to reject the settings and restart the process.|
+|Confirm configuration|↵|If you verified the configuration settings, you are prompted to confirm them.|
 
 The Verify Configuration prompt looks something like:
 
@@ -183,9 +208,12 @@ The Verify Configuration prompt looks something like:
 
 ## Installing Triton
 
-CoaL will now install the Triton head node based on the  configuration. The installation can take up to 20 minutes. Installation isn’t complete until the **Setup complete** message displays.
+CoaL will now install the Triton head node based on the configuration. The
+installation can take up to 20 minutes. Installation isn’t complete until the
+**Setup complete** message displays.
 
-On a Mac, you will be prompted to enter your admin password several times to enable the VM to monitor all network traffic:
+On a Mac, you will be prompted to enter your admin password several times to
+enable the VM to monitor all network traffic:
 
 ![Mac system dialog confirming VM can monitor all network traffic.](../img/coal-mac-vm-monitor-all-network-traffic.png)
 
@@ -193,9 +221,11 @@ A reboot notification displays when the next phase of installation completes:
 
 ![Reboot message shown on console.](../img/coal-will-reboot.png)
 
-The final phase of installation, setup, is the longest but does not display its progress. You may see either just a cursor on the login page or a login prompt.
+The final phase of installation, setup, is the longest but does not display its
+progress. You may see either just a cursor on the login page or a login prompt.
 
-A message on the console welcomes you to Triton. After some time, a **preparing for setup** message displays:
+A message on the console welcomes you to Triton. After some time, a
+**preparing for setup** message displays:
 
 ![preparing for setup on console.](../img/coal-preparing-for-setup.png)
 
@@ -207,7 +237,8 @@ When the installation completes, **completing setup** displays.
 
 ### Root Access
 
-After setup is complete you should be able to SSH into CoaL using the admin network headnode IP address you configured. For example:
+After setup is complete you should be able to SSH into CoaL using the admin
+network headnode IP address you configured. For example:
 
 ```bash
 ssh root@10.88.88.200  # password 'rootpass'
@@ -215,59 +246,65 @@ ssh root@10.88.88.200  # password 'rootpass'
 
 ### Health checks
 
-Performing health checks is a best practice. You can check the health of CoaL using `sdcadm check-health` before each step. Until [TOOLS-1001](https://smartos.org/bugview/TOOLS-1001) is resolved, you should also run `sdc-healthcheck`.
+Performing health checks is a best practice. You can check the health of CoaL
+using `sdcadm health` before/after rebooting or updating CoaL.
 
 To confirm the health of the services:
 
 ```bash
-root@headnode (coal-1) ~]# sdc-healthcheck
-ZONE                                 STATE           AGENT               STATUS
-global                               running         -                   online
-assets                               running         -                   online
-amon                                 running         -                   online
-binder                               running         -                   online
-rabbitmq                             running         -                   online
-napi                                 running         -                   online
-fwapi                                running         -                   online
-imgapi                               running         -                   online
-adminui                              running         -                   online
-moray                                running         -                   online
-amonredis                            running         -                   online
-sapi                                 running         -                   online
-workflow                             running         -                   online
-mahi                                 running         -                   online
-sdc                                  running         -                   online
-papi                                 running         -                   online
-dhcpd                                running         -                   online
-redis                                running         -                   online
-ufds                                 running         -                   online
-manatee                              running         -                   online
-vmapi                                running         -                   online
-cnapi                                running         -                   online
-ca                                   running         -                   online
-global                               running         provisioner         online
-global                               running         heartbeat           online
-global                               running         ur                  online
-global                               running         smartlogin          online
+root@headnode (coal-1) ~]# sdcadm health
+INSTANCE                              SERVICE          HOSTNAME  ALIAS       HEALTHY
+b25f30b0-e8dc-46e8-a3a3-58e5272b5c16  adminui          headnode  adminui0    true
+1ca8a319-0257-44d5-95a4-64419c7f1ebd  amon             headnode  amon0       true
+1555209d-9d88-4216-a0ff-3a8eec8117a5  amonredis        headnode  amonredis0  true
+cee69840-7778-4cff-872a-5696fef22aff  assets           headnode  assets0     true
+672f2081-0ee4-4815-a523-e0baf80457bd  binder           headnode  binder0     true
+1391af6e-da4a-49d3-8eba-ebb4e2e276c3  ca               headnode  ca0         true
+68f59f8f-bed8-46d0-a08b-99628d524e44  cnapi            headnode  cnapi0      true
+8654d01f-b6f5-4462-a4cf-248944384fbb  dhcpd            headnode  dhcpd0      true
+1774528c-c960-4e3e-8d5c-858c5e4b73de  fwapi            headnode  fwapi0      true
+8f9ee32c-73b0-4ea5-a685-c2fd9141edf0  imgapi           headnode  imgapi0     true
+df0cfe72-6067-450d-bf98-760ed3009783  mahi             headnode  mahi0       true
+9f93657d-2a8d-44fc-831b-f609b22aa3e6  manatee          headnode  manatee0    true
+46b4278d-08c5-4267-9b89-914eaf0c4cd9  moray            headnode  moray0      true
+796f56af-78b1-4a2b-a364-ad1eed275e3a  napi             headnode  napi0       true
+099c7c92-a5e5-42c0-84c2-0774584c808d  papi             headnode  papi0       true
+69980f40-2bfc-4673-8321-38d22e74eea6  rabbitmq         headnode  rabbitmq0   true
+c7cfcfaa-5369-4236-8ed9-96796d3a9ef5  sapi             headnode  sapi0       true
+f30cb983-f1fe-43d0-b093-31b2c5006b01  sdc              headnode  sdc0        true
+247f7e5f-e353-46c5-b615-eab326a96089  ufds             headnode  ufds0       true
+a1e8c136-2fed-4cd1-b3f6-0ec92ecc073e  vmapi            headnode  vmapi0      true
+c47c1b9f-e349-493c-b7d2-4c3a51fd2f21  workflow         headnode  workflow0   true
+564de8b3-3203-b2d7-402b-3698369f114f  global           headnode  global      true
+e80eb8a6-3c53-4ce5-b7b9-6f8bd174a010  amon-agent       headnode  -           true
+618fbb3b-bb5b-49b7-92ff-b8fb5a27e706  amon-relay       headnode  -           true
+03323225-bd5d-4978-b0a5-6ef59be16f9d  cmon-agent       headnode  -           true
+479f9013-73f7-416e-9b16-66486f638195  cn-agent         headnode  -           true
+7084a8b5-7646-406f-a134-97f2a8beb3f0  config-agent     headnode  -           true
+b2fa15f7-b245-4e5a-ad31-b1790f95b77c  firewaller       headnode  -           true
+f32aa368-1632-47b9-a2bc-1079a550a9d2  hagfish-watcher  headnode  -           true
+a411b34d-f1f2-4a16-9454-fb7cb8c21e7c  net-agent        headnode  -           true
+efadb38d-6f53-4d94-bacc-29c04d56a076  smartlogin       headnode  -           true
+eadc8725-8dc7-4d67-82ea-3ca081b821ae  vm-agent         headnode  -           true
 ```
 
 ### Adding external Nics
 
-External NICs are required to access remote update sources and the AdminUI via a browser.
+External NICs are required to access remote update sources and the
+AdminUI via a browser.
 
-1. To add external nics to `imgapi` and `adminui`:
+To add external nics to `imgapi` and `adminui`:
+   ```bash
+   [root@headnode (coal-1) ~]# sdcadm post-setup common-external-nics
+   Added external nic to adminui
+   Added external nic to imgapi
+   ```
+   **Note**: This command does not wait for the `add nics` jobs to
+   complete. Once you submit the command, you might need to wait after
+   the command exits until you are sure that the jobs really finish.
 
-	```bash
-	[root@headnode (coal-1) ~]# sdcadm post-setup common-external-nics
-	Added external nic to adminui
-	Added external nic to imgapi
-	```
-
-	**Note**: This command does not wait for the `add nics` jobs to complete. Once you submit the command, you might need to wait after the command exits until you are sure that the jobs really finish.
-
-2. To confirm which services have an external IP, run `sdc-vmapi`:
-
-    ```bash
+To confirm which services have an external IP, run `sdc-vmapi`:
+   ```bash
     root@headnode (coal-1) ~]# sdc-vmapi /vms?state=running | json -H -ga alias nics.0.ip nics.1.ip
     dhcpd0 10.99.99.9
     imgapi0 10.99.99.21 10.88.88.4
@@ -291,70 +328,68 @@ External NICs are required to access remote update sources and the AdminUI via a
     ca0 10.99.99.30
     mahi0 10.99.99.33
     adminui0 10.99.99.31 10.88.88.3
-    ```
+   ```
 
-3. To test whether you can access the operations portal, `SDC ADMINUI` in a web browser on the host computer, navigate to https://10.88.88.3/.
+To test whether you can access the AdminUI via the external IP address,
+in a web browser on the host computer, navigate to https://10.88.88.3.
 
 ### Setting up CloudAPI for development
 
-CloudAPI provides the self-serve API access to Triton. If you are developing or testing against CloudAPI then create the CloudAPI zone.
+CloudAPI provides the self-serve API access to Triton. If you are developing
+or testing against CloudAPI, you can install it by running:
+   ```bash
+   root@headnode (coal-1) ~]# sdcadm post-setup cloudapi
+   cloudapi0 zone created
+   ```
 
-1. To create the CloudAPI zone, run:
+If you plan to use CloudAPI in CoaL and to provision VMs, you will need to
+enable the head node to act as a compute node for instances. The head node
+is excluded from the set of servers used for provisioning customer instances.
+For development and testing, allowing the head node to act as a compute node
+for instances is useful.
 
-    ```bash
-    root@headnode (coal-1) ~]# sdcadm post-setup cloudapi
-    cloudapi0 zone created
-    ```
-
-If you plan to use CloudAPI in CoaL and to provision VMs, you will need to enable the head node to act as a compute node for instances. The head node is excluded from the set of servers used for provisioning customer instances. For development and testing, allowing the head node to act as a compute node for instances is useful.
-
-2. To enable the head node to act as a compute node for instances:
-
-```bash
-[root@headnode (coal-1) ~]# sdcadm post-setup dev-headnode-prov
-Configuring CNAPI to allow headnode provisioning and over-provisioning (allow a minute to propagate)
-```
+To enable the head node to act as a compute node for instances:
+   ```bash
+   [root@headnode (coal-1) ~]# sdcadm post-setup dev-headnode-prov
+   Configuring CNAPI to allow headnode provisioning and over-provisioning (allow a minute to propagate)
+   ```
 
 ### Fabrics
 
-Fabrics are not required to run CoaL. If you need to setup fabrics for development purposes, you can refer to [Set up fabrics in CoaL](./coal-post-setup-fabrics.md)
+Fabrics are not required to run CoaL. If you need to setup fabrics for
+development purposes, you can refer to [Set up fabrics in CoaL](./coal-post-setup-fabrics.md)
 
 ## Maintaining CoaL
 
 ### Set Channel
 
-The first time you update CoaL, set the [updatechannel](../operator-guide/update.md).
-
-1. To set the update channel, run:
-
-```bash
-[root@headnode (coal-1) ~]# sdcadm channel set dev
-Update channel has been successfully set to: 'dev'
-```
-
-2. Check health by running `sdcadm check-health` and `sdc-healthcheck`.
+The default channel can be modified by setting the [update channel](../operator-guide/update.md):
+   ```bash
+   [root@headnode (coal-1) ~]# sdcadm channel set dev
+   Update channel has been successfully set to: 'dev'
+   ```
 
 ### Self Update
 
-1. To update `sdcadm`:
-
-    ```bash
-    [root@headnode (coal-1) ~]# sdcadm --version
-    sdcadm 1.4.4 (release-20150205-20150205T060457Z-g7d76790)
-    [root@headnode (coal-1) ~]# sdcadm self-update --latest
-    Update to sdcadm 1.5.0 (master-20150211T134112Z-gef31015)
-    Download update from https://updates.joyent.com
-    Run sdcadm installer (log at /var/sdcadm/self-updates/20150217T234531Z/install.log)
-    Updated to sdcadm 1.5.0 (master-20150211T134112Z-gef31015, elapsed 7s)
-    ```
-
-2. Run `sdcadm check-health` to confirm the that updated `sdcadm` reports a healthy state.
+To update `sdcadm`:
+   ```bash
+   [root@headnode (coal-1) ~]# sdcadm --version
+   sdcadm 1.4.4 (release-20150205-20150205T060457Z-g7d76790)
+   [root@headnode (coal-1) ~]# sdcadm self-update --latest
+   Update to sdcadm 1.5.0 (master-20150211T134112Z-gef31015)
+   Download update from https://updates.joyent.com
+   Run sdcadm installer (log at /var/sdcadm/self-updates/20150217T234531Z/install.log)
+   Updated to sdcadm 1.5.0 (master-20150211T134112Z-gef31015, elapsed 7s)
+   ```
 
 ### Backing up the manatee zone
 
-Most services store in information in Manatee. None of the other services keep any permanent data locally. (`imgapi` is the occasional exception.)
+Most services store their information in Manatee. None of the other
+services keep any permanent data locally. (`imgapi` is the occasional
+exception.)
 
-To take a ZFS snapshot of the manatee zone and temporarily store on head node's drive:
+To take a ZFS snapshot of the manatee zone and temporarily store on
+head node's drive:
 
 ```bash
 MANATEE0_UUID=$(vmadm lookup -1 alias=~manatee)
@@ -365,10 +400,11 @@ zfs destroy zones/$MANATEE0_UUID/data/manatee@backup
 
 ### Updating Services
 
-Now that you have backed up the Manatee zone, download and install the updated images for the services. This process can take up to 60 minutes depending on how many services have new images.
+Now that you have backed up the Manatee zone, download and install
+the updated images for the services. This process can take up to 60
+minutes depending on how many services have new images.
 
 1. To update global zone tools, run:
-
     ```bash
     [root@headnode (coal-1) ~]# sdcadm experimental update-gz-tools --latest
     Downloading gz-tools image 55d74974-8c0b-4126-8ea4-5c246cf412f5 (2.0.0) to /var/tmp/gz-tools-55d74974-8c0b-4126-8ea4-5c246cf412f5.tgz
@@ -381,21 +417,7 @@ Now that you have backed up the Manatee zone, download and install the updated i
     Cleaning up gz-tools tarball
     Updated gz-tools successfully (elapsed 13s).
     ```
-
-2. To update domain name services:
-
-    ```bash
-    [root@headnode (coal-1) ~]# sdcadm experimental update-other
-    Updating maintain_resolvers for all vm services
-    Updating DNS domain service metadata for papi, mahi
-    Updating DNS domain SDC application metadata for papi, mahi
-    No need to update region_name for this data center
-    sapi_domain already present on node.config
-    Done.
-    ```
-
-3. To update the agents:
-
+1. To update the agents:
     ```
     [root@headnode (coal-1) ~]# sdcadm experimental update-agents --latest -y --all
     UUID of latest installed agents image is: b38d1458-38d1-4884-ab05-6e36692c1700
@@ -414,8 +436,7 @@ Now that you have backed up the Manatee zone, download and install the updated i
     config-agent refresh for all the running servers
     Done.
     ```
-
-3. To update all the services, run the command below. This step can take up to 45 minutes depending on how many services have new images.
+1. To update all the services, run the command below. This step can take up to 45 minutes depending on how many services have new images.
 
     ```bash
     [root@headnode (coal-1) /var/tmp]# sdcadm update --all -y
@@ -429,198 +450,7 @@ Now that you have backed up the Manatee zone, download and install the updated i
             image 78c965a4-bd8d-11e4-a1bc-2701505c414d (amon@master-20150226T075046Z-g58ecaf8)
             image 6e9b95ec-beb5-11e4-806b-6fc4218e1009 (sdc-postgres@master-20150227T191223Z-gad45608)
             image 30fe9576-bd8f-11e4-9066-63d665bc96ce (manta-nameservice@master-20150226T080343Z-gba090a8)
-            image 675087da-beb4-11e4-a9b3-8f914417afff (manta-moray@master-20150227T190616Z-gf7607c7)
-            image 970715a8-c16f-11e4-9fae-3f1afe2afdee (cnapi@master-20150303T063214Z-g0c8f661)
-            image 0c589eba-c177-11e4-9be7-b3bfec9244fb (dhcpd@master-20150303T072519Z-g54ca866)
-            image aaba7218-bd8f-11e4-81df-573bd1d77302 (redis@master-20150226T081228Z-g0d6e5b9)
-            image bfc5dac8-bd8d-11e4-a03b-67835b902758 (ufds@master-20150226T075650Z-g9a66af3)
-            image 959b6076-bd90-11e4-ae05-6fc0ef56abd1 (workflow@master-20150226T081626Z-g2a160f5)
-            image 1ac995dc-bd8d-11e4-89ed-0b706fd9fcfd (napi@master-20150226T074910Z-gbc4a87c)
-            image 1fa4af12-bd90-11e4-b420-dfe5cc431999 (fwapi@master-20150226T081200Z-g8601d56)
-            image 3862bfbc-c1d7-11e4-8dc0-7b7e574c78b0 (adminui@master-20150303T185212Z-gca114bd)
-            image 5231245e-bd8d-11e4-9db9-07ccad0e008e (imgapi@master-20150226T074935Z-gf69e4d4)
-            image 2752e4fc-bf0e-11e4-8de7-73e39bcc2a12 (vmapi@master-20150228T054919Z-gb09aea6)
-            image cf267ca8-bd91-11e4-941b-5f26cf29c0e5 (sapi@master-20150226T082326Z-g14fa2e4)
-            image 26eb639e-c112-11e4-ada8-ffb116cec9d8 (cloudapi@master-20150302T192040Z-g24cfb4d)
-            image 6ab73f54-bd8d-11e4-83c2-8b81723a3436 (manta-deployment@master-20150226T075408Z-gc8d74a9)
-            image 1ccefc72-bd8e-11e4-b163-df2139248aba (assets@master-20150226T080059Z-g6012d50)
-            image f1b6b7e0-bd8e-11e4-8ae4-d3a190985286 (amonredis@master-20150226T080620Z-g4bbca77)
-            image 156647c6-c174-11e4-804f-73c1ba84c2f5 (sdc@master-20150303T070134Z-g997645e)
-        update "papi" service to image 85157ca0-bd90-11e4-9016-477613964961 (papi@master-20150226T081600Z-g7905a77)
-        update "amonredis" service to image f1b6b7e0-bd8e-11e4-8ae4-d3a190985286 (amonredis@master-20150226T080620Z-g4bbca77)
-        update "amon" service to image 78c965a4-bd8d-11e4-a1bc-2701505c414d (amon@master-20150226T075046Z-g58ecaf8)
-        update "cnapi" service to image 970715a8-c16f-11e4-9fae-3f1afe2afdee (cnapi@master-20150303T063214Z-g0c8f661)
-        update "dhcpd" service to image 0c589eba-c177-11e4-9be7-b3bfec9244fb (dhcpd@master-20150303T072519Z-g54ca866)
-        update "redis" service to image aaba7218-bd8f-11e4-81df-573bd1d77302 (redis@master-20150226T081228Z-g0d6e5b9)
-        update "napi" service to image 1ac995dc-bd8d-11e4-89ed-0b706fd9fcfd (napi@master-20150226T074910Z-gbc4a87c)
-        update "workflow" service to image 959b6076-bd90-11e4-ae05-6fc0ef56abd1 (workflow@master-20150226T081626Z-g2a160f5)
-        update "fwapi" service to image 1fa4af12-bd90-11e4-b420-dfe5cc431999 (fwapi@master-20150226T081200Z-g8601d56)
-        update "sdc" service to image 156647c6-c174-11e4-804f-73c1ba84c2f5 (sdc@master-20150303T070134Z-g997645e)
-        update "adminui" service to image 3862bfbc-c1d7-11e4-8dc0-7b7e574c78b0 (adminui@master-20150303T185212Z-gca114bd)
-        update "vmapi" service to image 2752e4fc-bf0e-11e4-8de7-73e39bcc2a12 (vmapi@master-20150228T054919Z-gb09aea6)
-        update "cloudapi" service to image 26eb639e-c112-11e4-ada8-ffb116cec9d8 (cloudapi@master-20150302T192040Z-g24cfb4d)
-        update "manta" service to image 6ab73f54-bd8d-11e4-83c2-8b81723a3436 (manta-deployment@master-20150226T075408Z-gc8d74a9)
-        update "assets" service to image 1ccefc72-bd8e-11e4-b163-df2139248aba (assets@master-20150226T080059Z-g6012d50)
-        update "imgapi" service to image 5231245e-bd8d-11e4-9db9-07ccad0e008e (imgapi@master-20150226T074935Z-gf69e4d4)
-        update "ufds" service to image bfc5dac8-bd8d-11e4-a03b-67835b902758 (ufds@master-20150226T075650Z-g9a66af3)
-        update "moray" service to image 675087da-beb4-11e4-a9b3-8f914417afff (manta-moray@master-20150227T190616Z-gf7607c7)
-        update "sapi" service to image cf267ca8-bd91-11e4-941b-5f26cf29c0e5 (sapi@master-20150226T082326Z-g14fa2e4)
-        update "manatee" service to image 6e9b95ec-beb5-11e4-806b-6fc4218e1009 (sdc-postgres@master-20150227T191223Z-gad45608)
-        update "binder" service to image 30fe9576-bd8f-11e4-9066-63d665bc96ce (manta-nameservice@master-20150226T080343Z-gba090a8)
-        update "mahi" service to image a3012cb0-bde9-11e4-8816-57d15d66624e (manta-authcache@master-20150226T185448Z-g4e3f5d9)
-    Create work dir: /var/sdcadm/updates/20150303T194912Z
-    Downloading image 85157ca0-bd90-11e4-9016-477613964961 (papi@master-20150226T081600Z-g7905a77)
-    Downloading image a3012cb0-bde9-11e4-8816-57d15d66624e (manta-authcache@master-20150226T185448Z-g4e3f5d9)
-    Downloading image 78c965a4-bd8d-11e4-a1bc-2701505c414d (amon@master-20150226T075046Z-g58ecaf8)
-    Downloading image 6e9b95ec-beb5-11e4-806b-6fc4218e1009 (sdc-postgres@master-20150227T191223Z-gad45608)
-    Imported image a3012cb0-bde9-11e4-8816-57d15d66624e (manta-authcache@master-20150226T185448Z-g4e3f5d9)
-    Downloading image 30fe9576-bd8f-11e4-9066-63d665bc96ce (manta-nameservice@master-20150226T080343Z-gba090a8)
-    Imported image 30fe9576-bd8f-11e4-9066-63d665bc96ce (manta-nameservice@master-20150226T080343Z-gba090a8)
-    Downloading image 675087da-beb4-11e4-a9b3-8f914417afff (manta-moray@master-20150227T190616Z-gf7607c7)
-    Imported image 85157ca0-bd90-11e4-9016-477613964961 (papi@master-20150226T081600Z-g7905a77)
-    Downloading image 970715a8-c16f-11e4-9fae-3f1afe2afdee (cnapi@master-20150303T063214Z-g0c8f661)
-    Imported image 970715a8-c16f-11e4-9fae-3f1afe2afdee (cnapi@master-20150303T063214Z-g0c8f661)
-    Downloading image 0c589eba-c177-11e4-9be7-b3bfec9244fb (dhcpd@master-20150303T072519Z-g54ca866)
-    Imported image 0c589eba-c177-11e4-9be7-b3bfec9244fb (dhcpd@master-20150303T072519Z-g54ca866)
-    Downloading image aaba7218-bd8f-11e4-81df-573bd1d77302 (redis@master-20150226T081228Z-g0d6e5b9)
-    Imported image 78c965a4-bd8d-11e4-a1bc-2701505c414d (amon@master-20150226T075046Z-g58ecaf8)
-    Downloading image bfc5dac8-bd8d-11e4-a03b-67835b902758 (ufds@master-20150226T075650Z-g9a66af3)
-    Imported image aaba7218-bd8f-11e4-81df-573bd1d77302 (redis@master-20150226T081228Z-g0d6e5b9)
-    Downloading image 959b6076-bd90-11e4-ae05-6fc0ef56abd1 (workflow@master-20150226T081626Z-g2a160f5)
-    Imported image 959b6076-bd90-11e4-ae05-6fc0ef56abd1 (workflow@master-20150226T081626Z-g2a160f5)
-    Downloading image 1ac995dc-bd8d-11e4-89ed-0b706fd9fcfd (napi@master-20150226T074910Z-gbc4a87c)
-    Imported image 675087da-beb4-11e4-a9b3-8f914417afff (manta-moray@master-20150227T190616Z-gf7607c7)
-    Downloading image 1fa4af12-bd90-11e4-b420-dfe5cc431999 (fwapi@master-20150226T081200Z-g8601d56)
-    Imported image 1fa4af12-bd90-11e4-b420-dfe5cc431999 (fwapi@master-20150226T081200Z-g8601d56)
-    Downloading image 3862bfbc-c1d7-11e4-8dc0-7b7e574c78b0 (adminui@master-20150303T185212Z-gca114bd)
-    Imported image 6e9b95ec-beb5-11e4-806b-6fc4218e1009 (sdc-postgres@master-20150227T191223Z-gad45608)
-    Downloading image 5231245e-bd8d-11e4-9db9-07ccad0e008e (imgapi@master-20150226T074935Z-gf69e4d4)
-    Imported image bfc5dac8-bd8d-11e4-a03b-67835b902758 (ufds@master-20150226T075650Z-g9a66af3)
-    Downloading image 2752e4fc-bf0e-11e4-8de7-73e39bcc2a12 (vmapi@master-20150228T054919Z-gb09aea6)
-    Imported image 1ac995dc-bd8d-11e4-89ed-0b706fd9fcfd (napi@master-20150226T074910Z-gbc4a87c)
-    Downloading image cf267ca8-bd91-11e4-941b-5f26cf29c0e5 (sapi@master-20150226T082326Z-g14fa2e4)
-    Imported image 5231245e-bd8d-11e4-9db9-07ccad0e008e (imgapi@master-20150226T074935Z-gf69e4d4)
-    Downloading image 26eb639e-c112-11e4-ada8-ffb116cec9d8 (cloudapi@master-20150302T192040Z-g24cfb4d)
-    Imported image 2752e4fc-bf0e-11e4-8de7-73e39bcc2a12 (vmapi@master-20150228T054919Z-gb09aea6)
-    Downloading image 6ab73f54-bd8d-11e4-83c2-8b81723a3436 (manta-deployment@master-20150226T075408Z-gc8d74a9)
-    Imported image 3862bfbc-c1d7-11e4-8dc0-7b7e574c78b0 (adminui@master-20150303T185212Z-gca114bd)
-    Downloading image 1ccefc72-bd8e-11e4-b163-df2139248aba (assets@master-20150226T080059Z-g6012d50)
-    Imported image 26eb639e-c112-11e4-ada8-ffb116cec9d8 (cloudapi@master-20150302T192040Z-g24cfb4d)
-    Downloading image f1b6b7e0-bd8e-11e4-8ae4-d3a190985286 (amonredis@master-20150226T080620Z-g4bbca77)
-    Imported image 1ccefc72-bd8e-11e4-b163-df2139248aba (assets@master-20150226T080059Z-g6012d50)
-    Downloading image 156647c6-c174-11e4-804f-73c1ba84c2f5 (sdc@master-20150303T070134Z-g997645e)
-    Imported image cf267ca8-bd91-11e4-941b-5f26cf29c0e5 (sapi@master-20150226T082326Z-g14fa2e4)
-    Imported image f1b6b7e0-bd8e-11e4-8ae4-d3a190985286 (amonredis@master-20150226T080620Z-g4bbca77)
-    Imported image 156647c6-c174-11e4-804f-73c1ba84c2f5 (sdc@master-20150303T070134Z-g997645e)
-    Imported image 6ab73f54-bd8d-11e4-83c2-8b81723a3436 (manta-deployment@master-20150226T075408Z-gc8d74a9)
-    Installing image 85157ca0-bd90-11e4-9016-477613964961 (papi@master-20150226T081600Z-g7905a77)
-    Reprovisioning papi VM f36bf6cf-fd0e-457f-8965-edda37e45189
-    Wait (60s) for papi instance f36bf6cf-fd0e-457f-8965-edda37e45189 to come up
-    Installing image f1b6b7e0-bd8e-11e4-8ae4-d3a190985286 (amonredis@master-20150226T080620Z-g4bbca77)
-    Reprovisioning amonredis VM 61d1c261-f7d7-42b6-aa57-64b5660cd5e0
-    Wait (60s) for amonredis instance 61d1c261-f7d7-42b6-aa57-64b5660cd5e0 to come up
-    Installing image 78c965a4-bd8d-11e4-a1bc-2701505c414d (amon@master-20150226T075046Z-g58ecaf8)
-    Reprovisioning amon VM 79681927-a86b-48d7-b65a-d9a069785d25
-    Wait (60s) for amon instance 79681927-a86b-48d7-b65a-d9a069785d25 to come up
-    Installing image 970715a8-c16f-11e4-9fae-3f1afe2afdee (cnapi@master-20150303T063214Z-g0c8f661)
-    Reprovisioning cnapi VM 458f3ec3-eb36-43ba-8833-bfbfba91f88b
-    Wait (60s) for cnapi instance 458f3ec3-eb36-43ba-8833-bfbfba91f88b to come up
-    Installing image 0c589eba-c177-11e4-9be7-b3bfec9244fb (dhcpd@master-20150303T072519Z-g54ca866)
-    Reprovisioning dhcpd VM 3e60a5ce-438d-4497-aa43-7cf6bd8503dd
-    Wait (60s) for dhcpd instance 3e60a5ce-438d-4497-aa43-7cf6bd8503dd to come up
-    Installing image aaba7218-bd8f-11e4-81df-573bd1d77302 (redis@master-20150226T081228Z-g0d6e5b9)
-    Reprovisioning redis VM aba66c50-cdfe-413a-8a10-479a2ca302dd
-    Wait (60s) for redis instance aba66c50-cdfe-413a-8a10-479a2ca302dd to come up
-    Installing image 1ac995dc-bd8d-11e4-89ed-0b706fd9fcfd (napi@master-20150226T074910Z-gbc4a87c)
-    Reprovisioning napi VM 9f3c4cf5-82f6-4dfb-9c85-48129560670e
-    Wait (60s) for napi instance 9f3c4cf5-82f6-4dfb-9c85-48129560670e to come up
-    Installing image 959b6076-bd90-11e4-ae05-6fc0ef56abd1 (workflow@master-20150226T081626Z-g2a160f5)
-    Reprovisioning workflow VM cfd7978b-d6e1-49d3-9673-8265704a1b87
-    Wait (60s) for workflow instance cfd7978b-d6e1-49d3-9673-8265704a1b87 to come up
-    Installing image 1fa4af12-bd90-11e4-b420-dfe5cc431999 (fwapi@master-20150226T081200Z-g8601d56)
-    Reprovisioning fwapi VM ec50f64c-2c4c-44b0-8050-f371d6bb1e49
-    Wait (60s) for fwapi instance ec50f64c-2c4c-44b0-8050-f371d6bb1e49 to come up
-    Installing image 156647c6-c174-11e4-804f-73c1ba84c2f5 (sdc@master-20150303T070134Z-g997645e)
-    Reprovisioning sdc VM d5ae7694-6ad6-4a2c-9675-f19fb075314f
-    Wait (60s) for sdc instance d5ae7694-6ad6-4a2c-9675-f19fb075314f to come up
-    Installing image 3862bfbc-c1d7-11e4-8dc0-7b7e574c78b0 (adminui@master-20150303T185212Z-gca114bd)
-    Reprovisioning adminui VM 75d74108-91a3-4958-a7d8-dedc6feb9cfb
-    Wait (60s) for adminui instance 75d74108-91a3-4958-a7d8-dedc6feb9cfb to come up
-    Installing image 2752e4fc-bf0e-11e4-8de7-73e39bcc2a12 (vmapi@master-20150228T054919Z-gb09aea6)
-    Reprovisioning vmapi VM ead80fc7-7688-4290-9504-440389f836d7
-    Wait (60s) for vmapi instance ead80fc7-7688-4290-9504-440389f836d7 to come up
-    Update "assets" VM b85bf7d8-0473-46eb-845b-967d201b6e85 user-script
-    Installing image 1ccefc72-bd8e-11e4-b163-df2139248aba (assets@master-20150226T080059Z-g6012d50)
-    Reprovisioning assets VM b85bf7d8-0473-46eb-845b-967d201b6e85
-    Wait (60s) for assets instance b85bf7d8-0473-46eb-845b-967d201b6e85 to come up
-    Installing image 5231245e-bd8d-11e4-9db9-07ccad0e008e (imgapi@master-20150226T074935Z-gf69e4d4)
-    Reprovisioning imgapi VM 52aca9c6-8d72-4df5-b44c-e9c496e4a510
-    Wait (60s) for imgapi instance 52aca9c6-8d72-4df5-b44c-e9c496e4a510 to come up
-    Disabling imgapi service
-    Running IMGAPI migration-008-new-storage-layout.js
-    Running IMGAPI migration-009-backfill-archive.js
-    Running IMGAPI migration-010-backfill-billing_tags.js
-    Running IMGAPI migration-011-backfill-published_at.js
-    Enabling imgapi service
-    Running vmadm lookup to get local manatee
-    Running manatee-adm to find primary manatee
-    Creating ufds buckets backup 20150303T201054479.sql
-    Copying backup file to HeadNode
-    Moving backup file to /var/sdcadm/ufds-backup
-    Installing image bfc5dac8-bd8d-11e4-a03b-67835b902758 (ufds@master-20150226T075650Z-g9a66af3)
-    Reprovisioning ufds VM dbb49dbf-b79d-4999-8b3a-00e8e48f6043
-    Wait (60s) for ufds instance dbb49dbf-b79d-4999-8b3a-00e8e48f6043 to come up
-    Installing image 675087da-beb4-11e4-a9b3-8f914417afff (manta-moray@master-20150227T190616Z-gf7607c7)
-    Provisioning Temporary moray VM moray0tmp
-    Wait (sleep) for moray instance a9a4eb48-67b2-4f09-9a43-0bcf2a7ed1c5 to come up
-    Running vmadm lookup to get tmp instance UUID
-    Checking if tmp instace a9a4eb48-67b2-4f09-9a43-0bcf2a7ed1c5 services have errors
-    Waiting until a9a4eb48-67b2-4f09-9a43-0bcf2a7ed1c5 instance is in DNS
-    Disabling registrar on VM 1c3d73be-4e9d-4aac-9a92-8ee85c6edf22
-    Wait until VM 1c3d73be-4e9d-4aac-9a92-8ee85c6edf22 is out of DNS
-    Reprovisioning moray VM 1c3d73be-4e9d-4aac-9a92-8ee85c6edf22
-    Wait (60s) for moray instance 1c3d73be-4e9d-4aac-9a92-8ee85c6edf22 to come up
-    Waiting until 1c3d73be-4e9d-4aac-9a92-8ee85c6edf22 instance is in DNS
-    Disabling registrar on VM a9a4eb48-67b2-4f09-9a43-0bcf2a7ed1c5
-    Wait until VM a9a4eb48-67b2-4f09-9a43-0bcf2a7ed1c5 is out of DNS
-    Stop tmp VM a9a4eb48-67b2-4f09-9a43-0bcf2a7ed1c5
-    Destroying tmp VM a9a4eb48-67b2-4f09-9a43-0bcf2a7ed1c5 (moray0tmp)
-    Get SAPI current mode
-    Installing image cf267ca8-bd91-11e4-941b-5f26cf29c0e5 (sapi@master-20150226T082326Z-g14fa2e4)
-    Updating 'sapi-url' in SAPI
-    Updating 'sapi-url' in VM c9949452-cae6-44c5-826f-13b7f4d1cb1b
-    Verifying if we are on an HA setup
-    Provisioning Temporary sapi VM sapi0tmp
-    Wait (sleep) for sapi instance af8015de-24be-41b3-b1af-b94d337bdc4c to come up
-    Running vmadm lookup to get tmp instance UUID
-    Checking if tmp instace af8015de-24be-41b3-b1af-b94d337bdc4c services have errors
-    Waiting until af8015de-24be-41b3-b1af-b94d337bdc4c instance is in DNS
-    Disabling registrar on VM c9949452-cae6-44c5-826f-13b7f4d1cb1b
-    Wait until VM c9949452-cae6-44c5-826f-13b7f4d1cb1b is out of DNS
-    Reprovisioning sapi VM c9949452-cae6-44c5-826f-13b7f4d1cb1b
-    Wait (60s) for sapi instance c9949452-cae6-44c5-826f-13b7f4d1cb1b to come up
-    Waiting until c9949452-cae6-44c5-826f-13b7f4d1cb1b instance is in DNS
-    Disabling registrar on VM af8015de-24be-41b3-b1af-b94d337bdc4c
-    Wait until VM af8015de-24be-41b3-b1af-b94d337bdc4c is out of DNS
-    Stop tmp VM af8015de-24be-41b3-b1af-b94d337bdc4c
-    Destroying tmp VM af8015de-24be-41b3-b1af-b94d337bdc4c (sapi0tmp)
-    Verifying manatee target version
-    Target version is new enough to avoid setting SAPI back to proto mode
-    get local manatee
-    Running manatee-adm status in local manatee
-    Getting Compute Nodes Information for manatee VMs
-    Getting SDC's moray vms from VMAPI
-    Installing image 6e9b95ec-beb5-11e4-806b-6fc4218e1009 (sdc-postgres@master-20150227T191223Z-gad45608)
-    Disabling moray services
-    Checking manatee-adm version
-    Reprovisioning "primary" manatee
-    Reprovisioning 87686cf6-5211-471f-867c-0ae221911043 VM 564deee0-9ceb-4e0b-999c-e50f74a7b6f3
-    Wait (60s) for manatee instance 87686cf6-5211-471f-867c-0ae221911043 to come up
-    Ensure ONE NODE WRITE MODE
-    Enabling moray services
-    Waiting (2mins) for moray services to be up
-    Looking for zk leader
-    Installing image 30fe9576-bd8f-11e4-9066-63d665bc96ce (manta-nameservice@master-20150226T080343Z-gba090a8)
+    ...
     Updating ZK leader
     Reprovisioning fbbafcc4-b34e-4365-b129-c7ca3c1b7115 VM 564deee0-9ceb-4e0b-999c-e50f74a7b6f3
     Wait (sleep) for binder instance fbbafcc4-b34e-4365-b129-c7ca3c1b7115 to come up
@@ -630,17 +460,26 @@ Now that you have backed up the Manatee zone, download and install the updated i
     Wait (60s) for mahi instance 0ce580dd-725b-4f80-a341-963359802e90 to come up
     Updated successfully (elapsed 2297s).
     ```
-
-4. To confirm health, run `sdcadm check-health`.
+1. To obtain other miscellaneous updates:
+    ```bash
+    [root@headnode (coal-1) ~]# sdcadm experimental update-other
+    Updating maintain_resolvers for all vm services
+    Updating DNS domain service metadata for papi, mahi
+    Updating DNS domain SDC application metadata for papi, mahi
+    No need to update region_name for this data center
+    sapi_domain already present on node.config
+    Done.
+    ```
+1. To confirm health, run `sdcadm health`.
 
 ### Updating the Platform
 
-[Triton SmartOS](https://smartos.org/) is the operating system, or the platform. You'll find occasional references to SDC in the code, which is an abbreviate for one of the previous versions of the platform. 
-
-You may update the platform image (PI) at the same time you install SDC updates. You might not reboot the head node or compute nodes (CN) right away. You will likely install a new PI more frequently than the rest of Triton, so that on reboot you benefit from the most reliable and secure OS.
+[Triton SmartOS](https://smartos.org/) is the operating system, or the platform.
+You may update the platform image (PI) at the same time you install Triton
+updates. You need not reboot the head node or compute nodes (CN) right
+away.
 
 1. To download and install the latest platform image:
-
     ```bash
     [root@headnode (coal-1) ~]# sdcadm platform install --latest
     Downloading platform 20150312T155347Z (image 6564370e-da8f-4c40-b66e-9c4ba21e9f50) to /var/tmp/platform-master-20150312T155347Z.tgz
@@ -659,9 +498,7 @@ You may update the platform image (PI) at the same time you install SDC updates.
     Updating 'latest' link
     Installation complete
     ```
-
-2. To update the head node to use the latest platform image, run:
-
+1. To update the head node to use the latest platform image, run:
     ```bash
     [root@headnode (coal-1) ~]# sdcadm platform assign --latest --all
     updating headnode 564dc5bc-f596-6234-8041-bab9c76c2509 to 20150205T055835Z
@@ -669,37 +506,30 @@ You may update the platform image (PI) at the same time you install SDC updates.
     Updating booter cache for servers
     Done updating booter caches
     ```
-	This command assigns the latest platform image to the head node, which is included with the `--all` servers option on the `sdc platform assign` command.
-
-3. To confirm the update:
-
+    This command assigns the latest platform image to the head node,
+    which is included with the `--all` servers option on the
+    `sdcadm platform assign` command.
+1. To confirm the update:
     ```bash
     [root@headnode (coal-1) ~]# sdcadm platform list
     VERSION           CURRENT_PLATFORM  BOOT_PLATFORM  LATEST
     20150219T182356Z  0                 1              true
     20150205T055835Z  1                 0              false
     ```
-
-4. To reboot the head node:
-
+1. To reboot the head node:
     ```bash
     [root@headnode (coal-1) ~]# reboot
     reboot: Halting 22 zones.
     Connection to 10.88.88.200 closed by remote host.
     ```
-
-5. To log in again and confirm the platform version:
-
+1. To log in again and confirm the platform version:
     ```bash
     % ssh root@10.88.88.200
     Password:
     Last login: Thu Feb 19 21:04:24 2015 from 10.88.88.1
      - SmartOS Live Image v0.147+ build: 20150219T182356Z
     ```
-
-5. To confirm health: `sdc-healthcheck`
-
-Repeat these steps until the state of all services change from `error` or `svc-err` to `online`. Once you are finished, you have successfully updated CoaL.
+1. To confirm health: `sdcadm health`
 
 ## Related Documentation
 

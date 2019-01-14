@@ -127,7 +127,7 @@ the [Joyent Manufacturing Database](https://docs.joyent.com/private-cloud/hardwa
 To install Triton, first download the latest release image:
 
 ```bash
-curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/usb-latest.tgz
+curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/coal-latest.tgz
 ```
 
 Once you have downloaded the latest release image, you will need to
