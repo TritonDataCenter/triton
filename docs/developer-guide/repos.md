@@ -146,3 +146,5 @@ The other repos are used by one of the other repos above:
 * [sdc-designation](https://github.com/joyent/sdc-designation): Compute node designation library
 * [sdc-wf-shared](https://github.com/joyent/sdc-wf-shared): SmartDataCenter workflow shared code.
 * [cloud-tycoon](https://github.com/joyent/cloud-tycoon): DC simulation package
+* [node-triton-netconfig](https://github.com/joyent/node-triton-netconfig): A module to help manage the network configuration of a trition datacenter
+
