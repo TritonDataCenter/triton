@@ -5,7 +5,7 @@
 #
 
 #
-# Copyright (c) 2014, Joyent, Inc.
+# Copyright (c) 2018, Joyent, Inc.
 #
 
 #
@@ -18,6 +18,7 @@ RAMSEY = node_modules/.bin/ramsey
 MD_FILES = \
 	docs/developer-guide/repos.md
 
+CLEAN_FILES += build/repos.json
 
 
 include ./tools/mk/Makefile.defs
@@ -36,13 +37,13 @@ docs: $(MD_FILES)
 docs/developer-guide/repos.md: $(RAMSEY) docs/developer-guide/repos.md.in build/repos.json
 	$(RAMSEY) -d build -j repos.json "$@.in" "$@"
 
+JSON_SCRIPT = 'var self = this; \
+	this.name = /([^:/]+).git$$/.exec(this.git)[1]; \
+	this.url = "https://github.com/joyent/" + this.name; \
+	(this.tags || ["none"]).forEach(function (t) { self[t] = true; });'
+
 build/repos.json: build etc/repos.json
-	$(JSON) -f ./etc/repos.json -e ' \
-	    var self = this; \
-	    this.name = /([^:/]+).git$$/.exec(this.git)[1]; \
-	    this.url = "https://github.com/joyent/" + this.name; \
-	    (this.tags || ["none"]).forEach(function (t) { self[t] = true; }); \
-	    ' > "$@"
+	$(JSON) -f ./etc/repos.json -e $(JSON_SCRIPT) > "$@"
 
 build:
 	mkdir -p "$@"
