@@ -25,7 +25,7 @@ are not appropriate for production deployments.
 ## Minimum Requirements
 
 The minimum requirements for a good CoaL experience are a Mac with 16 GB RAM and
-an SSD with 45 GB disk available.
+an SSD with 45 GB of disk space available.
 
 ## Overview
 
@@ -87,12 +87,12 @@ To extract the CoaL virtual machine:
 
 ```bash
 $ tar -zxvf coal-latest.tgz -C ~/Documents/Virtual\ Machines.localized
-x root.password.20140911t161518z
-x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/
-x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmx
-x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/zpool.vmdk
-x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmdk
-x coal-master-20140911T194415Z-g1a445f5-4gb.vmwarevm/4gb.img
+x root.password.20190122T132623z
+x coal-master-20190122T132623Z-g1a445f5-4gb.vmwarevm/
+x coal-master-20190122T132623Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmx
+x coal-master-20190122T132623Z-g1a445f5-4gb.vmwarevm/zpool.vmdk
+x coal-master-20190122T132623Z-g1a445f5-4gb.vmwarevm/USB-headnode.vmdk
+x coal-master-20190122T132623Z-g1a445f5-4gb.vmwarevm/4gb.img
 ...
 ```
 
@@ -109,53 +109,42 @@ To configure memory:
 
 1. Select **Virtual Machine** and then click **Settings**.  
    The **USB-headnode Settings** dialog displays.
-1. Click **Processes & Memory**. Change the memory settings, if needed.  
+2. Click **Processes & Memory**. Change the memory settings, if needed.  
    **Note**: The default memory is set to 8192 MB. You can change this setting,
    but be sure to leave Mac OS X with at least 8 GB to avoid resource allocation
    problems. If you are not using the VMware GUI, you can change the default
    memory in the CoaL `USB-headnode.vmx` file. You can set memsize = "6144",
    or according to your preference.
-1. If you have changed the memory settings, restart the VM.
+3. If you have changed the memory settings, restart the VM.
 
-The GRUB boot loader menu displays.
-
-## GRUB menu navigation alert
-
-GRUB intervenes in the boot process, enabling you to specify the environment to
-load. The default is for the console to use ttyb. This is fine for production but
-not for our use.
-
-Immediately after highlighting **Live 64-bit** using the arrow keys, press **c**
-quickly in order to direct the console to use **vga**.
-
-![CoaL Grub Boot Menu](../img/coal-grub-menu.png)
-
-If you are too slow, the **Live 64-bit** option loads instead of the GRUB command
-line. If needed, press **Esc** to redirect the console back to the GRUB menu and
-try again.
 
 ## Booting the head node
 
-When you are prompted with the GRUB menu:
+1. When you are prompted with the Loader menu press **'5'** to go to the Boot
+Options menu.
 
-1. Press the down arrow key to highlight **Live 64-bit**.
-1. Quickly press **c** to load the GRUB command line.  
-   If you miss this step, press **Esc** to redirect the console back to the GRUB
-   menu and try again.
-1. At the **GRUB command prompt**, type `variable os_console vga`, and press **Enter**.
-1. Press **Esc** to return to the GRUB menu.
-1. Press **Enter** to boot **Live 64-bit**.
+     ![CoaL Loader Main Menu](../img/coal-loader-main-menu.png)
+
+     By default, the OS will redirect the console to ttyb which is fine
+     for production but needs to be changed for CoaL.  Once in the Boot
+     Options menu, press **'2'** to cycle through the choices for **OS Console**
+     until the value is **'text'**, as shown below:
+
+     ![CoaL Loader Boot Options Menu](../img/coal-loader-boot-options.png)
+
+2. Press **'1'** to return to the main menu.
+
+3. Press **'2'** to boot from the USB stick.
+
 
 **Note**: If you see a blank screen with a cursor at the top left while the head
-node is booting, you may have forgotten to redirect the console. If so, press
-`Esc` to return to the GRUB menu.
-
+node is booting, you may have forgotten to redirect the console.
 ![cursor_only](../img/coal-only-cursor.png)
 
 **Note**: Because you are in a virtual environment without Intel VT-x support
-enabled, you'll receive cpu and kvm warnings. You can safely ignore them:
+enabled, you'll receive CPU warnings. You can safely ignore them:
 
-![kvm warning on boot](../img/coal-boot-warnings.png)
+![CPU warning on boot](../img/coal-boot-warnings.png)
 
 ## Configuring the head node
 
@@ -221,15 +210,14 @@ A reboot notification displays when the next phase of installation completes:
 
 ![Reboot message shown on console.](../img/coal-will-reboot.png)
 
-The final phase of installation, setup, is the longest but does not display its
-progress. You may see either just a cursor on the login page or a login prompt.
+After the system reboots, images and manifests from the USB key are copied into
+a cache in the zones ZFS pool.  This process can take several minutes:
 
-A message on the console welcomes you to Triton. After some time, a
-**preparing for setup** message displays:
+![Creating the USB cache.](../img/coal-usbkey-cache.png)
 
-![preparing for setup on console.](../img/coal-preparing-for-setup.png)
-
-When the installation completes, **completing setup** displays.
+The final and longest phase of installation involves importing and provisioning
+the Triton service images.  When the installation completes, **Setup complete**
+displays.
 
 ![Setup complete on console.](../img/coal-setup-complete.png)
 
@@ -436,7 +424,8 @@ minutes depending on how many services have new images.
     config-agent refresh for all the running servers
     Done.
     ```
-1. To update all the services, run the command below. This step can take up to 45 minutes depending on how many services have new images.
+1. To update all the services, run the command below. This step can take up to
+45 minutes depending on how many services have new images.
 
     ```bash
     [root@headnode (coal-1) /var/tmp]# sdcadm update --all -y

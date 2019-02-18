@@ -84,6 +84,13 @@
             "name": "grafana"
         },
         {
+            "name": "ipxe",
+            "labels": {
+                "release": true,
+                "mg": "ipxe"
+            }
+        },
+        {
             "name": "java-triton"
         },
         {
@@ -1053,7 +1060,6 @@
         "image-converter",
         "imagetools",
         "innovator-workshop",
-        "ipxe",
         "java-fast-md5",
         "java-http-signature",
         "java-manta",

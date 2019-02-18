@@ -254,13 +254,6 @@
     ]
   },
   {
-    "git": "git@github.com:joyent/sdcboot.git",
-    "desc": "SDC FDUM environment",
-    "tags": [
-      "build"
-    ]
-  },
-  {
     "git": "git@github.com:joyent/sdc-ufds.git",
     "desc": "SDC LDAP Server",
     "tags": [
@@ -505,6 +498,13 @@
   {
     "git": "git@github.com:joyent/mountain-gorilla.git",
     "desc": "Builder of all the SDC bits.",
+    "tags": [
+      "build"
+    ]
+  },
+  {
+    "git": "git@github.com:joyent/ipxe.git",
+    "desc": "SDC iPXE implementation",
     "tags": [
       "build"
     ]
