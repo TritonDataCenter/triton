@@ -501,16 +501,6 @@
             "name": "sdc-bunyan-serializers"
         },
         {
-            "name": "sdc-cloud-analytics",
-            "labels": {
-                "release": true,
-                "tritonservice": "ca",
-                "image": "ca",
-                "mg": "ca",
-                "vm": true
-            }
-        },
-        {
             "name": "sdc-cloudapi",
             "labels": {
                 "release": true,
@@ -908,6 +898,9 @@
             }
         },
         {
+            "name": "triton-logarchiver"
+        },
+        {
             "name": "triton-mockcloud",
             "labels": {
                 "release": true,
@@ -979,6 +972,7 @@
         "commons-vfs-manta",
         "conch",
         "conch-docs",
+        "conch-engineering-planning",
         "conch-report-card",
         "conch-reporter-smartos",
         "conch-shell",
@@ -993,7 +987,6 @@
         "cr-update-reviewers",
         "ctf2json",
         "daggr",
-        "dcim_agent",
         "debian-image-tests",
         "debian-lx-brand-image-builder",
         "docker-machine-driver-triton",
@@ -1183,7 +1176,6 @@
         "node-snmpjs",
         "node-splitduplex",
         "node-stackvis",
-        "node-tar-1",
         "node-timefilter",
         "node-wfq",
         "node-zfile",
@@ -1223,6 +1215,7 @@
         "rust-cueball",
         "rust-fast",
         "rust-manta",
+        "rust-muppet",
         "s3-manta-bridge",
         "sdc-hammer",
         "sdc-vmtools",
