@@ -99,6 +99,9 @@
             }
         },
         {
+            "name": "kang"
+        },
+        {
             "name": "keyapi"
         },
         {
@@ -144,6 +147,9 @@
         },
         {
             "name": "node-amqp-joyent"
+        },
+        {
+            "name": "node-amqpsnoop"
         },
         {
             "name": "node-aperture"
@@ -198,6 +204,9 @@
         },
         {
             "name": "node-forkexec"
+        },
+        {
+            "name": "node-getopt"
         },
         {
             "name": "node-imgmanifest"
@@ -567,9 +576,6 @@
             }
         },
         {
-            "name": "sdc-events"
-        },
-        {
             "name": "sdc-firewaller-agent",
             "labels": {
                 "release": true,
@@ -898,7 +904,12 @@
             }
         },
         {
-            "name": "triton-logarchiver"
+            "name": "triton-logarchiver",
+            "labels": {
+                "tritonservice": "logarchiver",
+                "mg": "logarchiver",
+                "vm": true
+            }
         },
         {
             "name": "triton-mockcloud",
@@ -1076,6 +1087,7 @@
         "manta-marlin",
         "manta-marlin-dashboard",
         "manta-mdshovel",
+        "manta-mdu",
         "manta-medusa",
         "manta-minnow",
         "manta-mlive",
@@ -1130,6 +1142,7 @@
         "minecrab",
         "minio",
         "mjob-cost",
+        "mmlog",
         "mock-docker-registry",
         "mod_usdt",
         "moray-etl-jsonb",
@@ -1174,6 +1187,7 @@
         "node-restify",
         "node-skinner",
         "node-snmpjs",
+        "node-spawn-async",
         "node-splitduplex",
         "node-stackvis",
         "node-timefilter",
