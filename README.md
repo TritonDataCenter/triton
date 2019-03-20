@@ -18,7 +18,7 @@ data centers. With an emphasis on ease of installation and operation, Triton is
 proven at scale: Triton powers the [Triton
 Cloud](https://www.joyent.com/datacenter/docs/cloud) and private data centers
 ([Triton Enterprise]( https://www.joyent.com/datacenter/docs/enterprise)
-worldwide.
+worldwide).
 
 This repository provides documentation for the overall Triton project and
 pointers to the other repositories that make up a complete Triton deployment.
