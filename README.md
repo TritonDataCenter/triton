@@ -5,7 +5,7 @@
 -->
 
 <!--
-    Copyright (c) 2016, Joyent, Inc.
+    Copyright 2019, Joyent, Inc.
 -->
 
 
@@ -68,9 +68,10 @@ For more details, see:
 
 Community discussion about Triton DataCenter happens in two main places:
 
-* The *sdc-discuss* mailing list. Once you [subscribe to the list](https://www.listbox.com/subscribe/?list_id=247449),
-  you can send mail to the list address: sdc-discuss@lists.smartdatacenter.org.
-  The mailing list archives are also [available on the web](https://www.listbox.com/member/archive/247449/=now).
+* The *sdc-discuss*
+  [mailing list](https://smartdatacenter.topicbox.com/groups/sdc-discuss).
+  If you wish to send mail to the list you'll need to join, but you can view
+  and search the archives online without being a member.
 
 * In the *#smartos* IRC channel on the [Freenode IRC network](https://freenode.net/).
 
