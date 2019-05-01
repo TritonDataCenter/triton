@@ -16,7 +16,7 @@ section in the glossary](./glossary.md#service) for details.
 | [adminui](https://docs.joyent.com/private-cloud/install/operations-setup) | [sdc-adminui](https://github.com/joyent/sdc-adminui) | Triton Operations Portal |
 | [amon](https://github.com/joyent/sdc-amon/blob/master/docs/index.md) | [sdc-amon](https://github.com/joyent/sdc-amon) | Triton monitoring and alarming |
 | amonredis | [sdc-amonredis](https://github.com/joyent/sdc-amonredis) | Internal infrastructure for the Amon service |
-| [binder](https://github.com/joyent/binder/blob/master/docs/index.md) | [binder](https://github.com/joyent/binder) | Triton/Manta DNS server over Apache ZooKeeper |
+| binder | [binder](https://github.com/joyent/binder) | Triton/Manta DNS server over Apache ZooKeeper |
 | [ca](https://github.com/joyent/sdc-cloud-analytics/blob/master/docs/index.md) | [sdc-cloud-analytics](https://github.com/joyent/sdc-cloud-analytics) | Triton internal API for gathering real-time metrics across the datacenter |
 | [cloudapi](https://github.com/joyent/sdc-cloudapi/blob/master/docs/index.md) | [sdc-cloudapi](https://github.com/joyent/sdc-cloudapi) | Triton Public HTTP API |
 | [cnapi](https://github.com/joyent/sdc-cnapi/blob/master/docs/index.md) | [sdc-cnapi](https://github.com/joyent/sdc-cnapi) | Triton Compute Node API |
@@ -62,7 +62,7 @@ compute nodes).
 | [hagfish-watcher](https://github.com/joyent/sdc-hagfish-watcher/blob/master/docs/index.md) | [sdc-hagfish-watcher](https://github.com/joyent/sdc-hagfish-watcher) | gz | Records telemetry about customer workloads for usage monitoring and billing purposes. |
 | hermes-actor | [sdc-hermes](https://github.com/joyent/sdc-hermes) | gz | Uploads Triton logs to Manta |
 | net-agent | [sdc-net-agent](https://github.com/joyent/sdc-net-agent) | gz | Next generation agent for updating NAPI with CN network data. |
-| [registrar](https://github.com/joyent/registrar/blob/master/docs/index.md) | [registrar](https://github.com/joyent/registrar) | vm | Registers the local host with *binder* for Triton internal DNS. |
+| [registrar](https://github.com/joyent/registrar/blob/master/README.md) | [registrar](https://github.com/joyent/registrar) | vm | Registers the local host with *binder* for Triton internal DNS. |
 | smartlogin | [sdc-smart-login](https://github.com/joyent/sdc-smart-login) | gz | The set of components that enable SSHd on VMs to resolve public keys in UFDS. |
 | varpd | [varpd](https://github.com/joyent/illumos-joyent/tree/master/usr/src/cmd/varpd) | gz | Provides virtual ARP services for overlay networks by querying Portolan |
 | vm-agent | [sdc-vm-agent](https://github.com/joyent/sdc-vm-agent) | gz | Next generation agent for updating VMAPI with VM data from a CN. |
