@@ -496,13 +496,6 @@
     "desc": "SmartDataCenter workflow shared code."
   },
   {
-    "git": "git@github.com:joyent/mountain-gorilla.git",
-    "desc": "Builder of all the SDC bits.",
-    "tags": [
-      "build"
-    ]
-  },
-  {
     "git": "git@github.com:joyent/ipxe.git",
     "desc": "SDC iPXE implementation",
     "tags": [
@@ -547,5 +540,9 @@
     "tags": [
       "docs"
     ]
+  },
+  {
+    "git": "git@github.com:joyent/node-triton-netconfig.git",
+    "desc": "A module to help manage the network configuration of a trition datacenter"
   }
 ]

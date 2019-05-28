@@ -150,9 +150,6 @@
             }
         },
         {
-            "name": "mountain-gorilla"
-        },
-        {
             "name": "node-amqp-joyent"
         },
         {
