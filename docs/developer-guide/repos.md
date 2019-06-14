@@ -109,7 +109,6 @@ Build tools are used for creating the zone images:
 * [sdcnode](https://github.com/joyent/sdcnode): Tools for creation of prebuilt node tarballs for SDC components.
 * [sdc-headnode](https://github.com/joyent/sdc-headnode): Repository for building headnode images for SDC, and the intial setup and configuration of the headnode itself
 * [sdc-scripts](https://github.com/joyent/sdc-scripts): Common scripts for configuring and setting up SDC zones.
-* [mountain-gorilla](https://github.com/joyent/mountain-gorilla): Builder of all the SDC bits.
 * [ipxe](https://github.com/joyent/ipxe): SDC iPXE implementation
 
 
@@ -147,4 +146,3 @@ The other repos are used by one of the other repos above:
 * [sdc-wf-shared](https://github.com/joyent/sdc-wf-shared): SmartDataCenter workflow shared code.
 * [cloud-tycoon](https://github.com/joyent/cloud-tycoon): DC simulation package
 * [node-triton-netconfig](https://github.com/joyent/node-triton-netconfig): A module to help manage the network configuration of a trition datacenter
-

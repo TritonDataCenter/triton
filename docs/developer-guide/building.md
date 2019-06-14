@@ -1,530 +1,255 @@
-# Building SDC
+---
+Building Triton and Manta
+---
+
+## Introduction
+
+[Triton](https://github.com/joyent/triton/#triton-datacenter) and
+[Manta](https://github.com/joyent/manta#manta-tritons-object-storage-and-converged-analytics-solution)
+is composed of an operating system, a series of components which run the
+services that make up the system, and a set of administrative tools.
+Many of the components are deployed inside dedicated SmartOS zones.
+You may find the [architecture diagram](https://github.com/joyent/triton/blob/master/docs/developer-guide/architecture.md) useful to refer to.
+
+All of that software can be built directly from
+[the sources on github](https://github.com/joyent/triton/blob/master/docs/developer-guide/repos.md)
+and the resulting components can be assembled into an image that you can install
+on your own hardware.
+
+This guide tells you how to get started.
+
+If you're working on Manta, or are interested about other aspects of the build
+system, see the [Manta dev notes](https://github.com/joyent/manta/blob/master/docs/dev-notes.md).
 
 ## Prerequisites
 
  * we assume you have npm/node installed on your workstation
  * we assume you have git installed on your workstation
  * we assume you have json (npm install -g json) installed on your workstation
- * we assume you understand the basics of SDC, if not please start with [the
-   SmartDataCenter README](https://github.com/joyent/sdc#readme)
+ * we assume you understand the basics of Triton, if not please start with [the
+   Triton README](https://github.com/joyent/triton#readme)
  * we assume you have your SSH keys loaded in your ssh-agent when connecting
    to build zones via SSH.
 
 ## Decisions to Make
 
-To build SDC components you to decide first make a couple choices:
+To build Triton and Manta components you first need to make some choices:
 
- * which components are you going to build?
- * where are you going to build components?
+ * [which components are you going to build?](#components)
+ * [where are you going to build those components?](#buildzone)
 
-### Components
+<a name="components"></a>
 
-If you are building any of the following components:
+## Components
 
- * manta-manatee
- * sdc-manatee
- * electric-moray
- * platform
+Many components that make up part of Triton or Manta are formed from a
+`base image` (or `origin image`) installed with a specific set of packages
+from a given pkgsrc release, along with the software that implements the
+services delivered by that component. Some components are services or
+software that run directly on the system, either on the "global zone"
+itself, or installed within other zones.
 
-you will need a sdc-multiarch 13.3.1 build zone. For any other components you
-will need an sdc-smartos 1.6.3. If you want to build *all* components, you'll
-need both.
+The different components have different build zone requirements, since
+different components deploy with different origin images. We require the
+build zone to be running the same pkgsrc release that the component will
+ultimately be deployed with. A build zone is composed of a base image at
+a given pkgsrc release and a set of developer tools.
 
-### Where to build
+The top-level `Makefile` in each component repository includes metadata to
+declare what build zone it needs. The `make validate-buildenv` target in each
+component `Makefile` will determine whether the build zone and environment is
+correctly configured. The `make show-buildenv` will give a short summary of the
+expected build zone.
 
-If you have an account in the Joyent Public Cloud you can build all components
-(except "platform", see "Building the Platform") required to create a working
-SDC headnode in the JPC and have the outputs pushed to Joyent's Manta. This is
-the easiest method for building, but will create several zones (one for each
-zone image built) and store results in Manta, both of which will have billing
-consequences.
+A few components have quite tailored build systems, such as
+[`smartos-live`](https://github.com/joyent/smartos-live#smartos-live-smartos-platform),
+which builds the operating system and associated services (collectively known
+as the `platform`) or
+[`sdc-headnode`](https://github.com/joyent/sdc-headnode/#sdc-headnode),
+which assembles components into a bootable USB, iso or vmware image.
 
-If instead you would like to build components in a local SDC install or in a
-downloaded CoaL image, you will have some additional setup to do before you can
-build. In this case, see the section "Setting up an SDC for builds".
+For the most part though, components share the same `Makefile` rules to make
+it easier for developers to build any component.
 
-NOTE: Even if you do not use JPC and output your builds to Manta, you will still
-need an account in JPC in order to do a build. This is because dependent
-components will still need to be downloaded from Manta.
+<a name="buildzone"></a>
 
-## Setting up your workspace for driving builds
+## Where to build
 
-### Clone MG (mountain-gorilla)
+Triton/Manta components are built inside build zones that run on
+either of two platforms, Triton or SmartOS.
 
-On your local workstation (tested with OS X, but should work elsewhere) you can
-run:
+The tooling to create build zones differs across these platforms, so please
+read **[Build Zone Setup For Manta and Triton](./build-zone-setup.md)** to
+get started.
 
-```
-git clone git@github.com:joyent/mountain-gorilla.git MG && cd MG
-```
-
-Most of the rest of these instructions can be performed from within this
-directory.
-
-After cloning, you should run:
-
-```
-npm install
-```
-
-in this directory to setup the dependencies. Once you've done that, you can also
-run:
-
-```
-export PATH=${PATH}:$(pwd)/node_modules/smartdc/bin
-```
-
-### Setup your environment variables
-
-This is one of the most critical steps. The environment variables define which
-SDC/manta target/credentials will be used for the rest of setup. You must set
-at least:
-
-```
-export MANTA_USER=<USER>
-export MANTA_KEY_ID=<KEY>
-export MANTA_URL=https://us-east.manta.joyent.com
-export SDC_ACCOUNT=<USER>
-export SDC_KEY_ID=<KEY>
-export SDC_URL=https://us-east-1.api.joyentcloud.com
-```
-
-where <USER> is the name of the JPC/SDC user you want to build with, and <KEY>
-is the SSH fingerprint of the SSH key that you've added for your user.
-
-If you're using CoaL and using the default self-signed certificates for cloudapi
-you will also want to:
-
-```
-export SDC_TESTING=1
-```
-
-otherwise you'll get errors like:
-
-```
-sdc-listpackages: error: undefined
-```
-
-It's possible to use different <USER> values for MANTA_USER and SDC_ACCOUNT if
-you've pointed these at different SDC standups. In that case zones will be
-created using the SDC_ACCOUNT credentials and any files pulled from / pushed to
-Manta will be done using the MANTA_USER's credentials.
-
-If you're *not* using JPC here, you'll want to change the SDC_URL and MANTA_URL
-above to match your local cloudapi and manta respectively.
-
-NOTE: if your SDC is not yet setup, you need to set SDC_URL *after* setting up
-cloudapi in the next section.
-
-
-## Setting up an SDC for builds
-
-NOTE: skip this section (move on to "Setting up the build environment") if
-you're going to build in the JPC.
-
-This section assumes that you have a local SDC/CoaL setup and have access to
-the global zone.
-
-### Setting up cloudapi
-
-If you are using CoaL you won't have cloudapi by default. To add it you can
-run the following from within the MG directory on your workstation:
-
-```
-./tools/setup-cloudapi.sh root@<HN_GZ_IP>
-```
-
-where <HN_GZ_IP> is the IP of the GZ of your headnode. This script will login
-and create the cloudapi zone for you.
-
-If you're using CoaL and don't have any CNs attached to your headnode, you
-will also want to login to the GZ of your CoaL headnode and run:
-
-```
-/zones/$(vmadm lookup -1 tags.smartdc_role=cloudapi)/root/opt/smartdc/cloudapi/tools/coal-setup.sh
-```
-
-in order that you can provision using cloudapi on your headnode.
-
-
-### Setting up imgapi
-
-In order to perform builds you need to add an external interface to the imgapi
-zone. You also need to setup firewall rules (default rules do not allow
-connections on the external interface) that allow your build zone(s) to connect
-to the external interface of imgapi.
-
-Refer to the SDC documentation for details on how to perform the required steps
-here.
-
-Firewall rules can also be setup after the build zone(s) are created, but before
-the first build.
-
-Record the external IP address for imgapi. You'll need this later to set
-SDC_IMGAPI_URL.
-
-For your convienence, here are commands for the previous steps if you are
-running in COAL:
-
-```
-# Add an external nic
-$ /usbkey/scripts/add_external_nic.sh $(vmadm lookup alias=~imgapi)
-# Make sure the job finished successfully
-$ sdc-workflow /jobs/405b26f1-0f6a-4118-aacb-0d89fd777a36 | json -Ha execution
-succeeded
-# Find the external imgapi ip address
-$ sdc-vmapi /vms/$(vmadm lookup alias=~imgapi) | json -H nics | \
-    json -ac 'this.nic_tag === "external"' ip
-10.88.88.3
-```
-
-If you're using your own SDC and do not have imgapi connected to a Manta (eg.
-you're using CoaL) you'll also need to run the following from the GZ of the
-headnode:
-
-```
-echo '{"metadata": {"IMGAPI_ALLOW_LOCAL_CREATE_IMAGE_FROM_VM": true}}' \
-  | sapiadm update $(sdc-sapi /services?name=imgapi | json -H 0.uuid)
-```
-
-### Importing the images
-
-If you are using CoaL the sdc-smartos and sdc-multiarch images should already
-be imported. If for some reason your setup does *not* have these images, you'll
-need to import them. Follow the SDC documentation on importing images. The
-images you need are:
-
- * fd2cc906-8938-11e3-beab-4359c665ac99 / sdc-smartos 1.6.3
- * b4bdc598-8939-11e3-bea4-8341f6861379 / sdc-multiarch 13.3.1
-
-
-## Setting up the build environment(s)
-
-Based on the choices you made earlier (see "Decisions to Make" section) you
-should know which build zones you will need. This section will guide you through
-the creation of the required zones.
-
-### Common steps to creating any build zone
-
-Before you continue, ensure that whatever user you're going to use (whether your
-personal account in JPC or 'admin' or other user in your local SDC/CoaL) has
-your SSH keys added to it. This is important as these instructions will have
-you running sdc-* commands and manta commands which will need these credentials.
-
-If you don't do this you'll see errors like:
-
-```
-sdc-listpackages: error (InvalidCredentials): Invalid key d5:19:78:bb:d8:f5:ba:cd:6b:40:96:3f:5a:23:59:a9
-```
-
-### Find the package uuid for your build package
-
-Whether you're building in JPC or a local SDC you need to find the UUID of the
-package you're going to use to build. To do this (assuming you've setup all the
-variables listed in the previous section correctly) you can run:
-
-```
-sdc-listpackages | json -c "this.name == 'g3-standard-2-smartos'" 0.id
-```
-
-replacing 'g3-standard-2-smartos' with the name of your package if you're not
-using JPC. For CoaL you can use package 'sdc_2048' if you haven't changed the
-default packages. The output of this command will be a UUID which you should
-substitute in commands below. In my case the value was
-'486bb054-6a97-4ba3-97b7-2413d5f8e849' so substitute your own value where you
-see that.  If your SDC_ACCOUNT isn't an administrator, you may not be able
-to find the `sdc_2048` package.  If you are using COAL this is because the
-package's owner_uuid is admin.  To make images public for you ruser to see, run
-this from the global zone:
-
-```
-sdc-papi /packages | json -Ha uuid | while read l; do \
-    echo '{ "owner_uuids": null }' | sdc-papi /packages/$l -X PUT -d@-; done
-```
-
-Note that you probably do *not* want to do this for a public SDC.  You are
-better off creating a new, public package.
-
-### Creating a sdc-smartos 1.6.3 build zone
-
-To create a sdc-smartos 1.6.3 zone you'll want to run:
-
-```
-sdc-createmachine \
-    --dataset fd2cc906-8938-11e3-beab-4359c665ac99 \
-    --package 486bb054-6a97-4ba3-97b7-2413d5f8e849 \
-    --name "build-1.6.3"
-```
-
-changing "486bb054-6a97-4ba3-97b7-2413d5f8e849" to match the UUID you got in
-the previous step. The output should be a JSON object. The only field from
-that which you need to keep track of right now is the 'id' field. This is the
-UUID of the new build VM.
-
-You can run:
-
-```
-sdc-getmachine 721182fa-d4f1-61f6-8fae-9875512356e2 | json state
-```
-
-substituting your own UUID for '721182fa-d4f1-61f6-8fae-9875512356e2' until the
-result is 'running'. Once the VM goes running, you can find its IP using:
-
-```
-sdc-getmachine 721182fa-d4f1-61f6-8fae-9875512356e2 | json ips
-```
-
-(again substituting your own UUID for '721182fa-d4f1-61f6-8fae-9875512356e2').
-
-At this point you'll want to take the IP address which is public (in the case
-there are more than one) and fill that in as <BUILD_ZONE_IP> in the section
-"Preparing build zones for builds" below.
-
-
-### Creating an sdc-multiarch 13.3.1 build zone
+If you're not developing the operating system itself (the `platform` component)
+it is possible to partially develop and test on other platforms (e.g OS X or
+Linux) However, doing complete builds of components requires ZFS tooling that
+is only supported on Triton/SmartOS at the time of writing.
 
-To create a sdc-multiarch 13.3.1 build zone, you should follow the steps for
-creating a sdc-smartos 1.6.3 build zone with the exception that instead of
-dataset "fd2cc906-8938-11e3-beab-4359c665ac99" you should use dataset
-"b4bdc598-8939-11e3-bea4-8341f6861379" and you'll want to use a different name.
-For example:
+One exception to the above is the `sdc-headnode` build which can be built on
+OS X and Linux in addition to Triton or SmartOS.
 
-```
-sdc-createmachine \
-  --dataset b4bdc598-8939-11e3-bea4-8341f6861379 \
-  --package 486bb054-6a97-4ba3-97b7-2413d5f8e849 \
-  --name "build-13.3.1"
-```
-
-### Preparing build zone(s) for builds
-
-For each build zone (1.6.3 or 13.3.1) you want to follow the same set of
-instructions. First you want to do:
-
-```
-./tools/setup-remote-build-zone.sh root@<BUILD_ZONE_IP>
-```
-
-This will produce some output as it logs into your zone, installs some packages
-and generally gets it ready for you to login and start some builds.
-
-### Cloning MG in your build zone
-
-For each build zone (1.6.3 or 13.3.1) you want to clone MG before you start
-building. So SSH to the build zone, then run:
-
-```
-ssh -A root@<BUILD_ZONE_IP> # Use the -A to forward your SSH agent
-git clone git@github.com:joyent/mountain-gorilla.git MG && cd MG
-```
-
-### Add additional environment variables
-
-If you're building in JPC, you can skip this step. If you're building in a local
-SDC/CoaL setup, you'll probably also need to also set the following at this
-point:
-
-```
-export SDC_LOCAL_BUILD=1
-export SDC_IMAGE_PACKAGE=sdc_2048
-export SDC_TESTING=1
-export SDC_IMGAPI_URL=https://10.88.0.15
-```
-
-You'll also need to ensure these variables are set at the time of each build.
-
-where:
-
- * SDC_LOCAL_BUILD tells MG that you don't want the build creating zones in JPC
-   or pushing files to JPC's Manta as part of the build process.
- * SDC_IMAGE_PACKAGE is the name of the package you want to use for the build
-   zones. CoaL ships with an sdc_2048 package which should work.
- * SDC_TESTING allows the node-smartdc tools to work even when you've got a
-   self-signed SSL certificate.
- * SDC_IMGAPI_URL should be set to https://<IP> where <IP> is the external IP
-   you added to imgapi (remembering to add the firewall rules if you have not
-   already)
-
-## Building
-
-The following commands should be run in the MG directory in the appropriate
-build zone for the target you're building. They should also be run with all the
-environment variables described earlier set.
-
-### Option 1: build a single target, taking dependencies from joyager
-
-Ensure you've set the appropriate environment variables, especially:
-
- * SDC_LOCAL_BUILD if you're building against your own SDC/CoaL
- * SDC_URL set to the proper cloudapi
-
-Then to build, run the following in your MG directory in your build zone:
-
-```
-TARG=<build>; ./configure -t ${TARG} -d joyager -D /stor/builds \
-    -O /stor/whatever/builds && make ${TARG}_upload_manta
-```
-
-if we use 'assets' for the build for example:
-
-```
-TARG=assets; ./configure -t ${TARG} -d joyager -D /stor/builds \
-    -O /stor/whatever/builds && make ${TARG}_upload_manta
-```
-
-which will:
-
- * download dependencies from /joyager/stor/builds
- * create a tarball of the assets bits + dependencies
- * create a SmartOS VM in JPC (using cloudapi)
- * install the tarball of bits into the JPC VM
- * create an image from the VM, sending to Manta
- * download the image from Manta modify the manifest
- * push the build back to manta in ${MANTA_USER}/stor/whatever/builds/assets
-
-
-### Option 2: build a single target, taking dependencies from joyager but not uploading results
-
-To *not* upload results to Manta, follow the same procedure as in "Option 1" but
-change the make target from:
-
-```
-make ${TARG}_upload_manta
-```
-
-to:
-
-```
-make ${TARG}
-```
-
-The result will then be in the bits/ directory instead of going to Manta.
-
-
-### Option 3: build all targets from scratch
+It is also possible to build on virtual machines (vmware, kvm, bhyve, etc.)
+hosting SmartOS, or a
+[Triton "CoaL" ("Cloud on a Laptop")](https://github.com/joyent/triton/blob/master/docs/developer-guide/coal-setup.md) instance, though your virtualization platform will need to allow nested
+virtualization in order to host the 'retro' build zones that we talk about later
+in this document.
 
-If you want to ensure you've built every bit that you're using, you'll want to
-do your builds in order and send them to a fresh Manta area. There's a tool
-in MG's tools directory that will help you build in the correct order. For
-example, assuming I'm running as Manta user "joyager" and I want to create a
-full set of builds and then use that to build a new headnode image, I'd start
-in my 1.6.3 zone and run:
+<a name="makefile-targets"></a>
 
-```
-(set -o errexit
-    for TARG in $(./tools/targets-1.6.3.sh); do
-        ./configure -t ${TARG} -d joyager -D /stor/whatever/builds \
-            -O /stor/whatever/builds && make ${TARG}_upload_manta
-    done
-)
-```
-
-which will build all the dependencies first then the 1.6.3-built images.
-Uploading to /joyager/stor/whatever/builds (which was empty when we started) and
-taking dependencies only from that directory.
-
-Once this is complete, we can run the same command just with:
-
-```
-./tools/targets-13.3.1.sh
-```
-
-instead of:
-
-```
-./tools/targets-1.6.3.sh
-```
-
-generating the target list. The only target that currently cannot be built
-this way which is required for building a new headnode image is the platform
-target. The next section will deal with that.
-
-### Building sdc-headnode without using manta at all
-
-Assuming you've set all the environment variables and setup both build zones
-you need (including the modifications in the "Building the platform image"
-section) and setup your cloudapi and so forth, you can use the instructions in
-this section to build everything locally without Manta.
-
-Start on the 1.6.3 build zone and run:
-
-```
-mkdir /root/MY_BITS
-export LOCAL_BITS_DIR=/root/MY_BITS
-```
-
-Then cd to your MG workspace on this zone and run:
-
-```
-(set -o errexit; for TARG in $(tools/targets-1.6.3.sh); do \
-    ./configure -t ${TARG} -d joyager -D /stor/donotuse/builds \
-        -O /stor/donotuse/builds && make ${TARG}_local_bits_dir; done)
-```
-
-This will take a while. Once it completes, create the /root/MY_BITS directory
-on your 13.3.1 build zone and set the LOCAL_BITS_DIR variable:
-
-```
-mkdir /root/MY_BITS
-export LOCAL_BITS_DIR=/root/MY_BITS
-```
-
-Now transfer all the bits from your 1.6.3 build zone to this 13.3.1 build zone.
-One way to do this is using rsync (make sure you preserve the directory
-structure):
-
-```
-rsync -va root@<1.6.3-zone-IP>:/root/MY_BITS/* /root/MY_BITS/
-```
-
-Once that's complete (still logged into the 13.3.1 build zone with the
-LOCAL_BITS_DIR set) you can go to your MG directory and run:
-
-```
-(set -o errexit; for TARG in $(tools/targets-13.3.1.sh) platform; do \
-    ./configure -t ${TARG} -d joyager -D /stor/donotuse/builds \
-        -O /stor/donotuse/builds && make ${TARG}_local_bits_dir; done)
-```
-
-This will take quite a while (3-4 hours most likely) but once it's complete,
-/root/MY_BITS will contain all the bits required to build the usb headnode
-image. To do this, you will want to:
-
-```
-git clone git@github.com:joyent/sdc-headnode.git
-cd sdc-headnode
-make BITS_DIR=/root/MY_BITS usb
-```
-
-You can also change 'usb' to 'coal' if you want to build the CoaL image instead.
-
-
-## Building the platform image
-
-The platform image can be built in a 13.3.1 build zone just like any other
-MG target. However there are some additional changes required to these build
-zones before you can build platform.
+## Building a component
 
-You need to:
+Having [setup and logged into the correct build zone for your component](./build-zone-setup.md),
+you should now be able to clone any of the
+[Manta or Triton repositories](./repos.md).
 
- * set fs_allowed="ufs,pcfs,tmpfs"
- * ensure you've got plenty of quota for your zone
- * ensure you've got enough DRAM allocated for your zone
-
-One option for performing all of these at once would be do something like:
-
- * vmadm update <uuid> fs_allowed="ufs,pcfs,tmpfs" ram=8192 quota=200
-
-from the GZ. This would work fine on hardware but is unlikely to work with CoaL
-unless you've bumped the default amount of DRAM for CoaL significantly.
-
-Once you have a properly setup 13.3.1 build zone you can build the platform
-with the same command as you'd use for other targets:
-
-```
-TARG=platform; ./configure -t ${TARG} -d joyager -D /stor/whatever/builds \
-    -O /stor/whatever/builds && make ${TARG}_upload_manta
-```
+The following Makefile targets are conventions used in most Manta/Triton
+components:
 
-which will build and upload to Manta. Alternatively you can omit the
-_upload_manta and just have the platform build to the local bits/ directory.
+  | target               | description
+  |----------------------|----------------------------------------------------------------------------------
+  | show-buildenv        |  show the build environment and build zone image uuid for building this component
+  | validate-buildenv    |  check that the build machine is capable of building this component
+  | all                  |  build all sources for this component
+  | release              |  build a tarball containing the bits for this component
+  | publish              |  publish a tarball containing the bits for this component
+  | buildimage           |  assemble a Triton/Manta image for this component
+  | bits-upload          |  post bits to Manta, and optionally updates.joyent.com for this component
+  | bits-upload-latest   |  just post the most recently built bits, useful in case an upload was interrupted
+  | check                |  run build tests (e.g. xml validation, linting)
+  | prepush              |  additional testing that should occur before pushing to github
+
+
+For more details on the specifics of these targets, we do have commentary in
+[eng.git:/Makefile](https://github.com/joyent/eng/blob/master/Makefile#L11) and
+[eng.git:/tools/mk/Makefile.defs](https://github.com/joyent/eng/blob/master/tools/mk/Makefile.defs#L29).
+
+Typically, the following can be used to build any component, and will leave
+a component image (a compressed zfs send stream and image manifest) in `./bits`
+along with some additional metadata about the build:
+
+```
+$ export ENGBLD_SKIP_VALIDATE_BUILD_PLATFORM=true
+$ make all release publish buildimage
+```
+
+The build will happily run as a non-root user (recommended!), however some
+parts of the build do need additional privileges. To add those to your non-root
+user inside your build zone, do:
+
+```
+# usermod -P 'Primary Administrator' youruser
+```
+
+For building some components, your user should have an ssh key that allows you
+to access private Joyent repos. You should also have Manta environment
+variables set to allow the build to publish artifacts to Manta if that's
+required (see ["Configuring the build zone"](./build-zone-setup.md#build-zone-configuration) in
+the "Build Zone Setup For Manta and Triton" document)
+
+### Additional notes on build artifacts
+
+The `bits-upload` or `bits-upload-latest` Makefile targets will upload built
+components from `./bits` using the `./deps/eng/tools/bits-upload.sh` script.
+
+   * `bits-upload` will publish bits to `$MANTA_USER/publics/builds/<component>`
+     by default, and will use `$MANTA_USER`, `$MANTA_KEY_ID` and `$MANTA_URL`
+     to determine the Manta address to post to.
+
+   * `bits-upload-latest` will attempt to retry the last upload, in case of
+      network interruption, but will otherwise not re-create any of the build
+      artifacts.
+
+   * publishing bits to the imgapi service on https://updates.joyent.com from
+     `bits-upload` requires you to have credentials configured there to allow
+     you to upload.
+
+   * By default, publishing to https://updates.joyent.com is disabled and will
+     only happen if `$ENGBLD_BITS_UPLOAD_IMAPI=true` in your shell environment.
+     You can also publish bits to a local (or NFS) path instead of Manta and
+     imgapi.
+     To do that, set `$ENGBLD_DEST_OUT_PATH` and `$ENGBLD_BITS_UPLOAD_LOCAL`
+
+     For example:
+     ```
+     export ENGBLD_DEST_OUT_PATH=/home/timf/projects/bits
+     export ENGBLD_BITS_UPLOAD_LOCAL=true
+     ```
+     This can be useful if doing a local `sdc-headnode` build.
+
+   * You can change which imgapi instance your build posts to by setting
+     `$UPDATES_IMGADM_USER`, `$UPDATES_IMG_URL` and `$UPDATES_IMGADM_IDENTITY`
+     in your environment. If not set, `$UPDATES_IMGADM_CHANNEL` is computed
+     automatically. See `./deps/eng/tools/bits-upload.sh`
+
+### Building from Gerrit
+
+When reviewing proposed changes from Gerrit, it can be useful to build and
+deploy those directly.
+
+Here we build patch set 2 of the `sdc-sapi.git` component, which has the
+gerrit id `5538`:
+
+```
+-bash-4.1$ cd /tmp
+-bash-4.1$ git clone https://cr.joyent.us/joyent/sdc-sapi.git
+Cloning into 'sdc-sapi'...
+remote: Counting objects: 2180, done
+remote: Finding sources: 100% (2180/2180)
+remote: Total 2180 (delta 1464), reused 2175 (delta 1464)
+Receiving objects: 100% (2180/2180), 540.64 KiB | 251.00 KiB/s, done.
+Resolving deltas: 100% (1464/1464), done.
+Checking connectivity... done.
+-bash-4.1$ cd sdc-sapi
+-bash-4.1$ git ls-remote | grep 5538
+From https://cr.joyent.us/joyent/sdc-sapi.git
+d2daf78578e3854069cbe194f5f9cf4c96571d22        refs/changes/38/5538/1
+53f51b8e1b4e6088b22757ee230edc9b6974e46e        refs/changes/38/5538/2
+-bash-4.1$ git fetch origin refs/changes/38/5538/2
+remote: Counting objects: 13, done
+remote: Finding sources: 100% (7/7)
+remote: Total 7 (delta 6), reused 7 (delta 6)
+Unpacking objects: 100% (7/7), done.
+From https://cr.joyent.us/joyent/sdc-sapi
+ * branch            refs/changes/38/5538/2 -> FETCH_HEAD
+ -bash-4.1$ git checkout FETCH_HEAD
+Note: checking out 'FETCH_HEAD'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+  HEAD is now at 53f51b8... TRITON-1131 convert sdc-sapi to engbld framework
+  -bash-4.1$ git describe --all --long
+  heads/master-1-g53f51b8
+-bash-4.1$ make all release publish buildimage
+fatal: ref HEAD is not a symbolic ref
+/tmp/space/sdc-sapi/deps/eng/tools/validate-buildenv.sh
+.
+.
+[ 29.00080643] Saving manifest to "/tmp/sapi-zfs--20190215T144650Z-g53f51b8.imgmanifest"
+[ 30.24198958] Destroyed zones/3923c435-8688-47bb-a5f1-b213b010f826/data/b9f703a4-52e1-4c3d-b862-29b8dd047669
+[ 30.29018650] Deleted /zoneproto-49345
+[ 30.29080095] Build complete
+cp /tmp/sapi-zfs--20190215T144650Z-g53f51b8.zfs.gz /tmp/space/sdc-sapi/bits/sapi
+cp /tmp/sapi-zfs--20190215T144650Z-g53f51b8.imgmanifest /tmp/space/sdc-sapi/bits/sapi
+pfexec rm /tmp/sapi-zfs--20190215T144650Z-g53f51b8.zfs.gz
+pfexec rm /tmp/sapi-zfs--20190215T144650Z-g53f51b8.imgmanifest
+pfexec rm -rf /tmp/buildimage-sapi--20190215T144650Z-g53f51b8
+-bash-4.1$
+```
+
+Note that the first build of components on a new dev zone will likely take
+a little longer than usual as the `agent-cache` framework has to build each
+agent to be included in the image, and the `buildimage` tool has to download
+and cache the base images for the component. See TOOLS-2063 and TOOLS-2066.
+
+Also note in the above, that the `$(BRANCH)` used for the build artifacts looks
+a little unusual due to the fact we checked out a gerrit branch that doesn't
+follow the same naming format as most git branches.
