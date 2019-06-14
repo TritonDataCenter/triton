@@ -177,7 +177,7 @@ made a mistake, you can reject the settings and restart the configuration proces
 |Default gateway IP address:|↵|Press **Enter** to select the default.|
 |Primary DNS Server|↵|Press **Enter** to select the default.|
 |Secondary DNS Server|↵|Press **Enter** to select the default.|
-|Head node domain name|*example.com*|The domain name should be unique.|
+|Head node domain name|*example.com*|The domain name should be unique($dc.domain should not publicly resolve).|
 |DNS Search Domain|*example.com*|The search domain should be unique.|
 |NTP Server IP Address|↵|Press **Enter** to select the default.|
 |Set root password|**rootpass**|Type **rootpass** to set the root password.|
