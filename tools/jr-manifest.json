@@ -78,6 +78,14 @@
             }
         },
         {
+            "name": "firewall-logger-agent",
+            "labels": {
+                "tritonservice": "firewall-logger-agent",
+                "mg": "firewall-logger-agent",
+                "agent": true
+            }
+        },
+        {
             "name": "fsnotify"
         },
         {
@@ -153,6 +161,12 @@
             }
         },
         {
+            "name": "node-amon-common"
+        },
+        {
+            "name": "node-amon-plugins"
+        },
+        {
             "name": "node-amqp-joyent"
         },
         {
@@ -171,7 +185,13 @@
             "name": "node-assert-plus"
         },
         {
+            "name": "node-async-hook"
+        },
+        {
             "name": "node-bunyan-syslog"
+        },
+        {
+            "name": "node-cls-hooked"
         },
         {
             "name": "node-cmdutil"
@@ -292,6 +312,9 @@
         },
         {
             "name": "node-progbar"
+        },
+        {
+            "name": "node-restify-clients"
         },
         {
             "name": "node-restify-warden"
@@ -479,6 +502,12 @@
                 "mg": "amon",
                 "vm": true
             }
+        },
+        {
+            "name": "sdc-amon-agent"
+        },
+        {
+            "name": "sdc-amon-relay"
         },
         {
             "name": "sdc-amonadm"
@@ -841,13 +870,6 @@
             }
         },
         {
-            "name": "sdcboot",
-            "labels": {
-                "release": true,
-                "mg": "sdcboot"
-            }
-        },
-        {
             "name": "sdcnode"
         },
         {
@@ -913,6 +935,7 @@
         {
             "name": "triton-logarchiver",
             "labels": {
+                "release": true,
                 "tritonservice": "logarchiver",
                 "mg": "logarchiver",
                 "vm": true
@@ -936,7 +959,9 @@
         {
             "name": "triton-prometheus",
             "labels": {
+                "release": true,
                 "tritonservice": "prometheus",
+                "image": "manta-prometheus",
                 "mg": "prometheus",
                 "vm": true
             }
@@ -990,8 +1015,6 @@
         "commons-vfs-manta",
         "conch",
         "conch-docs",
-        "conch-engineering-planning",
-        "conch-report-card",
         "conch-reporter-smartos",
         "conch-shell",
         "conch-ui",
@@ -1010,12 +1033,15 @@
         "docker-machine-driver-triton",
         "dogpatch",
         "dragnet",
+        "drone",
+        "drone-runtime",
         "dtrace-runner",
         "dtracetools",
         "dtracetools-lx",
         "dtruss-osx",
         "electric-boray",
         "electric-moray",
+        "epoll-test-suite",
         "erlang-manta",
         "eslint-config-joyent-portal",
         "evttool",
@@ -1023,7 +1049,7 @@
         "fedora-kvm-image-tests",
         "fedora-lx-brand-image-builder",
         "fishbulb",
-        "freebsd",
+        "fm-log-report",
         "freebsd-image-tests",
         "freebsd-kvm-image-builder",
         "freebsd-live",
@@ -1034,6 +1060,7 @@
         "gerrit-test-rewind",
         "gerritbot",
         "github-enterprise-triton-image",
+        "go",
         "gocommon",
         "gomanta",
         "gosdc",
@@ -1066,6 +1093,7 @@
         "jenkins-terraform-triton",
         "joyent-gerrit",
         "kafka-connect-manta",
+        "kbmd",
         "kirby-preview-base",
         "knife-joyent",
         "leveldown",
@@ -1100,6 +1128,7 @@
         "manta-mola",
         "manta-monitor",
         "manta-mprune",
+        "manta-mreq",
         "manta-munistats",
         "manta-muskie",
         "manta-nfs",
@@ -1131,6 +1160,7 @@
         "mi-debian",
         "mi-debian-8",
         "mi-debian-9",
+        "mi-debian-bhyve-9",
         "mi-example",
         "mi-freebsd-10",
         "mi-hadoop",
@@ -1142,6 +1172,7 @@
         "mi-postgresql",
         "mi-riak",
         "mi-standard",
+        "mi-ubuntu-hybrid",
         "mibe",
         "mill",
         "milld-nginx",
@@ -1153,6 +1184,7 @@
         "mod_usdt",
         "moray-etl-jsonb",
         "moray-test-suite",
+        "mountain-gorilla",
         "muppet",
         "nginx",
         "nhttpsnoop",
@@ -1214,6 +1246,7 @@
         "pgsqlstat",
         "pgstatsmon",
         "php-manta",
+        "pivy",
         "pkgbuild",
         "pkgin",
         "pkgin-test-suite",
@@ -1233,9 +1266,17 @@
         "python-manta",
         "ruby-manta",
         "rust-cueball",
+        "rust-cueball-dns-resolver",
+        "rust-cueball-postgres-connection",
+        "rust-cueball-static-resolver",
+        "rust-cueball-tcp-stream-connection",
         "rust-fast",
+        "rust-illumos-priv",
+        "rust-libmanta",
         "rust-manta",
+        "rust-moray",
         "rust-muppet",
+        "rust-sharkspotter",
         "s3-manta-bridge",
         "sdc-hammer",
         "sdc-vmtools",
