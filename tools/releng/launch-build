@@ -1,0 +1,136 @@
+#!/bin/bash
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+#
+# Copyright 2019 Joyent, Inc.
+#
+
+#
+# This script allows starting Jenkins builds from the command-line. To
+# use this, you will need to get an API token for a Jenkins user, and
+# provide it to the script through the JENKINS_AUTH environment variable
+# or the -u option, in the form <user>:<api token>.
+#
+
+if [[ -n "$TRACE" ]]; then
+	export PS4='[\D{%FT%TZ}] ${BASH_SOURCE}:${LINENO}: ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+	set -o xtrace
+fi
+set -o errexit
+set -o pipefail
+
+PROGNAME=$0
+
+function usage() {
+	if [[ -n $1 ]]; then
+		printf "%s: %s\n" "$PROGNAME" "$1" >&2
+	fi
+	printf "usage:\n    $PROGNAME [-v] [-H url] [-b BRANCH] [-F PLAT_FLAVOR] [-u auth] project\n" >&2
+	exit 2
+}
+
+while getopts 'F:H:u:b:hv' opt; do
+	case $opt in
+	H) JENKINS_URL=$OPTARG;;
+	u) JENKINS_AUTH=$OPTARG;;
+	b) BRANCH=$OPTARG;;
+	v) VERBOSE=true;;
+	F) PLAT_FLAVOR=$OPTARG;;
+	h) usage;;
+	:) usage "-$OPTARG requires an argument";;
+	\?) usage "illegal option: -$OPTARG";;
+	esac
+done
+
+PROJECT=${@:$OPTIND:1}
+
+if [[ -n "$PLAT_FLAVOR" ]]; then
+	case $PROJECT in
+		"platform"|"platform-debug")
+			case "$PLAT_FLAVOR" in
+				"triton"|"smartos"|"triton-and-smartos")
+					;;
+				*)
+					echo "ERROR: unknown platform flavor, expecting one of:"
+					echo "    smartos"
+					echo "    triton"
+					echo "    triton-and-smartos"
+					exit 1
+					;;
+			esac
+		;;
+	*)
+		usage "-F should only be used for platform or platform-debug builds"
+		;;
+	esac
+fi
+
+if [[ -z $PROJECT ]]; then
+	usage "project to build must be specified"
+fi
+
+if [[ -z $JENKINS_URL ]]; then
+	JENKINS_URL=https://jenkins.joyent.us
+fi
+
+if [[ -z $JENKINS_AUTH ]]; then
+	usage "JENKINS_AUTH must be set to <user>:<api token> (get it here: ${JENKINS_URL}/me/configure)"
+fi
+
+if [[ -n $BRANCH ]]; then
+	printf "Building %s with BRANCH=%s\n" "$PROJECT" "$BRANCH"
+	BUILD_PARAM=`printf '{"name":"BRANCH", "value": "%s"}' $BRANCH`
+fi
+
+#
+# The platform build expects a set of parameters to specify which branches
+# should be built. It's unfortunate we need to pass this parameter at all,
+# but we can't default jenkins to using ${BRANCH} in its CONFIGURE_PROJECTS
+# parameter, because that'll take the long-form git branch and write those
+# into the 'configure-projects' file.
+#
+PLAT_REPOS='illumos-extra illumos local/kvm-cmd local/kvm local/mdata-client local/ur-agent'
+for repo in $PLAT_REPOS; do
+	if [[ -z "$PLAT_PROJECTS_TEMPLATE" ]]; then
+		PLAT_PROJECTS_TEMPLATE="$repo: BRANCH: origin\n"
+	else
+		PLAT_PROJECTS_TEMPLATE="${PLAT_PROJECTS_TEMPLATE}$repo: BRANCH: origin\n"
+	fi
+done
+
+case $PROJECT in
+	"platform"|"platform-debug")
+		if [[ -n "$BRANCH" ]]; then
+			PLAT_PROJECTS=$(echo "${PLAT_PROJECTS_TEMPLATE}" | \
+			    sed -e "s/BRANCH/${BRANCH}/g")
+			BUILD_PARAM="${BUILD_PARAM},$(printf '{"name": "CONFIGURE_PROJECTS", "value": "%s"}' "${PLAT_PROJECTS}")"
+		fi
+		if [[ -n "$PLAT_FLAVOR" ]]; then
+			BUILD_PARAM="${BUILD_PARAM},$(printf '{"name": "PLATFORM_BUILD_FLAVOR", "value": "%s"}' "${PLAT_FLAVOR}")"
+		fi
+		;;
+	"headnode"|"headnode-debug"|"headnode-joyent")
+		if [[ -n "$BRANCH" ]]; then
+			BUILD_PARAM="${BUILD_PARAM},$(printf '{"name": "CONFIGURE_BRANCHES", "value": "bits-branch: %s"}' "${BRANCH}")"
+		fi
+		;;
+esac
+
+if [[ -n $VERBOSE ]]; then
+	CURL_OPTS=(-i)
+else
+	CURL_OPTS=(-s)
+fi
+
+CRUMB_URL="$JENKINS_URL/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)"
+BUILD_URL="$JENKINS_URL/job/$PROJECT/build"
+
+# Fetch the CSRF token to send in our request's headers
+CRUMB=`curl ${CURL_OPTS[@]} --user "$JENKINS_AUTH" "$CRUMB_URL"`
+
+curl ${CURL_OPTS[@]} -X POST -H "$CRUMB" "$BUILD_URL" --user "$JENKINS_AUTH" \
+    --data-urlencode json="{\"parameter\":[$BUILD_PARAM]}"
