@@ -189,9 +189,8 @@ fi
 
 if [[ -z "$TARGETS" ]]; then
     # gets a list of the 'mg' label, which is the jenkins job name.
-    TARGETS=$(jr list -H -l mg='*',release=true -o labels | json -ag mg | sort -u | \
-        grep -v sdcsso | \
-        grep -v sdcboot)
+    TARGETS=$(jr list -H -l mg,release -o labels | json -ag mg | sort -u | \
+        grep -v sdcsso)
 fi
 
 for targ in $TARGETS; do

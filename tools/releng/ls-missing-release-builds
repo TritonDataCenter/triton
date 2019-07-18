@@ -86,22 +86,19 @@ fi
 
 targets="$*"
 if [[ -z "$targets" ]]; then
-    targets=$(jr list -H -l mg='*',release=true -o labels | json -ag mg public | sort -u \
-        | grep -v '^sdcsso' \
-        | grep -v '^sdcboot' \
-        | grep -v '^headnode-debug' \
-        | grep -v '^headnode-joyent-debug')
+    targets=$(jr list -H -l mg,release -o labels | json -ag mg buildisprivate | sort -u \
+        | grep -v '^sdcsso')
 fi
 
 # Ensure mls is setup properly at all.
 mls /Joyent_Dev/public/builds >/dev/null \
     || fatal "cannot list /Joyent_Dev/public/builds"
 
-echo "$targets" | while read target public; do
-    if [[ "$public" == "true" ]]; then
-        latest_mpath=/Joyent_Dev/public/builds/$target/$release-latest
-    else
+echo "$targets" | while read target buildisprivate; do
+    if [[ "$buildisprivate" == "true" ]]; then
         latest_mpath=/Joyent_Dev/stor/builds/$target/$release-latest
+    else
+        latest_mpath=/Joyent_Dev/public/builds/$target/$release-latest
     fi
 
     case $target in
