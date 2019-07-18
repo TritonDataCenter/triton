@@ -646,7 +646,8 @@
             "name": "sdc-headnode",
             "labels": {
                 "release": true,
-                "mg": "headnode-joyent"
+                "mg": "headnode-joyent",
+                "buildisprivate": true
             }
         },
         {
@@ -801,7 +802,8 @@
             "name": "sdc-system-tests",
             "labels": {
                 "release": true,
-                "mg": "sdc-system-tests"
+                "mg": "sdc-system-tests",
+                "buildisprivate": true
             }
         },
         {
@@ -947,6 +949,7 @@
                 "release": true,
                 "image": "mockcloud",
                 "mg": "mockcloud",
+                "buildisprivate": true,
                 "vm": true
             }
         },
