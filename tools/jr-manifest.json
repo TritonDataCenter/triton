@@ -920,6 +920,7 @@
         {
             "name": "triton-grafana",
             "labels": {
+                "release": true,
                 "tritonservice": "grafana",
                 "mg": "grafana",
                 "vm": true
