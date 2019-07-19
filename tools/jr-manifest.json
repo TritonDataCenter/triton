@@ -802,8 +802,7 @@
             "name": "sdc-system-tests",
             "labels": {
                 "release": true,
-                "mg": "sdc-system-tests",
-                "buildisprivate": true
+                "mg": "sdc-system-tests"
             }
         },
         {
@@ -949,7 +948,6 @@
                 "release": true,
                 "image": "mockcloud",
                 "mg": "mockcloud",
-                "buildisprivate": true,
                 "vm": true
             }
         },
