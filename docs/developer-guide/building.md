@@ -179,7 +179,7 @@ components from `./bits` using the `./deps/eng/tools/bits-upload.sh` script.
      This can be useful if doing a local `sdc-headnode` build.
 
    * You can change which imgapi instance your build posts to by setting
-     `$UPDATES_IMGADM_USER`, `$UPDATES_IMG_URL` and `$UPDATES_IMGADM_IDENTITY`
+     `$UPDATES_IMGADM_USER`, `$UPDATES_IMGADM_URL` and `$UPDATES_IMGADM_IDENTITY`
      in your environment. If not set, `$UPDATES_IMGADM_CHANNEL` is computed
      automatically. See `./deps/eng/tools/bits-upload.sh`
 
@@ -188,60 +188,45 @@ components from `./bits` using the `./deps/eng/tools/bits-upload.sh` script.
 When reviewing proposed changes from Gerrit, it can be useful to build and
 deploy those directly.
 
-Here we build patch set 2 of the `sdc-sapi.git` component, which has the
+Here we build patch set 3 of the `sdc-sapi.git` component, which has the
 gerrit id `5538`:
 
 ```
 -bash-4.1$ cd /tmp
--bash-4.1$ git clone https://cr.joyent.us/joyent/sdc-sapi.git
-Cloning into 'sdc-sapi'...
-remote: Counting objects: 2180, done
-remote: Finding sources: 100% (2180/2180)
-remote: Total 2180 (delta 1464), reused 2175 (delta 1464)
-Receiving objects: 100% (2180/2180), 540.64 KiB | 251.00 KiB/s, done.
-Resolving deltas: 100% (1464/1464), done.
-Checking connectivity... done.
 -bash-4.1$ cd sdc-sapi
 -bash-4.1$ git ls-remote | grep 5538
 From https://cr.joyent.us/joyent/sdc-sapi.git
 d2daf78578e3854069cbe194f5f9cf4c96571d22        refs/changes/38/5538/1
 53f51b8e1b4e6088b22757ee230edc9b6974e46e        refs/changes/38/5538/2
--bash-4.1$ git fetch origin refs/changes/38/5538/2
-remote: Counting objects: 13, done
-remote: Finding sources: 100% (7/7)
-remote: Total 7 (delta 6), reused 7 (delta 6)
-Unpacking objects: 100% (7/7), done.
+2dc9ec5ca8ef57c73126b572e3683adde86793bd        refs/changes/38/5538/3
+-bash-4.1$ git fetch origin refs/changes/38/5538/3
 From https://cr.joyent.us/joyent/sdc-sapi
- * branch            refs/changes/38/5538/2 -> FETCH_HEAD
- -bash-4.1$ git checkout FETCH_HEAD
-Note: checking out 'FETCH_HEAD'.
-
-You are in 'detached HEAD' state. You can look around, make experimental
-changes and commit them, and you can discard any commits you make in this
-state without impacting any branches by performing another checkout.
-
-If you want to create a new branch to retain commits you create, you may
-do so (now or later) by using -b with the checkout command again. Example:
-
-  git checkout -b <new-branch-name>
-
-  HEAD is now at 53f51b8... TRITON-1131 convert sdc-sapi to engbld framework
-  -bash-4.1$ git describe --all --long
-  heads/master-1-g53f51b8
+ * branch            refs/changes/38/5538/3 -> FETCH_HEAD
+-bash-4.1$ git checkout -b cr5538-3 FETCH_HEAD
+Switched to a new branch 'cr5538-3'
+-bash-4.1$ git describe --all --long
+heads/cr5538-3-0-g2dc9ec5
 -bash-4.1$ make all release publish buildimage
-fatal: ref HEAD is not a symbolic ref
+Cloning into 'deps/eng'...
+remote: Enumerating objects: 71, done.
+remote: Counting objects: 100% (71/71), done.
+remote: Compressing objects: 100% (68/68), done.
+remote: Total 1191 (delta 37), reused 35 (delta 1), pack-reused 1120
+Receiving objects: 100% (1191/1191), 853.90 KiB | 546.00 KiB/s, done.
+Resolving deltas: 100% (714/714), done.
+Checking connectivity... done.
 /tmp/space/sdc-sapi/deps/eng/tools/validate-buildenv.sh
 .
 .
-[ 29.00080643] Saving manifest to "/tmp/sapi-zfs--20190215T144650Z-g53f51b8.imgmanifest"
-[ 30.24198958] Destroyed zones/3923c435-8688-47bb-a5f1-b213b010f826/data/b9f703a4-52e1-4c3d-b862-29b8dd047669
-[ 30.29018650] Deleted /zoneproto-49345
-[ 30.29080095] Build complete
-cp /tmp/sapi-zfs--20190215T144650Z-g53f51b8.zfs.gz /tmp/space/sdc-sapi/bits/sapi
-cp /tmp/sapi-zfs--20190215T144650Z-g53f51b8.imgmanifest /tmp/space/sdc-sapi/bits/sapi
-pfexec rm /tmp/sapi-zfs--20190215T144650Z-g53f51b8.zfs.gz
-pfexec rm /tmp/sapi-zfs--20190215T144650Z-g53f51b8.imgmanifest
-pfexec rm -rf /tmp/buildimage-sapi--20190215T144650Z-g53f51b8
+[  7.06203791] Saving manifest to "/tmp/sapi-zfs-cr5538-3-20190704T111304Z-g2dc9ec5.imgmanifest"
+[  7.43511288] Destroyed zones/3923c435-8688-47bb-a5f1-b213b010f825/data/3aff356f-986d-4d35-840a-1c5fff8430c1
+[  7.46680294] Deleted /zoneproto-26918
+[  7.46730580] Build complete
+cp /tmp/sapi-zfs-cr5538-3-20190704T111304Z-g2dc9ec5.zfs.gz /tmp/sdc-sapi/bits/sapi
+cp /tmp/sapi-zfs-cr5538-3-20190704T111304Z-g2dc9ec5.imgmanifest /tmp/sdc-sapi/bits/sapi
+pfexec rm /tmp/sapi-zfs-cr5538-3-20190704T111304Z-g2dc9ec5.zfs.gz
+pfexec rm /tmp/sapi-zfs-cr5538-3-20190704T111304Z-g2dc9ec5.imgmanifest
+pfexec rm -rf /tmp/buildimage-sapi-cr5538-3-20190704T111304Z-g2dc9ec5
 -bash-4.1$
 ```
 
@@ -250,6 +235,8 @@ a little longer than usual as the `agent-cache` framework has to build each
 agent to be included in the image, and the `buildimage` tool has to download
 and cache the base images for the component. See TOOLS-2063 and TOOLS-2066.
 
-Also note in the above, that the `$(BRANCH)` used for the build artifacts looks
-a little unusual due to the fact we checked out a gerrit branch that doesn't
-follow the same naming format as most git branches.
+Also note in the above, that we checked out the `FETCH_HEAD` to a new local
+branch. If you omit the `-b` flag during checkout, the build tooling will
+compute an empty value for `$(BRANCH)` and will cause the `bits-upload.sh`
+script to fail during the `bits-upload` or `bits-upload-latest` Makefile
+targets. See TOOLS-2287.
