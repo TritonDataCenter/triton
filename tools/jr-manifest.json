@@ -646,8 +646,7 @@
             "name": "sdc-headnode",
             "labels": {
                 "release": true,
-                "mg": "headnode-joyent",
-                "buildisprivate": true
+                "mg": "headnode"
             }
         },
         {
