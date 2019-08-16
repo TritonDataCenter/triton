@@ -113,6 +113,6 @@ echo "$targets" | while read target buildisprivate; do
     latest=$(mls $latest_mpath 2>/dev/null || true)
     if [[ -z "$latest" ]]; then
         echo "# $target, '$latest_mpath' does not exist" >&2
-        echo "./tools/launch-build ${PLAT_FLAVOR_ARG} -b $release $target"
+        echo "./tools/releng/launch-build ${PLAT_FLAVOR_ARG} -b $release $target"
     fi
 done
