@@ -75,9 +75,6 @@ Community discussion about Triton DataCenter happens in two main places:
 
 * In the *#smartos* IRC channel on the [Freenode IRC network](https://freenode.net/).
 
-You can also follow [@SmartDataCenter](https://twitter.com/SmartDataCenter) on
-Twitter for updates.
-
 
 ## Getting Started
 

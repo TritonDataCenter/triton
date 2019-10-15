@@ -13,19 +13,28 @@
 Thanks for using Triton and for considering contributing to it!
 
 tl;dr:
-- Triton repos do *not* use GitHub pull requests (PRs)! You'll be asked to
-  re-submit PRs to Gerrit. See below.
+- Some Triton repos use Joyent's Gerrit (https://cr.joyent.us) instead
+  of GitHub pull requests (PRs). *We are currently in the process of
+  moving to using GitHub PRs. Until that move is complete, if the repo
+  is listed at <https://cr.joyent.us/#/admin/projects/> then it is still
+  using Gerrit.*
 - Triton repos use both GitHub issues and internal-to-Joyent Jira projects for
   issue tracking.
 
 
 ## Code
 
-The Triton project uses Gerrit at [cr.joyent.us](https://cr.joyent.us) for code
-review of all changes. Any registered GitHub user can submit changes through
-this system. If you want to contribute a change, please see the [Joyent Gerrit
-user
-guide](https://github.com/joyent/joyent-gerrit/blob/master/docs/user/README.md).
+All changes to Triton project repositories go through code review. Currently
+that is via one of the following:
+
+- Joyent's Gerrit at [cr.joyent.us](https://cr.joyent.us), if the repo is
+  listed at <https://cr.joyent.us/#/admin/projects/>. Any registered GitHub user
+  can submit changes through this system. If you want to contribute a change,
+  please see the [Joyent Gerrit user
+  guide](https://github.com/joyent/joyent-gerrit/blob/master/docs/user/README.md).
+
+- GitHub PRs, at the usual place on each repo.
+
 If you're making a substantial change, you probably want to contact developers
 [on the mailing list or IRC](README.md#community) first. If you have any trouble
 with the contribution process, please feel free to contact developers [on the
@@ -40,16 +49,6 @@ Guidelines](https://github.com/joyent/eng/blob/master/docs/index.md). Notably:
   Don't push anything until it's tested.
 * All repositories should be "make check" clean at all times.
 * All repositories should have tests that run cleanly at all times.
-
-"make check" checks both JavaScript style and lint.  Style is checked with
-[jsstyle](https://github.com/davepacheco/jsstyle).  The specific style rules are
-somewhat repo-specific.  See the jsstyle configuration file or `JSSTYLE_FLAGS`
-in Makefiles in each repo for exceptions to the default jsstyle rules.
-
-Lint is checked with
-[javascriptlint](https://github.com/davepacheco/javascriptlint). Repos sometimes
-have repo-specific lint rules, but this is less common -- look for
-"tools/jsl.node.conf" for per-repo exceptions to the default rules.
 
 
 ## Issues
