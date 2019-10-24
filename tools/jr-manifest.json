@@ -108,6 +108,9 @@
             }
         },
         {
+            "name": "jenkins-joylib"
+        },
+        {
             "name": "joyent-repos"
         },
         {
@@ -137,6 +140,9 @@
         },
         {
             "name": "manta-manatee"
+        },
+        {
+            "name": "mdata-docs"
         },
         {
             "name": "mdb_v8"
@@ -236,6 +242,9 @@
             "name": "node-getopt"
         },
         {
+            "name": "node-imgadm"
+        },
+        {
             "name": "node-imgmanifest"
         },
         {
@@ -249,9 +258,6 @@
         },
         {
             "name": "node-kstat"
-        },
-        {
-            "name": "node-ldapjs"
         },
         {
             "name": "node-libmanta"
@@ -312,6 +318,9 @@
         },
         {
             "name": "node-progbar"
+        },
+        {
+            "name": "node-qlocker"
         },
         {
             "name": "node-restify-clients"
@@ -463,6 +472,9 @@
             "labels": {
                 "meta": true
             }
+        },
+        {
+            "name": "rust-triton-clients"
         },
         {
             "name": "schemas"
@@ -873,6 +885,9 @@
             "name": "sdcnode"
         },
         {
+            "name": "terraform-provider-triton"
+        },
+        {
             "name": "triton",
             "labels": {
                 "meta": true
@@ -1057,8 +1072,7 @@
         "freebsd-vpc",
         "gcc",
         "gerrit",
-        "gerrit-test",
-        "gerrit-test-rewind",
+        "gerrit-migration",
         "gerritbot",
         "github-enterprise-triton-image",
         "go",
@@ -1097,6 +1111,7 @@
         "kbmd",
         "kirby-preview-base",
         "knife-joyent",
+        "kosh",
         "leveldown",
         "libMicro",
         "libfaketime",
@@ -1110,9 +1125,11 @@
         "manifest-creator",
         "manta",
         "manta-archiver",
+        "manta-buckets-api",
         "manta-compute-bin",
         "manta-debugging-guide",
         "manta-finder",
+        "manta-fspopulate",
         "manta-garbage-collector",
         "manta-genazconfig",
         "manta-hk",
@@ -1128,17 +1145,21 @@
         "manta-mlive",
         "manta-mola",
         "manta-monitor",
+        "manta-monitor-deploy-stack",
         "manta-mprune",
         "manta-mreq",
         "manta-munistats",
         "manta-muskie",
         "manta-nfs",
         "manta-physusage",
+        "manta-picker",
+        "manta-remora",
         "manta-reshard",
         "manta-scripts",
         "manta-sharkspotter",
         "manta-shortener-client",
         "manta-show-changes",
+        "manta-storspan",
         "manta-thoth",
         "manta-tools-deck",
         "manta-wrasse",
@@ -1146,6 +1167,7 @@
         "manufacturing",
         "mdata-client",
         "mdb_go",
+        "mdb_v8_testing",
         "me-centos",
         "me-freebsd",
         "mesos",
@@ -1185,7 +1207,6 @@
         "mod_usdt",
         "moray-etl-jsonb",
         "moray-test-suite",
-        "mountain-gorilla",
         "muppet",
         "nginx",
         "nhttpsnoop",
@@ -1230,8 +1251,11 @@
         "node-splitduplex",
         "node-stackvis",
         "node-timefilter",
+        "node-uname",
         "node-wfq",
         "node-zfile",
+        "node-zoneid",
+        "node-zsock-async",
         "node-zuora-rest",
         "node_zuora",
         "node_zuora_aqua",
@@ -1257,6 +1281,7 @@
         "pkgsrc-wiki",
         "pkgsrc-wip",
         "pkgsrc.joyent.com",
+        "play",
         "portsnoop",
         "postgres-loadgen",
         "presto-manta",
@@ -1265,9 +1290,12 @@
         "publicsuffix-list",
         "pyserial",
         "python-manta",
+        "rancher",
+        "redfish-util",
         "ruby-manta",
         "rust-cueball",
         "rust-cueball-dns-resolver",
+        "rust-cueball-manatee-primary-resolver",
         "rust-cueball-postgres-connection",
         "rust-cueball-static-resolver",
         "rust-cueball-tcp-stream-connection",
@@ -1277,8 +1305,11 @@
         "rust-manta",
         "rust-moray",
         "rust-muppet",
+        "rust-quickcheck-helpers",
         "rust-sharkspotter",
+        "rust-utils",
         "s3-manta-bridge",
+        "sastopo2svg",
         "sdc-hammer",
         "sdc-vmtools",
         "sdc-vmtools-lx-brand",
@@ -1287,6 +1318,7 @@
         "smartmachine_cookbooks",
         "smartos-changelog",
         "smartos-dev-tools",
+        "smartos-docs",
         "smartos-image-tests",
         "smartos-live",
         "smartos-vmtools",
@@ -1294,6 +1326,7 @@
         "smfgen",
         "smtools",
         "snoopdump",
+        "sshpk-crypt",
         "statemap",
         "summit-workshop",
         "syslinux",
@@ -1306,6 +1339,8 @@
         "terraform-triton-prometheus",
         "terraform-triton-redash",
         "terraform-triton-zookeeper",
+        "tokio-zookeeper",
+        "topo-digraph-xml",
         "toshstomp",
         "triton-dcapi",
         "triton-kubernetes",
@@ -1314,6 +1349,7 @@
         "tsg-graphql",
         "ubuntu-certified-image-tests",
         "ubuntu-lx-brand-image-builder",
+        "ufds-terror-alert",
         "ursa",
         "uvxbridge",
         "v8plus",
