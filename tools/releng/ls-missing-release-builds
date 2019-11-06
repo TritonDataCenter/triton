@@ -51,7 +51,7 @@ function usage() {
 }
 
 # Specify the type of platform build to do.
-PLATFORM_BUILD_FLAVOR='smartos-and-triton'
+PLATFORM_BUILD_FLAVOR='triton-and-smartos'
 
 #---- mainline
 
@@ -84,17 +84,35 @@ if [[ -z "$JR_MANIFESTS" ]]; then
     JR_MANIFESTS=/Volumes/projects/triton.git/tools/jr-manifest.json,/Volumes/projects/manta.git/tools/jr-manifest.json,/Volumes/projects/smartos-live.git/tools/jr-manifest.json"
 fi
 
-targets="$*"
+filtered_targets="$*"
 if [[ -z "$targets" ]]; then
-    targets=$(jr list -H -l mg,release -o labels | json -ag mg buildisprivate | sort -u \
-        | grep -v '^sdcsso')
+    # we get the mg label since that's part of the component manta path
+    # we get the buildisprivate label to find non-public builds
+    # we get name since that's a component of the jenkins job to launch
+    targets=$(jr list -H -l mg,release \
+        -o labels.mg,labels.buildisprivate,name | grep -v ^sdcsso)
 fi
 
 # Ensure mls is setup properly at all.
 mls /Joyent_Dev/public/builds >/dev/null \
     || fatal "cannot list /Joyent_Dev/public/builds"
 
-echo "$targets" | while read target buildisprivate; do
+echo "$targets" | while read target buildisprivate gitrepo; do
+
+    # if we've been asked to only look for specific targets, then
+    # we should skip to the next item if this target isn't in our list
+    if [[ -n "$filtered_targets" ]]; then
+        process_target=""
+        for filter in $filtered_targets; do
+            if [[ "$target" == "$filter" ]]; then
+                process_target=true
+            fi
+        done
+        if [[ -z "$process_target" ]]; then
+            continue
+        fi
+    fi
+
     if [[ "$buildisprivate" == "true" ]]; then
         latest_mpath=/Joyent_Dev/stor/builds/$target/$release-latest
     else
@@ -102,7 +120,12 @@ echo "$targets" | while read target buildisprivate; do
     fi
 
     case $target in
-        "platform"|"platform-debug")
+        "platform")
+            # For the platform build, only the 'smartos-live' repository
+            # is relevant, ignore the others.
+            if [[ "$gitrepo" != "smartos_live" ]]; then
+                continue
+            fi
             PLAT_FLAVOR_ARG="-F $PLATFORM_BUILD_FLAVOR"
             ;;
         *)
@@ -113,6 +136,6 @@ echo "$targets" | while read target buildisprivate; do
     latest=$(mls $latest_mpath 2>/dev/null || true)
     if [[ -z "$latest" ]]; then
         echo "# $target, '$latest_mpath' does not exist" >&2
-        echo "./tools/releng/launch-build ${PLAT_FLAVOR_ARG} -b $release $target"
+        echo "./tools/releng/launch-build ${PLAT_FLAVOR_ARG} -b $release -g $gitrepo $target"
     fi
 done

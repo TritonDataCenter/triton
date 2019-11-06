@@ -29,15 +29,16 @@ function usage() {
 	if [[ -n $1 ]]; then
 		printf "%s: %s\n" "$PROGNAME" "$1" >&2
 	fi
-	printf "usage:\n    $PROGNAME [-v] [-H url] [-b BRANCH] [-F PLAT_FLAVOR] [-u auth] project\n" >&2
+	printf "usage:\n    $PROGNAME [-v] [-H url] [-b BRANCH] [-F PLAT_FLAVOR] [-u auth] <-g GITREPO> project\n" >&2
 	exit 2
 }
 
-while getopts 'F:H:u:b:hv' opt; do
+while getopts 'F:H:u:b:hvg:' opt; do
 	case $opt in
 	H) JENKINS_URL=$OPTARG;;
 	u) JENKINS_AUTH=$OPTARG;;
 	b) BRANCH=$OPTARG;;
+	g) GITREPO=$OPTARG;;
 	v) VERBOSE=true;;
 	F) PLAT_FLAVOR=$OPTARG;;
 	h) usage;;
@@ -81,6 +82,10 @@ if [[ -z $JENKINS_AUTH ]]; then
 	usage "JENKINS_AUTH must be set to <user>:<api token> (get it here: ${JENKINS_URL}/me/configure)"
 fi
 
+if [[ -z $GITREPO ]]; then
+	usage "-g GITREPO must be specified"
+fi
+
 if [[ -n $BRANCH ]]; then
 	printf "Building %s with BRANCH=%s\n" "$PROJECT" "$BRANCH"
 	BUILD_PARAM=`printf '{"name":"BRANCH", "value": "%s"}' $BRANCH`
@@ -113,7 +118,7 @@ case $PROJECT in
 			BUILD_PARAM="${BUILD_PARAM},$(printf '{"name": "PLATFORM_BUILD_FLAVOR", "value": "%s"}' "${PLAT_FLAVOR}")"
 		fi
 		;;
-	"headnode"|"headnode-debug"|"headnode-joyent")
+	"headnode"|"headnode-debug")
 		if [[ -n "$BRANCH" ]]; then
 			BUILD_PARAM="${BUILD_PARAM},$(printf '{"name": "CONFIGURE_BRANCHES", "value": "bits-branch: %s"}' "${BRANCH}")"
 		fi
@@ -127,7 +132,16 @@ else
 fi
 
 CRUMB_URL="$JENKINS_URL/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)"
-BUILD_URL="$JENKINS_URL/job/$PROJECT/build"
+
+case $PROJECT in
+	"platform"|"headnode"|"headnode-debug")
+		BUILD_URL="$JENKINS_URL/job/$PROJECT/build"
+		;;
+	*)
+		BUILD_URL="$JENKINS_URL/job/joyent-org/job/$GITREPO/job/$BRANCH/build"
+		;;
+esac
+set -x
 
 # Fetch the CSRF token to send in our request's headers
 CRUMB=`curl ${CURL_OPTS[@]} --user "$JENKINS_AUTH" "$CRUMB_URL"`
