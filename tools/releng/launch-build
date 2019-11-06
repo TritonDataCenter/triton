@@ -29,7 +29,7 @@ function usage() {
 	if [[ -n $1 ]]; then
 		printf "%s: %s\n" "$PROGNAME" "$1" >&2
 	fi
-	printf "usage:\n    $PROGNAME [-v] [-H url] [-b BRANCH] [-F PLAT_FLAVOR] [-u auth] <-g gitrepo> project\n" >&2
+	printf "usage:\n    $PROGNAME [-v] [-H url] [-b BRANCH] [-F PLAT_FLAVOR] [-u auth] <-g GITREPO> project\n" >&2
 	exit 2
 }
 
@@ -83,7 +83,7 @@ if [[ -z $JENKINS_AUTH ]]; then
 fi
 
 if [[ -z $GITREPO ]]; then
-	usage "-v gitrepo must be specified"
+	usage "-g GITREPO must be specified"
 fi
 
 if [[ -n $BRANCH ]]; then

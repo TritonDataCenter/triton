@@ -86,15 +86,18 @@ fi
 
 filtered_targets="$*"
 if [[ -z "$targets" ]]; then
+    # we get the mg label since that's part of the component manta path
+    # we get the buildisprivate label to find non-public builds
+    # we get name since that's a component of the jenkins job to launch
     targets=$(jr list -H -l mg,release \
-        -o labels.mg,labels.buildisprivate,htmlUrl | grep -v ^sdcsso)
+        -o labels.mg,labels.buildisprivate,name | grep -v ^sdcsso)
 fi
 
 # Ensure mls is setup properly at all.
 mls /Joyent_Dev/public/builds >/dev/null \
     || fatal "cannot list /Joyent_Dev/public/builds"
 
-echo "$targets" | while read target buildisprivate htmlurl; do
+echo "$targets" | while read target buildisprivate gitrepo; do
 
     # if we've been asked to only look for specific targets, then
     # we should skip to the next item if this target isn't in our list
@@ -116,14 +119,11 @@ echo "$targets" | while read target buildisprivate htmlurl; do
         latest_mpath=/Joyent_Dev/public/builds/$target/$release-latest
     fi
 
-    gitrepo=$(echo $htmlurl | awk -F/ '{print $NF}')
-
     case $target in
         "platform")
             # For the platform build, only the 'smartos-live' repository
             # is relevant, ignore the others.
-            smartos_live=$(echo $gitrepo | grep smartos-live || true)
-            if [[ -z "$smartos_live" ]]; then
+            if [[ "$gitrepo" != "smartos_live" ]]; then
                 continue
             fi
             PLAT_FLAVOR_ARG="-F $PLATFORM_BUILD_FLAVOR"
