@@ -86,11 +86,6 @@ if [[ -z $GITREPO ]]; then
 	usage "-g GITREPO must be specified"
 fi
 
-if [[ -n $BRANCH ]]; then
-	printf "Building %s with BRANCH=%s\n" "$PROJECT" "$BRANCH"
-	BUILD_PARAM=`printf '{"name":"BRANCH", "value": "%s"}' $BRANCH`
-fi
-
 #
 # The platform build expects a set of parameters to specify which branches
 # should be built. It's unfortunate we need to pass this parameter at all,
@@ -106,6 +101,19 @@ for repo in $PLAT_REPOS; do
 		PLAT_PROJECTS_TEMPLATE="${PLAT_PROJECTS_TEMPLATE}$repo: BRANCH: origin\n"
 	fi
 done
+
+case $PROJECT in
+	"platform"|"headnode"|"headnode-debug")
+		if [[ -n $BRANCH ]]; then
+			printf "Set BUILD_PARAM for %s: BRANCH=%s\n" "$PROJECT" "$BRANCH"
+			BUILD_PARAM=`printf '{"name":"BRANCH", "value": "%s"}' $BRANCH`
+		fi
+		BUILD_URL="$JENKINS_URL/job/$PROJECT/build"
+		;;
+	*)
+		BUILD_URL="$JENKINS_URL/job/joyent-org/job/$GITREPO/job/$BRANCH/build"
+		;;
+esac
 
 case $PROJECT in
 	"platform"|"platform-debug")
@@ -131,20 +139,14 @@ else
 	CURL_OPTS=(-s)
 fi
 
-CRUMB_URL="$JENKINS_URL/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)"
+if [[ -n "$BUILD_PARAM" ]]; then
+	JENKINS_JOB_PARAMS="--data-urlencode json={\"parameter\":[$BUILD_PARAM]}"
+fi
 
-case $PROJECT in
-	"platform"|"headnode"|"headnode-debug")
-		BUILD_URL="$JENKINS_URL/job/$PROJECT/build"
-		;;
-	*)
-		BUILD_URL="$JENKINS_URL/job/joyent-org/job/$GITREPO/job/$BRANCH/build"
-		;;
-esac
-set -x
+CRUMB_URL="$JENKINS_URL/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)"
 
 # Fetch the CSRF token to send in our request's headers
 CRUMB=`curl ${CURL_OPTS[@]} --user "$JENKINS_AUTH" "$CRUMB_URL"`
 
 curl ${CURL_OPTS[@]} -X POST -H "$CRUMB" "$BUILD_URL" --user "$JENKINS_AUTH" \
-    --data-urlencode json="{\"parameter\":[$BUILD_PARAM]}"
+    $JENKINS_JOB_PARAMS
