@@ -123,7 +123,7 @@ echo "$targets" | while read target buildisprivate gitrepo; do
         "platform")
             # For the platform build, only the 'smartos-live' repository
             # is relevant, ignore the others.
-            if [[ "$gitrepo" != "smartos_live" ]]; then
+            if [[ "$gitrepo" != "smartos-live" ]]; then
                 continue
             fi
             PLAT_FLAVOR_ARG="-F $PLATFORM_BUILD_FLAVOR"
