@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -143,6 +143,8 @@ fi
 if [[ -n "$BUILD_PARAM" ]]; then
 	JENKINS_JOB_PARAMS="--data-urlencode json={\"parameter\":[$BUILD_PARAM]}"
 else
+	# When posting, even if we have no parameters, we still need some data,
+	# otherwise Jenkins will complain.
 	JENKINS_JOB_PARAMS="--data-urlencode json={\"parameter\":[]}"
 fi
 
