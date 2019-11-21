@@ -145,7 +145,7 @@ if [[ -n "$BUILD_PARAM" ]]; then
 else
 	# When posting, even if we have no parameters, we still need some data,
 	# otherwise Jenkins will complain.
-	JENKINS_JOB_JSON="{\"parameter\":[]}'"
+	JENKINS_JOB_JSON="{\"parameter\":[]}"
 fi
 
 CRUMB_URL="$JENKINS_URL/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)"
