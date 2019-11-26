@@ -183,60 +183,78 @@ components from `./bits` using the `./deps/eng/tools/bits-upload.sh` script.
      in your environment. If not set, `$UPDATES_IMGADM_CHANNEL` is computed
      automatically. See `./deps/eng/tools/bits-upload.sh`
 
-### Building from Gerrit
+### Useful development tools and building from GitHub Pull Requests
 
-When reviewing proposed changes from Gerrit, it can be useful to build and
-deploy those directly.
+Setting up the following tools is likely to make your work on Manta and Triton
+a little easier:
 
-Here we build patch set 3 of the `sdc-sapi.git` component, which has the
-gerrit id `5538`:
+* [hub](https://hub.github.com/) is a command line extension to git, with
+  particularly useful commands to list, checkout and create pull requests.
+* [jr](https://github.com/joyent/joyent-repos) is a tool that makes it
+  easier to interact with the many Joyent repositories you'll be working with
+  when developing Manta and Triton. It allows you to list and clone
+  repositories, as well as allowing you to run commands that affect multiple
+  repositories.
+* [prr](https://github.com/joyent/prr/) is a command line tool for merging an
+  approved pull request, allowing you to modify the commit message.
+
+When reviewing proposed changes from GitHub, it can be useful to build and
+deploy those directly allowing reviewers to exercise the changes before they're
+integrated.
+
+In this example, we'll use `jr` to clone the
+[sdc-manta](https://github.com/joyent/sdc-manta) repository, then we'll
+use `hub` to get the changes from the
+[joyent/sdc-manta#21](https://github.com/joyent/sdc-manta/pull/21) pull
+request.
+
+First clone the repository:
 
 ```
--bash-4.1$ cd /tmp
--bash-4.1$ cd sdc-sapi
--bash-4.1$ git ls-remote | grep 5538
-From https://cr.joyent.us/joyent/sdc-sapi.git
-d2daf78578e3854069cbe194f5f9cf4c96571d22        refs/changes/38/5538/1
-53f51b8e1b4e6088b22757ee230edc9b6974e46e        refs/changes/38/5538/2
-2dc9ec5ca8ef57c73126b572e3683adde86793bd        refs/changes/38/5538/3
--bash-4.1$ git fetch origin refs/changes/38/5538/3
-From https://cr.joyent.us/joyent/sdc-sapi
- * branch            refs/changes/38/5538/3 -> FETCH_HEAD
--bash-4.1$ git checkout -b cr5538-3 FETCH_HEAD
-Switched to a new branch 'cr5538-3'
--bash-4.1$ git describe --all --long
-heads/cr5538-3-0-g2dc9ec5
--bash-4.1$ make all release publish buildimage
+-bash-4.3$ jr clone sdc-manta
+Clone 1 repo into "/tmp"? [y/N] y
+cloned "sdc-manta" to "/tmp/sdc-manta.git" (3s)
+-bash-4.3$ cd sdc-manta.git
+```
+
+Now use `hub` to obtain the changes from the pull request and build them:
+
+```
+-bash-4.3$ hub pr checkout 21
+Switched to a new branch 'prr-MANTA-4744'
+-bash-4.3$ git branch
+  master
+* prr-MANTA-4744
+-bash-4.3$ make all release publish buildimage
 Cloning into 'deps/eng'...
-remote: Enumerating objects: 71, done.
-remote: Counting objects: 100% (71/71), done.
-remote: Compressing objects: 100% (68/68), done.
-remote: Total 1191 (delta 37), reused 35 (delta 1), pack-reused 1120
-Receiving objects: 100% (1191/1191), 853.90 KiB | 546.00 KiB/s, done.
-Resolving deltas: 100% (714/714), done.
-Checking connectivity... done.
-/tmp/space/sdc-sapi/deps/eng/tools/validate-buildenv.sh
+remote: Enumerating objects: 177, done.
+remote: Counting objects: 100% (177/177), done.
 .
 .
-[  7.06203791] Saving manifest to "/tmp/sapi-zfs-cr5538-3-20190704T111304Z-g2dc9ec5.imgmanifest"
-[  7.43511288] Destroyed zones/3923c435-8688-47bb-a5f1-b213b010f825/data/3aff356f-986d-4d35-840a-1c5fff8430c1
-[  7.46680294] Deleted /zoneproto-26918
-[  7.46730580] Build complete
-cp /tmp/sapi-zfs-cr5538-3-20190704T111304Z-g2dc9ec5.zfs.gz /tmp/sdc-sapi/bits/sapi
-cp /tmp/sapi-zfs-cr5538-3-20190704T111304Z-g2dc9ec5.imgmanifest /tmp/sdc-sapi/bits/sapi
-pfexec rm /tmp/sapi-zfs-cr5538-3-20190704T111304Z-g2dc9ec5.zfs.gz
-pfexec rm /tmp/sapi-zfs-cr5538-3-20190704T111304Z-g2dc9ec5.imgmanifest
-pfexec rm -rf /tmp/buildimage-sapi-cr5538-3-20190704T111304Z-g2dc9ec5
--bash-4.1$
+/usr/bin/pfexec /tmp/sdc-manta.git/deps/eng/tools/buildimage/bin/buildimage \
+        -i 04a48d7d-6bb5-4e83-8c3b-e60a99e0f48f \
+        -d /tmp/buildimage-manta-deployment-prr-MANTA-4744-20191126T165949Z-gb4cc60e/root \
+        -m '{"name": "manta-deployment", "description": "Manta deployment tools", "version": "prr-MANTA-4744-20191126T165949Z-gb4cc60e", "tags": {"smartdc_service": true} }' \
+         \
+        -p $(echo openldap-client-2.4.44nb2 | sed -e 's/ /,/g') \
+        -M -S "$(git -C /tmp/sdc-manta.git remote get-url origin)" \
+        -a \
+        -P manta-deployment-zfs
+[  0.04019809] Starting build for manta-deployment (prr-MANTA-4744-20191126T165949Z-gb4cc60e)
+.
+.
+.
+cp /tmp/manta-deployment-zfs-prr-MANTA-4744-20191126T165949Z-gb4cc60e.pkgaudit /tmp/sdc-manta.git/bits/manta-deployment
+/usr/bin/pfexec rm /tmp/manta-deployment-zfs-prr-MANTA-4744-20191126T165949Z-gb4cc60e.zfs.gz
+/usr/bin/pfexec rm /tmp/manta-deployment-zfs-prr-MANTA-4744-20191126T165949Z-gb4cc60e.imgmanifest
+/usr/bin/pfexec rm /tmp/manta-deployment-zfs-prr-MANTA-4744-20191126T165949Z-gb4cc60e.pkgaudit
+/usr/bin/pfexec rm -rf /tmp/buildimage-manta-deployment-prr-MANTA-4744-20191126T165949Z-gb4cc60e
+-bash-4.3$
 ```
+
+We can now deploy the image in `/tmp/sdc-manta.git/bits/manta-deployment`.
 
 Note that the first build of components on a new dev zone will likely take
 a little longer than usual as the `agent-cache` framework has to build each
 agent to be included in the image, and the `buildimage` tool has to download
 and cache the base images for the component. See TOOLS-2063 and TOOLS-2066.
-
-Also note in the above, that we checked out the `FETCH_HEAD` to a new local
-branch. If you omit the `-b` flag during checkout, the build tooling will
-compute an empty value for `$(BRANCH)` and will cause the `bits-upload.sh`
-script to fail during the `bits-upload` or `bits-upload-latest` Makefile
-targets. See TOOLS-2287.
