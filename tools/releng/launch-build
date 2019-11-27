@@ -107,7 +107,7 @@ case $PROJECT in
 	"platform"|"headnode"|"headnode-debug")
 		if [[ -n $BRANCH ]]; then
 			printf "Set BUILD_PARAM for %s: BRANCH=%s\n" "$PROJECT" "$BRANCH"
-			BUILD_PARAM=`printf '{"name":"BRANCH", "value": "%s"}' $BRANCH`
+			BUILD_PARAM=$(printf '{"name":"BRANCH", "value": "%s"}' $BRANCH)
 		fi
 		BUILD_URL="$JENKINS_URL/job/$PROJECT/build"
 		;;
@@ -141,17 +141,18 @@ else
 fi
 
 if [[ -n "$BUILD_PARAM" ]]; then
-	JENKINS_JOB_PARAMS="--data-urlencode json={\"parameter\":[$BUILD_PARAM]}"
+	JENKINS_JOB_JSON="{\"parameter\":[$BUILD_PARAM]}"
 else
 	# When posting, even if we have no parameters, we still need some data,
 	# otherwise Jenkins will complain.
-	JENKINS_JOB_PARAMS="--data-urlencode json={\"parameter\":[]}"
+	JENKINS_JOB_JSON="{\"parameter\":[]}"
 fi
 
 CRUMB_URL="$JENKINS_URL/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)"
 
 # Fetch the CSRF token to send in our request's headers
-CRUMB=`curl ${CURL_OPTS[@]} --user "$JENKINS_AUTH" "$CRUMB_URL"`
+CRUMB=$(curl ${CURL_OPTS[@]} --user "$JENKINS_AUTH" "$CRUMB_URL")
+
 
 curl ${CURL_OPTS[@]} -X POST -H "$CRUMB" "$BUILD_URL" --user "$JENKINS_AUTH" \
-    $JENKINS_JOB_PARAMS
+    --data-urlencode json="${JENKINS_JOB_JSON}"
