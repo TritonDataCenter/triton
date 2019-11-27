@@ -183,7 +183,7 @@ components from `./bits` using the `./deps/eng/tools/bits-upload.sh` script.
      in your environment. If not set, `$UPDATES_IMGADM_CHANNEL` is computed
      automatically. See `./deps/eng/tools/bits-upload.sh`
 
-### Useful development tools and building from GitHub Pull Requests
+### Useful development tools and dealing with GitHub Pull Requests
 
 Setting up the following tools is likely to make your work on Manta and Triton
 a little easier:
@@ -198,33 +198,63 @@ a little easier:
 * [prr](https://github.com/joyent/prr/) is a command line tool for merging an
   approved pull request, allowing you to modify the commit message.
 
+Developers on Manta/Triton use GitHub pull requests to seek code review from
+other developers before committing changes to the repository.
+
+The `hub` command makes it simple to create a new pull request:
+
+```
+-bash-4.3$ cd /tmp/sdc-manta
+-bash-4.3$ echo "Make a change to this file." >> README.md
+-bash-4.3$ git commit -m "MANTA-1234 an example jira synopsis" README.md
+[pr-MANTA-1234 8f47ea2] MANTA-1234 an example jira synopsis
+ 1 file changed, 1 insertion(+)
+-bash-4.3$ hub pull-request -p
+Counting objects: 3, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 339 bytes | 0 bytes/s, done.
+Total 3 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+remote:
+remote: Create a pull request for 'pr-MANTA-1234' on GitHub by visiting:
+remote:      https://github.com/joyent/sdc-manta/pull/new/pr-MANTA-1234
+remote:
+remote:
+To git@github.com:joyent/sdc-manta
+ * [new branch]      HEAD -> pr-MANTA-1234
+Branch pr-MANTA-1234 set up to track remote branch pr-MANTA-1234 from origin.
+https://github.com/joyent/sdc-manta/pull/23
+-bash-4.3$
+```
+
 When reviewing proposed changes from GitHub, it can be useful to build and
 deploy those directly allowing reviewers to exercise the changes before they're
 integrated.
 
-In this example, we'll use `jr` to clone the
-[sdc-manta](https://github.com/joyent/sdc-manta) repository, then we'll
-use `hub` to get the changes from the
+
+In this example, we'll use `hub` to list all open pull requests, and then to
+get the changes from the
 [joyent/sdc-manta#21](https://github.com/joyent/sdc-manta/pull/21) pull
 request.
 
-First clone the repository:
 
 ```
--bash-4.3$ jr clone sdc-manta
-Clone 1 repo into "/tmp"? [y/N] y
-cloned "sdc-manta" to "/tmp/sdc-manta.git" (3s)
--bash-4.3$ cd sdc-manta.git
-```
-
-Now use `hub` to obtain the changes from the pull request and build them:
-
-```
+-bash-4.3$ hub pr list
+     #21  MANTA-4744 'manta-adm update' should guard image usage by image.name
+     #16  Bump js-yaml from 3.8.2 to 3.13.1   dependencies
+      #8  MANTA-4408 Reorder nics for manta prometheus service
+      #7  MANTA-3518 fix params.networks formatting of manta services
+      #5  MANTA-3974 manta deployment zone adminIp functions need to be factored out MANTA-3971 manta-oneach needs to be rack aware
+      #4  MANTA-3274 show how to run sdc-manta 'make test' when developing on non-smartos
 -bash-4.3$ hub pr checkout 21
 Switched to a new branch 'prr-MANTA-4744'
--bash-4.3$ git branch
-  master
-* prr-MANTA-4744
+-bash-4.3$
+```
+
+We can build the pull request changes as normal:
+
+```
 -bash-4.3$ make all release publish buildimage
 Cloning into 'deps/eng'...
 remote: Enumerating objects: 177, done.
