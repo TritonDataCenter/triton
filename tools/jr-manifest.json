@@ -48,7 +48,7 @@
             "labels": {
                 "release": true,
                 "tritonservice": "binder",
-                "image": "manta-nameservice",
+                "image": "mantav2-nameservice",
                 "mg": "binder",
                 "vm": true
             }
@@ -130,7 +130,7 @@
             "labels": {
                 "release": true,
                 "tritonservice": "mahi",
-                "image": "manta-authcache",
+                "image": "mantav2-authcache",
                 "mg": "mahi",
                 "vm": true
             }
@@ -161,7 +161,7 @@
             "labels": {
                 "release": true,
                 "tritonservice": "moray",
-                "image": "manta-moray",
+                "image": "mantav2-moray",
                 "mg": "moray",
                 "vm": true
             }
@@ -692,7 +692,7 @@
             "labels": {
                 "release": true,
                 "tritonservice": "manta",
-                "image": "manta-deployment",
+                "image": "mantav2-deployment",
                 "mg": "manta-deployment",
                 "vm": true
             }
@@ -977,7 +977,7 @@
             "labels": {
                 "release": true,
                 "tritonservice": "prometheus",
-                "image": "manta-prometheus",
+                "image": "mantav2-prometheus",
                 "mg": "prometheus",
                 "vm": true
             }
