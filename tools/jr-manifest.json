@@ -203,6 +203,9 @@
             "name": "node-cmdutil"
         },
         {
+            "name": "node-contract"
+        },
+        {
             "name": "node-crc"
         },
         {
@@ -1218,7 +1221,6 @@
         "node-checker",
         "node-codel",
         "node-consulite",
-        "node-contract",
         "node-debug-school",
         "node-debugging-methodologies",
         "node-dns",
