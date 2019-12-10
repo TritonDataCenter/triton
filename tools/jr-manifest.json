@@ -203,9 +203,6 @@
             "name": "node-cmdutil"
         },
         {
-            "name": "node-contract"
-        },
-        {
             "name": "node-crc"
         },
         {
