@@ -5,35 +5,18 @@
 -->
 
 <!--
-    Copyright 2016 Joyent, Inc.
+    Copyright 2019 Joyent, Inc.
 -->
 
 # Triton Contribution Guidelines
 
 Thanks for using Triton and for considering contributing to it!
 
-tl;dr:
-- Some Triton repos use Joyent's Gerrit (https://cr.joyent.us) instead
-  of GitHub pull requests (PRs). *We are currently in the process of
-  moving to using GitHub PRs. Until that move is complete, if the repo
-  is listed at <https://cr.joyent.us/#/admin/projects/> then it is still
-  using Gerrit.*
-- Triton repos use both GitHub issues and internal-to-Joyent Jira projects for
-  issue tracking.
-
 
 ## Code
 
-All changes to Triton project repositories go through code review. Currently
-that is via one of the following:
-
-- Joyent's Gerrit at [cr.joyent.us](https://cr.joyent.us), if the repo is
-  listed at <https://cr.joyent.us/#/admin/projects/>. Any registered GitHub user
-  can submit changes through this system. If you want to contribute a change,
-  please see the [Joyent Gerrit user
-  guide](https://github.com/joyent/joyent-gerrit/blob/master/docs/user/README.md).
-
-- GitHub PRs, at the usual place on each repo.
+All changes to Manta project repositories go through code review via a GitHub
+pull request.
 
 If you're making a substantial change, you probably want to contact developers
 [on the mailing list or IRC](README.md#community) first. If you have any trouble
