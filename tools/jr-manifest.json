@@ -31,6 +31,11 @@
             "name": "customerimages",
             "type": "boolean",
             "description": "PROPOSED a repo involved in base and customer image creation"
+        },
+        {
+            "name": "fork",
+            "type": "string",
+            "description": "a repo that is a fork of an upstream repository"
         }
     ],
     "defaults": {
@@ -56,19 +61,22 @@
         {
             "name": "cloud-init",
             "labels": {
-                "customerimages": true
+                "customerimages": true,
+                "fork": true
             }
         },
         {
             "name": "cloud-init-debian",
             "labels": {
-                "customerimages": true
+                "customerimages": true,
+                "fork": true
             }
         },
         {
             "name": "cloud-init-ubuntu",
             "labels": {
-                "customerimages": true
+                "customerimages": true,
+                "fork": true
             }
         },
         {
@@ -86,7 +94,10 @@
             }
         },
         {
-            "name": "fsnotify"
+            "name": "fsnotify",
+            "labels": {
+                "fork": true
+            }
         },
         {
             "name": "grafana"
@@ -287,7 +298,10 @@
             "name": "node-mdata-client"
         },
         {
-            "name": "node-mname"
+            "name": "node-mname",
+            "labels": {
+                "fork": true
+            }
         },
         {
             "name": "node-mname-client"
@@ -431,7 +445,10 @@
             "name": "node-zonename"
         },
         {
-            "name": "node-zookeeper-client"
+            "name": "node-zookeeper-client",
+            "labels": {
+                "fork": true
+            }
         },
         {
             "name": "node-zsock"
@@ -446,10 +463,16 @@
             }
         },
         {
-            "name": "postgres"
+            "name": "postgres",
+            "labels": {
+                "fork": true
+            }
         },
         {
-            "name": "prometheus"
+            "name": "prometheus",
+            "labels": {
+                "fork": true
+            }
         },
         {
             "name": "registrar",
