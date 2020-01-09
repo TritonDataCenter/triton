@@ -34,7 +34,7 @@
         },
         {
             "name": "fork",
-            "type": "string",
+            "type": "boolean",
             "description": "a repo that is a fork of an upstream repository"
         }
     ],
