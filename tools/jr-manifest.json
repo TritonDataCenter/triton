@@ -31,6 +31,11 @@
             "name": "customerimages",
             "type": "boolean",
             "description": "PROPOSED a repo involved in base and customer image creation"
+        },
+        {
+            "name": "nobranchprotection",
+            "type": "boolean",
+            "description": "a repo that does not require github master branch protections"
         }
     ],
     "defaults": {
@@ -464,7 +469,8 @@
         {
             "name": "rfd",
             "labels": {
-                "meta": true
+                "meta": true,
+		"nobranchprotection": true
             }
         },
         {
