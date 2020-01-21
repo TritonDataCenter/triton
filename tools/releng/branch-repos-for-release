@@ -76,7 +76,11 @@ function branchRepo {
     # Clone/pull repo to cache.
     mkdir -p $CACHEDIR
     if [[ -d "$repoCloneDir" ]]; then
-        (cd "$repoCloneDir" && git checkout -q master && git pull -q --rebase origin master)
+        git -C $repoCloneDir checkout -q master
+        git -C $repoCloneDir fetch origin
+        if ! git -C $repoCloneDir merge -q --ff-only origin/master; then
+            fatal "Could not update $repoCloneDir from origin. Do you have local changes there?"
+        fi
     else
         # Intentionally show checkout progress for long repos, and to show
         # that a cache dir is being used.
