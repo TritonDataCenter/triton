@@ -470,7 +470,7 @@
             "name": "rfd",
             "labels": {
                 "meta": true,
-		"nobranchprotection": true
+                "nobranchprotection": true
             }
         },
         {
