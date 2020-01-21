@@ -1,0 +1,181 @@
+#!/bin/bash
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Copyright 2020 Joyent, Inc.
+#
+
+#
+# Branch all Triton/Manta/SmartOS public, top-level release repositories for a
+# "release-YYYYMMDD" release.
+#
+# See <https://modocs.joyent.us/engdoc/master/sdcrelease/index.html>
+#
+
+if [[ -n "$TRACE" ]]; then
+    export PS4='[\D{%FT%TZ}] ${BASH_SOURCE}:${LINENO}: ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+    set -o xtrace
+fi
+set -o errexit
+set -o pipefail
+
+
+#---- globals, config
+
+TOP=$(cd $(dirname $0)/../; pwd)
+CACHEDIR="/var/tmp/branch-repos-for-release.d"
+
+
+#---- functions
+
+function usage
+{
+    local exitStatus=0
+
+    if [[ -n "$1" ]]; then
+        exitStatus=1
+        echo "error: $1" >&2
+        echo ""
+    fi
+    echo "Usage:"
+    echo "  branch-repos-for-release [<options>] [release-]YYYYMMDD"
+    echo ""
+    echo "Options:"
+    echo "  -h          Print this help and exit."
+    echo "  -y          Skip confirmation."
+    echo "  -n          Do a dry-run, don't actually branch."
+    echo "  -s          Only check for SmartOS (aka 'platform') repos."
+    echo ""
+    echo "Examples:"
+    echo "  branch-repos-for-release -n release-20200130  # dry-run"
+    echo "  branch-repos-for-release release-20200130"
+    echo "  branch-repos-for-release -s release-20200130  # just SmartOS repos"
+
+    exit $exitStatus
+}
+
+function fatal
+{
+    echo "$0: fatal error: $*"
+    exit 1
+}
+
+function branchRepo {
+    local repoName=$1
+    local branch=$2
+    local dryRun=$3
+
+    local dryRunMsg=""
+    if [[ "$dryRun" == "true" ]]; then
+        dryRunMsg=" (dry-run)"
+    fi
+    local repoCloneDir=$CACHEDIR/$repoName
+
+    # Clone/pull repo to cache.
+    mkdir -p $CACHEDIR
+    if [[ -d "$repoCloneDir" ]]; then
+        git -C $repoCloneDir checkout -q master
+        git -C $repoCloneDir fetch origin
+        if ! git -C $repoCloneDir merge -q --ff-only origin/master; then
+            fatal "Could not update $repoCloneDir from origin. Do you have local changes there?"
+        fi
+    else
+        # Intentionally show checkout progress for long repos, and to show
+        # that a cache dir is being used.
+        echo "" >&2
+        git clone git@github.com:joyent/$repoName.git "$repoCloneDir"
+        echo "" >&2
+    fi
+
+    local hit=$(cd "$repoCloneDir" && git branch --list -a "origin/$branch")
+    if [[ -n "$hit" ]]; then
+        echo "Repo $repoName already has branch origin/$branch"
+    elif [[ "$dryRun" == "true" ]]; then
+        echo "Create branch '$branch' on repo $repoName (dry-run)"
+    else
+        echo "Create branch '$branch' on repo $repoName"
+        git -C "$repoCloneDir" checkout -q master
+        git -C "$repoCloneDir" checkout -B "$branch"
+        git -C "$repoCloneDir" push origin "$branch"
+        # go back to master branch for subsequent runs
+        git -C "$repoCloneDir" checkout -q master
+        echo "" >&2
+    fi
+}
+
+
+#---- mainline
+
+optDryRun=false
+optJustSmartos=false
+optYes=false
+while getopts "hnsy" opt; do
+    case "$opt" in
+    h)
+        usage
+        ;;
+    n)
+        optDryRun=true
+        ;;
+    s)
+        optJustSmartos=true
+        ;;
+    y)
+        optYes=true
+        ;;
+    *)
+        usage "illegal option -- $OPTARG"
+        ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+release=$1
+if [[ -z "$release" ]]; then
+    usage "no release argument given"
+fi
+if [[ -n "$(echo "$release" | grep '^[0-9]\{8\}$' || true)" ]]; then
+    # YYYYMMDD
+    branch=release-$release
+elif [[ -n "$(echo "$release" | grep '^release-[0-9]\{8\}$' || true)" ]]; then
+    branch=$release
+else
+    fatal "'$release' does not match '[release-]YYYYMMDD'"
+fi
+
+for command in jr json; do
+    $command -h 2>&1 >/dev/null || fatal "Unable to run $command, please check your \$PATH"
+done
+
+if [[ -z "$JR_MANIFESTS" ]]; then
+    fatal "\$JR_MANIFESTS should be set in the environment.
+Example value:
+    JR_MANIFESTS=~/wrk/triton/tools/jr-manifest.json,~/wrk/manta/tools/jr-manifest.json,~/wrk/smartos-live/tools/jr-manifest.json"
+fi
+
+# Use Joyent repo metadata (https://github.com/joyent/joyent-repos) to list
+# (a) public and (b) release repositories to branch.
+if [[ "$optJustSmartos" == "true" ]]; then
+    repos=$(jr list -l smartos,release,public -Ho name)
+else
+    repos=$(jr list -l release,public -Ho name)
+fi
+
+# Confirmation.
+if [[ "$optYes" != "true" ]]; then
+    numRepos=$(echo "$repos" | wc -l | awk '{print $1}')
+    echo "This will create the '$branch' branch on $numRepos repo(s) as necessary." >&2
+    read -p "Would you like to continue? [y/N] " answer
+    if [[ "$answer" =~ ^[Yy]$ ]]; then
+        echo "" >&2
+    else
+        echo "Aborting (answer was not 'y' or 'Y')"
+        exit 1
+    fi
+fi
+
+for repo in $repos; do
+    branchRepo "$repo" "$branch" "$optDryRun"
+done
