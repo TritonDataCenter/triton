@@ -89,8 +89,7 @@ if [[ -z "$targets" ]]; then
     # we get the mg label since that's part of the component manta path
     # we get the buildisprivate label to find non-public builds
     # we get name since that's a component of the jenkins job to launch
-    targets=$(jr list -H -l mg,release \
-        -o labels.mg,labels.buildisprivate,name | grep -v ^sdcsso)
+    targets=$(jr list -H -l mg,release -o labels.mg,labels.buildisprivate,name)
 fi
 
 # Ensure mls is setup properly at all.
