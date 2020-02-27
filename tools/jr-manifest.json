@@ -949,6 +949,7 @@
         {
             "name": "triton-kbmapi",
             "labels": {
+                "release": true,
                 "tritonservice": "kbmapi",
                 "mg": "kbmapi",
                 "vm": true
