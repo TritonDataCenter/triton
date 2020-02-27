@@ -7,7 +7,7 @@
 #
 
 #
-# Copyright 2019 Joyent, Inc.
+# Copyright 2020 Joyent, Inc.
 #
 
 #
@@ -94,7 +94,7 @@ fi
 # parameter, because that'll take the long-form git branch and write those
 # into the 'configure-projects' file.
 #
-PLAT_REPOS='illumos-extra illumos local/kvm-cmd local/kvm local/mdata-client local/ur-agent'
+PLAT_REPOS='illumos-extra illumos local/kbmd local/kvm-cmd local/kvm local/mdata-client local/ur-agent'
 for repo in $PLAT_REPOS; do
 	if [[ -z "$PLAT_PROJECTS_TEMPLATE" ]]; then
 		PLAT_PROJECTS_TEMPLATE="$repo: BRANCH: origin\n"
