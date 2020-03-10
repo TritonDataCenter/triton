@@ -52,7 +52,7 @@ PROJECT=${@:$OPTIND:1}
 
 if [[ -n "$PLAT_FLAVOR" ]]; then
 	case $PROJECT in
-		"platform"|"platform-debug")
+		"platform")
 			case "$PLAT_FLAVOR" in
 				"triton"|"smartos"|"triton-and-smartos")
 					;;
@@ -66,7 +66,7 @@ if [[ -n "$PLAT_FLAVOR" ]]; then
 			esac
 		;;
 	*)
-		usage "-F should only be used for platform or platform-debug builds"
+		usage "-F should only be used for platform builds"
 		;;
 	esac
 fi
@@ -87,24 +87,8 @@ if [[ -z $GITREPO ]]; then
 	usage "-g GITREPO must be specified"
 fi
 
-#
-# The platform build expects a set of parameters to specify which branches
-# should be built. It's unfortunate we need to pass this parameter at all,
-# but we can't default jenkins to using ${BRANCH} in its CONFIGURE_PROJECTS
-# parameter, because that'll take the long-form git branch and write those
-# into the 'configure-projects' file.
-#
-PLAT_REPOS='illumos-extra illumos local/kbmd local/kvm-cmd local/kvm local/mdata-client local/ur-agent'
-for repo in $PLAT_REPOS; do
-	if [[ -z "$PLAT_PROJECTS_TEMPLATE" ]]; then
-		PLAT_PROJECTS_TEMPLATE="$repo: BRANCH: origin\n"
-	else
-		PLAT_PROJECTS_TEMPLATE="${PLAT_PROJECTS_TEMPLATE}$repo: BRANCH: origin\n"
-	fi
-done
-
 case $PROJECT in
-	"platform"|"headnode"|"headnode-debug")
+	"headnode"|"headnode-debug")
 		if [[ -n $BRANCH ]]; then
 			printf "Set BUILD_PARAM for %s: BRANCH=%s\n" "$PROJECT" "$BRANCH"
 			BUILD_PARAM=$(printf '{"name":"BRANCH", "value": "%s"}' $BRANCH)
@@ -117,14 +101,9 @@ case $PROJECT in
 esac
 
 case $PROJECT in
-	"platform"|"platform-debug")
-		if [[ -n "$BRANCH" ]]; then
-			PLAT_PROJECTS=$(echo "${PLAT_PROJECTS_TEMPLATE}" | \
-			    sed -e "s/BRANCH/${BRANCH}/g")
-			BUILD_PARAM="${BUILD_PARAM},$(printf '{"name": "CONFIGURE_PROJECTS", "value": "%s"}' "${PLAT_PROJECTS}")"
-		fi
+	"platform")
 		if [[ -n "$PLAT_FLAVOR" ]]; then
-			BUILD_PARAM="${BUILD_PARAM},$(printf '{"name": "PLATFORM_BUILD_FLAVOR", "value": "%s"}' "${PLAT_FLAVOR}")"
+			BUILD_PARAM="$(printf '{"name": "PLATFORM_BUILD_FLAVOR", "value": "%s"}' "${PLAT_FLAVOR}")"
 		fi
 		;;
 	"headnode"|"headnode-debug")
