@@ -19,7 +19,7 @@ on your own hardware.
 This guide tells you how to get started.
 
 If you're working on Manta, or are interested about other aspects of the build
-system, see the [Manta dev notes](https://github.com/joyent/manta/blob/master/docs/dev-notes.md).
+system, see the [Manta developer guide](https://github.com/joyent/manta/tree/master/docs/developer-guide).
 
 ## Prerequisites
 
