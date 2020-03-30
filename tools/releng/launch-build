@@ -95,9 +95,10 @@ case $PROJECT in
 			BUILD_PARAM="$(printf '{"name": "PLATFORM_BUILD_FLAVOR", "value": "%s"}' "${PLAT_FLAVOR}")"
 		fi
 		;;
-	"headnode"|"headnode-debug")
+	"headnode")
 		if [[ -n "$BRANCH" ]]; then
 			BUILD_PARAM="$(printf '{"name": "CONFIGURE_BRANCHES", "value": "bits-branch: %s"}' "${BRANCH}")"
+			BUILD_PARAM="${BUILD_PARAM},{\"name\": \"INCLUDE_DEBUG_STAGE\", \"value\": \"true\"}"
 		fi
 		;;
 esac
