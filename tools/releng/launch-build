@@ -87,18 +87,7 @@ if [[ -z $GITREPO ]]; then
 	usage "-g GITREPO must be specified"
 fi
 
-case $PROJECT in
-	"headnode"|"headnode-debug")
-		if [[ -n $BRANCH ]]; then
-			printf "Set BUILD_PARAM for %s: BRANCH=%s\n" "$PROJECT" "$BRANCH"
-			BUILD_PARAM=$(printf '{"name":"BRANCH", "value": "%s"}' $BRANCH)
-		fi
-		BUILD_URL="$JENKINS_URL/job/$PROJECT/build"
-		;;
-	*)
-		BUILD_URL="$JENKINS_URL/job/joyent-org/job/$GITREPO/job/$BRANCH/build"
-		;;
-esac
+BUILD_URL="$JENKINS_URL/job/joyent-org/job/$GITREPO/job/$BRANCH/build"
 
 case $PROJECT in
 	"platform")
@@ -106,9 +95,10 @@ case $PROJECT in
 			BUILD_PARAM="$(printf '{"name": "PLATFORM_BUILD_FLAVOR", "value": "%s"}' "${PLAT_FLAVOR}")"
 		fi
 		;;
-	"headnode"|"headnode-debug")
+	"headnode")
 		if [[ -n "$BRANCH" ]]; then
-			BUILD_PARAM="${BUILD_PARAM},$(printf '{"name": "CONFIGURE_BRANCHES", "value": "bits-branch: %s"}' "${BRANCH}")"
+			BUILD_PARAM="$(printf '{"name": "CONFIGURE_BRANCHES", "value": "bits-branch: %s"}' "${BRANCH}")"
+			BUILD_PARAM="${BUILD_PARAM},{\"name\": \"INCLUDE_DEBUG_STAGE\", \"value\": \"true\"}"
 		fi
 		;;
 esac
