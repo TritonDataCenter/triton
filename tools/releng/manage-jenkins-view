@@ -1,0 +1,103 @@
+#!/bin/bash
+
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+#
+# Copyright 2020 Joyent, Inc.
+#
+
+#
+# This script creates a new Jenkins view for the given release branch. To
+# use this, you will need to get an API token for a Jenkins user, and
+# provide it to the script through the JENKINS_AUTH environment variable.
+#
+
+if [[ -n "$TRACE" ]]; then
+    export PS4='[\D{%FT%TZ}] ${BASH_SOURCE}:${LINENO}: ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+    set -o xtrace
+fi
+set -o errexit
+set -o pipefail
+
+PROGNAME=$0
+
+function usage() {
+    printf "Usage:\n    $PROGNAME <-c BRANCH | -d BRANCH>\n" >&2
+    printf "\n"
+    printf "This program creates or destroys a Jenkins view of a series of\n"
+    printf "jobs matching the given branch. It does not affect the jobs\n"
+    printf "themselves.\n\n"
+    printf "    -c BRANCH        create a view for the given branch\n"
+    printf "    -d BRANCH        destroy the view for the given branch\n\n"
+    exit 2
+}
+
+#
+# Main
+#
+while getopts "c:d:h" opt; do
+    case "${opt}" in
+        c)
+            CREATE=true
+            RELEASE="${OPTARG}"
+            ;;
+        d)
+            DESTROY=true
+            RELEASE="${OPTARG}"
+            ;;
+        h)
+            usage
+            ;;
+        *)
+            echo "Error: Unknown argument ${opt}"
+            usage
+    esac
+done
+shift $((OPTIND - 1))
+
+if [[ -z "$RELEASE" ]]; then
+    usage
+fi
+
+if [[ -z "$CREATE" && -z "$DESTROY" ]]; then
+    echo "Error: either a -c or a -d argument must be passed"
+    usage
+fi
+
+if [[ -z $JENKINS_URL ]]; then
+    JENKINS_URL=https://jenkins.joyent.us
+fi
+
+if [[ -z $JENKINS_AUTH ]]; then
+    usage "JENKINS_AUTH must be set to <user>:<api token> (get it here: ${JENKINS_URL}/me/configure)"
+fi
+
+CRUMB_URL="$JENKINS_URL/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)"
+
+# Fetch the CSRF token to send in our request's headers
+CRUMB=$(curl ${CURL_OPTS[@]} --user "$JENKINS_AUTH" "$CRUMB_URL" 2> /dev/null)
+
+if [[ -n "$CREATE" ]]; then
+
+    JENKINS_VIEW_JSON="{
+        \"name\": \"$RELEASE\",
+        \"mode\": \"hudson.model.ListView\",
+        \"recurse\": \"true\",
+        \"includeRegex\": \".*${RELEASE}.*\"
+    }"
+
+    curl -X POST -H "$CRUMB" "${JENKINS_URL}/createView" \
+        --user "$JENKINS_AUTH" \
+        --data 'name=ViewX&mode=hudson.model.ListView&json'="${JENKINS_VIEW_JSON}"
+
+elif [[ -n "$DESTROY" ]]; then
+
+    curl -X POST -H "$CRUMB" "${JENKINS_URL}/view/${RELEASE}/doDelete" \
+        --user "$JENKINS_AUTH" \
+        -F Submit=Yes
+
+fi
