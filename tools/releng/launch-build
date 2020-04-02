@@ -93,6 +93,7 @@ case $PROJECT in
 	"platform")
 		if [[ -n "$PLAT_FLAVOR" ]]; then
 			BUILD_PARAM="$(printf '{"name": "PLATFORM_BUILD_FLAVOR", "value": "%s"}' "${PLAT_FLAVOR}")"
+			BUILD_PARAM="${BUILD_PARAM},{\"name\": \"ONLY_BUILD_STRAP_CACHE\", \"value\": \"false\"}"
 		fi
 		;;
 	"headnode")
