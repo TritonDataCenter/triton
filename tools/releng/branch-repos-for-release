@@ -155,6 +155,41 @@ Example value:
     JR_MANIFESTS=~/wrk/triton/tools/jr-manifest.json,~/wrk/manta/tools/jr-manifest.json,~/wrk/smartos-live/tools/jr-manifest.json"
 fi
 
+#
+# If the release engineer has JR_MANIFEST entries that are not up to date, we
+# may not create release branches for the expected repositories. It's possible
+# that jr-manifest files are not housed in a repository, in which case, the
+# check below will do nothing, but let's at least try.
+#
+OUTDATED_REPOS=""
+echo "Checking JR_MANIFESTS repos for upstream changes ..."
+set +o errexit
+for jr_manifest in $(echo $JR_MANIFESTS | sed -e 's/,/ /g'); do
+    JR_REPO=$(echo $jr_manifest | \
+        sed -e 's#/tools/jr-manifest.json##g' | \
+        sed -e 's#/jr-manifest.json##'g)
+    # list changes not yet pulled to this repository
+    HAS_INCOMING=$(git -C $JR_REPO fetch 2> /dev/null && \
+        git -C $JR_REPO log ..FETCH_HEAD 2> /dev/null)
+    if [[ -n "$HAS_INCOMING" ]]; then
+        OUTDATED_REPOS="$OUTDATED_REPOS $JR_REPO"
+    fi
+done
+
+if [[ -n "$OUTDATED_REPOS" ]]; then
+    echo ""
+    echo "ERROR: Some JR_MANIFESTS repositories have upstream changes."
+    echo "       Please run the following commands before re-running this"
+    echo "       script."
+    echo ""
+    for jr_repo in $OUTDATED_REPOS; do
+        echo "    git -C $jr_repo pull"
+    done
+    echo ""
+    fatal "Exiting now."
+fi
+set -o errexit
+
 # Use Joyent repo metadata (https://github.com/joyent/joyent-repos) to list
 # (a) public and (b) release repositories to branch.
 if [[ "$optJustSmartos" == "true" ]]; then
