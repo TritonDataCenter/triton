@@ -25,6 +25,7 @@ set -o pipefail
 
 TOP=$(cd $(dirname $0)/../../; pwd)
 CACHEDIR="/var/tmp/weekly-build-cache"
+mkdir -p $CACHEDIR
 
 JENKINSFILE=/tmp/Jenkinsfile.$$
 
@@ -108,12 +109,10 @@ while getopts "hnsy" opt; do
 done
 shift $((OPTIND - 1))
 
-for command in jr json; do
-    $command -h 2>&1 >/dev/null || fatal "Unable to run $command, please check your \$PATH"
-done
+json -h 2>&1 >/dev/null || fatal "Unable to run $command, please check your \$PATH"
+jr -h 2>&1 > /dev/null || ensure_jr
 
 if [[ -z "$JR_MANIFESTS" ]]; then
-    mkdir -p $CACHEDIR
     for repo in manta smartos-live; do
         git clone https://github.com/joyent/$repo $CACHEDIR/$repo
     done
@@ -127,6 +126,13 @@ if [[ "$optJustSmartos" == "true" ]]; then
 else
     repos=$(jr list -l release,public -Ho name)
 fi
+
+function ensure_jr {
+    git clone https://github.com/joyent/joyent-repos $CACHEDIR/joyent-repos
+    cd $CACHEDIR/joyent-repos
+    make all
+    export PATH=$CACHEDIR/joyent-repos/bin:$PATH
+}
 
 function jenkins_header {
     # Write the Jenkinsfile header
