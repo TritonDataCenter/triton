@@ -123,9 +123,7 @@ json -h 2>&1 >/dev/null || fatal "Unable to run $command, please check your \$PA
 $JR -h 2>&1 > /dev/null || ensure_jr
 
 if [[ -z "$JR_MANIFESTS" ]]; then
-    for repo in manta smartos-live; do
-        git clone https://github.com/joyent/$repo $CACHEDIR/$repo
-    done
+    $JR clone -y -d $CACHEDIR smartos-live manta
     export JR_MANIFESTS=$TOP/tools/jr-manifest.json,$CACHEDIR/smartos-live/tools/jr-manifest.json,$CACHEDIR/manta/tools/jr-manifest.json
 fi
 
