@@ -125,11 +125,6 @@ pipeline {
                 build(job: 'joyent-org/manta-manatee/master', wait: true)
             }
         }
-        stage('manta-marlin') {
-            steps {
-                build(job: 'joyent-org/manta-marlin/master', wait: true)
-            }
-        }
         stage('manta-minnow') {
             steps {
                 build(job: 'joyent-org/manta-minnow/master', wait: true)

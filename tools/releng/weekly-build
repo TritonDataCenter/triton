@@ -113,7 +113,7 @@ function ensure_jr {
     git clone https://github.com/joyent/joyent-repos $CACHEDIR/joyent-repos
     cd $CACHEDIR/joyent-repos
     make all
-    export PATH=$CACHEDIR/joyent-repos/bin:$PATH
+    export PATH=$CACHEDIR/joyent-repos/bin:/usr/bin:$PATH
 }
 
 json -h 2>&1 >/dev/null || fatal "Unable to run $command, please check your \$PATH"
