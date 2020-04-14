@@ -126,6 +126,7 @@ if [[ -z "$JR_MANIFESTS" ]]; then
     for repo in manta smartos-live; do
         git clone https://github.com/joyent/$repo $CACHEDIR/$repo
     done
+    cd $TOP
     export JR_MANIFESTS=$TOP/tools/jr-manifest.json,$CACHEDIR/smartos-live/tools/jr-manifest.json,$CACHEDIR/manta/tools/jr-manifest.json
 fi
 
