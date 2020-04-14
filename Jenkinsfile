@@ -12,7 +12,9 @@
 
 pipeline {
 
-    agent any
+    agent {
+        label joyCommonLabels(image_ver: '19.4.0')
+    }
     options {
         buildDiscarder(logRotator(numToKeepStr: '30'))
         timestamps()
@@ -28,7 +30,9 @@ pipeline {
                 * matches the one we'd otherwise generate. Run this first to
                 * prevent wasting time building incorrect components.
                 */
-                sh './tools/releng/weekly-build'
+                nodejs('sdcnode-v8-zone64') {
+                    sh './tools/releng/weekly-build'
+                }
             }
         }
         stage('triton/manta components') {
