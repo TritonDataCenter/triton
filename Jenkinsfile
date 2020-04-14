@@ -28,7 +28,7 @@ pipeline {
                 * matches the one we'd otherwise generate. Run this first to
                 * prevent wasting time building incorrect components.
                 */
-                sh './tools/releng/weekly-build/weekly-build'
+                sh './tools/releng/weekly-build'
             }
         }
         stage('triton/manta components') {
