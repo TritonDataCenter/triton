@@ -22,12 +22,14 @@ pipeline {
     stages {
         stage('compare jenkinsfile') {
             when { branch 'weekly-build' }
-            /*
-            * This checks that the Jenkinsfile in the checked-out workspace
-            * matches the one we'd otherwise generate. Run this first to prevent
-            * wasting time building incorrect components.
-            */
-            sh './tools/releng/weekly-build/weekly-build'
+            steps {
+                /*
+                * This checks that the Jenkinsfile in the checked-out workspace
+                * matches the one we'd otherwise generate. Run this first to
+                * prevent wasting time building incorrect components.
+                */
+                sh './tools/releng/weekly-build/weekly-build'
+            }
         }
         stage('triton/manta components') {
             when {

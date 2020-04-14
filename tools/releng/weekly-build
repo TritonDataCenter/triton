@@ -161,12 +161,14 @@ function compare_jenkinsfile_stage {
     cat >> $JENKINSFILE <<EOF
         stage('compare jenkinsfile') {
             when { branch '$WHEN_BRANCH' }
-            /*
-            * This checks that the Jenkinsfile in the checked-out workspace
-            * matches the one we'd otherwise generate. Run this first to prevent
-            * wasting time building incorrect components.
-            */
-            sh './tools/releng/weekly-build/weekly-build'
+            steps {
+                /*
+                * This checks that the Jenkinsfile in the checked-out workspace
+                * matches the one we'd otherwise generate. Run this first to
+                * prevent wasting time building incorrect components.
+                */
+                sh './tools/releng/weekly-build/weekly-build'
+            }
         }
 EOF
 }
