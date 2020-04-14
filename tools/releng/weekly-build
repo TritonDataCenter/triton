@@ -27,6 +27,9 @@ TOP=$(cd $(dirname $0)/../../; pwd)
 CACHEDIR="/var/tmp/weekly-build-cache"
 mkdir -p $CACHEDIR
 
+# Assume 'jr' is on the $PATH, but we'll check for that later
+JR=jr
+
 JENKINSFILE=/tmp/Jenkinsfile.$$
 
 AGENTS="sdc-agents-core
@@ -113,11 +116,11 @@ function ensure_jr {
     git clone https://github.com/joyent/joyent-repos $CACHEDIR/joyent-repos
     cd $CACHEDIR/joyent-repos
     make all
-    export PATH=$CACHEDIR/joyent-repos/bin:/usr/bin:$PATH
+    export JR=$CACHEDIR/joyent-repos/bin/jr
 }
 
 json -h 2>&1 >/dev/null || fatal "Unable to run $command, please check your \$PATH"
-jr -h 2>&1 > /dev/null || ensure_jr
+$JR -h 2>&1 > /dev/null || ensure_jr
 
 if [[ -z "$JR_MANIFESTS" ]]; then
     for repo in manta smartos-live; do
@@ -129,9 +132,9 @@ fi
 # Use Joyent repo metadata (https://github.com/joyent/joyent-repos) to list
 # (a) public and (b) release repositories.
 if [[ "$optJustSmartos" == "true" ]]; then
-    repos=$(jr list -l smartos,release,public -Ho name)
+    repos=$($JR list -l smartos,release,public -Ho name)
 else
-    repos=$(jr list -l release,public -Ho name)
+    repos=$($JR list -l release,public -Ho name)
 fi
 
 function jenkins_header {
