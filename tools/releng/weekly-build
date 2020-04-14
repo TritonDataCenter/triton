@@ -1,0 +1,356 @@
+#!/bin/bash
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Copyright 2020 Joyent, Inc.
+#
+
+#
+# Create a Jenkinsfile corresponding to a weekly build and compare it to
+# the weekly-build branch of this repository if it differs from the current
+# Jenkinsfile.
+#
+
+if [[ -n "$TRACE" ]]; then
+    export PS4='[\D{%FT%TZ}] ${BASH_SOURCE}:${LINENO}: ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+    set -o xtrace
+fi
+set -o errexit
+set -o pipefail
+
+
+#---- globals, config
+
+TOP=$(cd $(dirname $0)/../../; pwd)
+CACHEDIR="/var/tmp/weekly-build-cache"
+
+JENKINSFILE=/tmp/Jenkinsfile.$$
+
+AGENTS="sdc-agents-core
+    triton-cmon-agent
+    sdc-cn-agent
+    sdc-net-agent
+    sdc-vm-agent
+    sdc-hagfish-watcher
+    sdc-smart-login
+    sdc-amon
+    sdc-firewaller-agent
+    sdc-config-agent"
+
+PLATFORM="smartos-live
+    illumos-extra
+    illumos-joyent
+    illumos-kvm-cmd
+    illumos-kvm
+    kbmd
+    mdata-client
+    sdc-ur-agent"
+
+# The branch of all components that we build, could be parameterized eventually
+COMPONENT_BRANCH="master"
+
+# Set the branch triton.git needs to be on in order to do one of these builds
+WHEN_BRANCH="weekly-build"
+# Only build if a user has pushed the button
+TRIGGERED_CLAUSE="triggeredBy cause: 'UserIdCause'"
+
+
+#---- functions
+
+function usage
+{
+    local exitStatus=0
+
+    if [[ -n "$1" ]]; then
+        exitStatus=1
+        echo "error: $1" >&2
+        echo ""
+    fi
+    echo "Usage:"
+    echo "  weekly-build [<options>] [release-]YYYYMMDD"
+    echo ""
+    echo "Options:"
+    echo "  -h          Print this help and exit."
+    echo "  -n          Do a dry-run, don't actually branch."
+    echo "  -s          Only build the SmartOS (aka 'platform') repos."
+    echo ""
+
+    exit $exitStatus
+}
+
+function fatal
+{
+    echo "$0: fatal error: $*"
+    exit 1
+}
+
+#---- mainline
+
+optDryRun=false
+optYes=false
+while getopts "hnsy" opt; do
+    case "$opt" in
+    h)
+        usage
+        ;;
+    n)
+        optDryRun=true
+        ;;
+    s)
+        optJustSmartos=true
+        ;;
+    *)
+        usage "illegal option -- $OPTARG"
+        ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+for command in jr json; do
+    $command -h 2>&1 >/dev/null || fatal "Unable to run $command, please check your \$PATH"
+done
+
+if [[ -z "$JR_MANIFESTS" ]]; then
+    mkdir -p $CACHEDIR
+    for repo in manta smartos-live; do
+        git clone https://github.com/joyent/$repo $CACHEDIR/$repo
+    done
+    export JR_MANIFESTS=$TOP/tools/jr-manifest.json,$CACHEDIR/smartos-live/tools/jr-manifest.json,$CACHEDIR/manta/tools/jr-manifest.json
+fi
+
+# Use Joyent repo metadata (https://github.com/joyent/joyent-repos) to list
+# (a) public and (b) release repositories.
+if [[ "$optJustSmartos" == "true" ]]; then
+    repos=$(jr list -l smartos,release,public -Ho name)
+else
+    repos=$(jr list -l release,public -Ho name)
+fi
+
+function jenkins_header {
+    # Write the Jenkinsfile header
+    YEAR=$(date +%Y)
+    cat > $JENKINSFILE <<EOF
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+/*
+ * Copyright $YEAR Joyent, Inc.
+ */
+
+@Library('jenkins-joylib@v1.0.4') _
+
+pipeline {
+
+    agent any
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '30'))
+        timestamps()
+        parallelsAlwaysFailFast()
+    }
+
+    stages {
+EOF
+}
+
+function compare_jenkinsfile_stage {
+    cat >> $JENKINSFILE <<EOF
+        stage('compare jenkinsfile') {
+            when { branch '$WHEN_BRANCH' }
+            /*
+            * This checks that the Jenkinsfile in the checked-out workspace
+            * matches the one we'd otherwise generate. Run this first to prevent
+            * wasting time building incorrect components.
+            */
+            sh './tools/releng/weekly-build/weekly-build'
+        }
+EOF
+}
+
+function triton_stage {
+    # Builds all Triton/Manta components in parallel
+    cat >> $JENKINSFILE <<EOF
+        stage('triton/manta components') {
+            when {
+                allOf {
+                    branch '$WHEN_BRANCH'
+                    $TRIGGERED_CLAUSE
+                }
+            }
+        /*
+         * This builds all components required for the headnode in parallel.
+         * We don't indent the enclosed stages to improve readability.
+         */
+            parallel {
+EOF
+    platform_stage
+    if [[ -z "$optJustSmartos" ]]; then
+        component_stage
+    fi
+    cat >> $JENKINSFILE <<EOF
+            }
+        /* End triton/manta component parallel */
+        }
+EOF
+    # We can't nest a stage that includes a parallel directive
+    # inside another parallel directive. Fortunately, the agent builds
+    # don't take long, so we'll live with it.
+    agent_stage
+}
+
+
+function platform_stage {
+    # Include the platform build stage
+    cat >>  $JENKINSFILE <<EOF
+        stage('platform build') {
+            steps {
+                build(job:'joyent-org/smartos-live/$COMPONENT_BRANCH',
+                    wait: true,
+                    parameters: [
+                        text(name: 'CONFIGURE_PROJECTS',
+                            value:
+                            "illumos-extra: $COMPONENT_BRANCH: origin\n" +
+                            'illumos: $COMPONENT_BRANCH: origin\n' +
+                            'local/kbmd: $COMPONENT_BRANCH: origin\n' +
+                            'local/kvm-cmd: $COMPONENT_BRANCH: origin\n' +
+                            'local/kvm: $COMPONENT_BRANCH: origin\n' +
+                            'local/mdata-client: $COMPONENT_BRANCH: origin\n' +
+                            'local/ur-agent: $COMPONENT_BRANCH: origin'),
+                        booleanParam(name: 'BUILD_STRAP_CACHE', value: false)
+                    ])
+            }
+        }
+EOF
+}
+
+function agent_stage {
+    # builds all agents and the agents installer shar
+    cat >> $JENKINSFILE <<EOF
+        /*
+         * Build all agents in parallel, then build the agents-installer
+         * which bundles them into a shar archive.
+         */
+        stage('agents parallel') {
+            when {
+                allOf {
+                    branch '$WHEN_BRANCH'
+                    $TRIGGERED_CLAUSE
+                }
+            }
+            parallel {
+EOF
+    for agent in $AGENTS; do
+        cat >> $JENKINSFILE <<EOF
+                stage('$agent') {
+                    steps {
+                        build(job: 'joyent-org/$agent/$COMPONENT_BRANCH', wait: true)
+                    }
+                }
+EOF
+    done
+    cat >> $JENKINSFILE <<EOF
+            }
+        }
+EOF
+    cat >> $JENKINSFILE <<EOF
+        stage('agents-installer') {
+            when {
+                allOf {
+                    branch '$WHEN_BRANCH'
+                    $TRIGGERED_CLAUSE
+                }
+            }
+            steps {
+                build(job: 'joyent-org/sdc-agents-installer/$COMPONENT_BRANCH', wait: true)
+            }
+        }
+EOF
+}
+
+function component_stage {
+    # Now build everything other than the agents, the headnode and the platform
+    SKIP_COMPONENTS="$AGENTS $PLATFORM sdc-agents-installer sdc-headnode "
+    for skip_component in $SKIP_COMPONENTS; do
+            echo $skip_component
+    done | sort > /tmp/weekly-build-skip.$$
+
+    set +o errexit
+    for repo in $repos; do
+        SHOULD_SKIP=$(cat /tmp/weekly-build-skip.$$ | grep "^$repo\$")
+        if [[ -n "$SHOULD_SKIP" ]]; then
+            continue
+        fi
+        cat >> $JENKINSFILE <<EOF
+        stage('$repo') {
+            steps {
+                build(job: 'joyent-org/$repo/$COMPONENT_BRANCH', wait: true)
+            }
+        }
+EOF
+    done
+    set -o errexit
+    rm /tmp/weekly-build-skip.$$
+}
+
+function headnode_stage {
+    cat >> $JENKINSFILE <<EOF
+        /*
+         * Now that all components are built, build the headnode images.
+         */
+        stage('sdc-headnode') {
+            when {
+                allOf {
+                    branch '$WHEN_BRANCH'
+                    $TRIGGERED_CLAUSE
+                }
+            }
+            steps {
+                build(job: 'joyent-org/sdc-headnode/$COMPONENT_BRANCH', wait: true)
+            }
+        }
+EOF
+}
+
+function jenkins_footer {
+# Write the Jenkinsfile footer
+cat >>  $JENKINSFILE <<EOF
+    }
+    post {
+        always {
+            joyMattermostNotification(channel: 'jenkins')
+        }
+    }
+}
+EOF
+}
+
+jenkins_header
+compare_jenkinsfile_stage
+triton_stage
+headnode_stage
+jenkins_footer
+
+if [[ -d $CACHEDIR ]]; then
+    echo "removing cache dir"
+    rm -rf $CACHEDIR
+fi
+
+set +o errexit
+# Compare what we generated to what is in the workspace.
+grep -v 'Copyright .* Joyent, Inc.' $TOP/Jenkinsfile > /tmp/Jenkinsfile.committed.$$
+grep -v 'Copyright .* Joyent, Inc.' $JENKINSFILE > /tmp/Jenkinsfile.generated.$$
+diff /tmp/Jenkinsfile.committed.$$ /tmp/Jenkinsfile.generated.$$
+RES=$?
+rm /tmp/Jenkinsfile.committed.$$ /tmp/Jenkinsfile.generated.$$
+if [[ $RES -ne 0 ]]; then
+    echo "New Jenkinsfile differs from committed version, please update it."
+    echo "See $JENKINSFILE"
+    exit 1
+else
+    echo "Weekly build Jenkinsfile is current."
+    exit 0
+fi
