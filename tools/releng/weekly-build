@@ -57,7 +57,7 @@ COMPONENT_BRANCH="master"
 
 # Set the branch triton.git needs to be on in order to do one of these builds
 WHEN_BRANCH="weekly-build"
-# Only build if a user has pushed the button
+# Only build if a user has pushed the 'Build now' button (or similar API call)
 TRIGGERED_CLAUSE="triggeredBy cause: 'UserIdCause'"
 
 
@@ -119,15 +119,33 @@ function ensure_jr {
     export JR=$CACHEDIR/joyent-repos/bin/jr
 }
 
-json -h 2>&1 >/dev/null || fatal "Unable to run $command, please check your \$PATH"
+json -h 2>&1 >/dev/null || \
+    fatal "Unable to run $command, please check your \$PATH"
 $JR -h 2>&1 > /dev/null || ensure_jr
 
 if [[ -z "$JR_MANIFESTS" ]]; then
-    for repo in manta smartos-live; do
+    # Despite this script being in triton.git, it's not on the master branch
+    # so let's ensure we use that branch for jr-manifest data instead.
+    for repo in triton manta smartos-live; do
         git clone https://github.com/joyent/$repo $CACHEDIR/$repo
     done
     cd $TOP
-    export JR_MANIFESTS=$TOP/tools/jr-manifest.json,$CACHEDIR/smartos-live/tools/jr-manifest.json,$CACHEDIR/manta/tools/jr-manifest.json
+    export JR_MANIFESTS=$CACHEDIR/triton/tools/jr-manifest.json,$CACHEDIR/smartos-live/tools/jr-manifest.json,$CACHEDIR/manta/tools/jr-manifest.json
+
+    # There is a chicken/egg problem here, in that the 'weekly-build' branch
+    # might have an old copy of the script that we're running. Check that it's
+    # current, and bail out it not.
+    if [[ -f $CACHEDIR/triton/tools/releng/weekly-build ]]; then
+        set +o errexit
+        diff ${TOP}/tools/releng/weekly-build \
+            $CACHEDIR/triton/tools/releng/weekly-build
+        if [[ $? -ne 0 ]]; then
+            echo "Error: the 'weekly-build' branch contains a stale copy of " \
+                "./tools/releng/weekly-build. Please cherry-pick it from " \
+                "'master' onto the 'weekly-build' branch."
+            exit 1
+        fi
+        set -o errexit
 fi
 
 # Use Joyent repo metadata (https://github.com/joyent/joyent-repos) to list
@@ -137,6 +155,17 @@ if [[ "$optJustSmartos" == "true" ]]; then
 else
     repos=$($JR list -l release,public -Ho name)
 fi
+
+#
+# Generate a Goovy expression that returns true if the 'COMPONENT' build
+# parameter is either empty, or includes the name of the component. We use
+# the resulting expression in a 'when {..}' clause to determine whether to
+# build a given component.
+#
+function compute_expression {
+    COMPONENT=$1
+    echo "params.COMPONENTS == \"\" or params.COMPONENTS =~ .*$COMPONENT.*"
+}
 
 function jenkins_header {
     # Write the Jenkinsfile header
@@ -164,6 +193,17 @@ pipeline {
         timestamps()
         parallelsAlwaysFailFast()
     }
+    parameters {
+        string(
+            name: 'COMPONENTS',
+            defaultValue: '',
+            description:
+                'A space separated list of the repositories to build. ' +
+                'By default, all components are included, but if any are ' +
+                'specified here, sdc-headnode is automatically added unless ' +
+                'this is a SmartOS only build.'
+            )
+    }
 
     stages {
 EOF
@@ -188,7 +228,9 @@ EOF
 }
 
 function triton_stage {
-    # Builds all Triton/Manta components in parallel
+    # Builds all Triton/Manta components in parallel. Note the when-clause
+    # doesn't include a $EXPRESSION_CLAUSE since this top-level stage simply
+    # collects a series of other stages in parallel.
     cat >> $JENKINSFILE <<EOF
         stage('triton/manta components') {
             when {
@@ -215,14 +257,24 @@ EOF
     # We can't nest a stage that includes a parallel directive
     # inside another parallel directive. Fortunately, the agent builds
     # don't take long, so we'll live with it.
-    agent_stage
+    if [[ -z "$optJustSmartos" ]]; then
+        agent_stage
+    fi
 }
 
 
 function platform_stage {
     # Include the platform build stage
+    EXPRESSION_CLAUSE=$(compute_expression smartos-live)
     cat >>  $JENKINSFILE <<EOF
         stage('platform build') {
+            when {
+                allOf {
+                    branch '$WHEN_BRANCH'
+                    $TRIGGERED_CLAUSE
+                    $EXPRESSION_CLAUSE
+                }
+            }
             steps {
                 build(job:'joyent-org/smartos-live/$COMPONENT_BRANCH',
                     wait: true,
@@ -244,7 +296,9 @@ EOF
 }
 
 function agent_stage {
-    # builds all agents and the agents installer shar
+    # builds all agents and the agents installer shar. We don't include a
+    # $EXPRESSION_CLAUSE yet, since we're just collecting a series of other
+    # stages in parallel.
     cat >> $JENKINSFILE <<EOF
         /*
          * Build all agents in parallel, then build the agents-installer
@@ -260,10 +314,18 @@ function agent_stage {
             parallel {
 EOF
     for agent in $AGENTS; do
+        EXPRESSION_CLAUSE=$(compute_expression $agent)
         cat >> $JENKINSFILE <<EOF
                 stage('$agent') {
+                    when {
+                        branch '$WHEN_BRANCH'
+                        $TRIGGERED_CLAUSE
+                        $EXPRESSION_CLAUSE
+                    }
                     steps {
-                        build(job: 'joyent-org/$agent/$COMPONENT_BRANCH', wait: true)
+                        build(
+                            job: 'joyent-org/$agent/$COMPONENT_BRANCH',
+                            wait: true)
                     }
                 }
 EOF
@@ -272,16 +334,20 @@ EOF
             }
         }
 EOF
+    EXPRESSION_CLAUSE=$(compute_expression agents-installer)
     cat >> $JENKINSFILE <<EOF
         stage('agents-installer') {
             when {
                 allOf {
                     branch '$WHEN_BRANCH'
                     $TRIGGERED_CLAUSE
+                    $EXPRESSION_CLAUSE
                 }
             }
             steps {
-                build(job: 'joyent-org/sdc-agents-installer/$COMPONENT_BRANCH', wait: true)
+                build(
+                    job: 'joyent-org/sdc-agents-installer/$COMPONENT_BRANCH',
+                    wait: true)
             }
         }
 EOF
@@ -300,8 +366,14 @@ function component_stage {
         if [[ -n "$SHOULD_SKIP" ]]; then
             continue
         fi
+        EXPRESSION_CLAUSE=$(compute_expression $repo)
         cat >> $JENKINSFILE <<EOF
         stage('$repo') {
+            when {
+                branch '$WHEN_BRANCH'
+                $TRIGGERED_CLAUSE
+                $EXPRESSION_CLAUSE
+            }
             steps {
                 build(job: 'joyent-org/$repo/$COMPONENT_BRANCH', wait: true)
             }
@@ -313,6 +385,10 @@ EOF
 }
 
 function headnode_stage {
+    #
+    # Note that we always build sdc-headnode, we don't have an EXPRESSION_CLAUSE
+    # for it.
+    #
     cat >> $JENKINSFILE <<EOF
         /*
          * Now that all components are built, build the headnode images.
@@ -325,7 +401,15 @@ function headnode_stage {
                 }
             }
             steps {
-                build(job: 'joyent-org/sdc-headnode/$COMPONENT_BRANCH', wait: true)
+                build(
+                    job: 'joyent-org/sdc-headnode/$COMPONENT_BRANCH',
+                    wait: true,
+                    parameters: [
+                        text(name: 'CONFIGURE_BRANCHES',
+                            value:
+                            "bits-branch: $COMPONENT_BRANCH"),
+                        booleanParam(name: 'INCLUDE_DEBUG_STAGE', value: true)
+                    ])
             }
         }
 EOF
@@ -347,7 +431,9 @@ EOF
 jenkins_header
 compare_jenkinsfile_stage
 triton_stage
-headnode_stage
+if [[ -z "$optJustSmartos" ]]; then
+    headnode_stage
+fi
 jenkins_footer
 
 if [[ -d $CACHEDIR ]]; then
