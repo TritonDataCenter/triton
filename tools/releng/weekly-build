@@ -146,6 +146,7 @@ if [[ -z "$JR_MANIFESTS" ]]; then
             exit 1
         fi
         set -o errexit
+    fi
 fi
 
 # Use Joyent repo metadata (https://github.com/joyent/joyent-repos) to list
@@ -164,7 +165,7 @@ fi
 #
 function compute_expression {
     COMPONENT=$1
-    echo "params.COMPONENTS == \"\" or params.COMPONENTS =~ .*$COMPONENT.*"
+    echo "expression { params.COMPONENTS == \"\" || params.COMPONENTS =~ \".*$COMPONENT.*\" }"
 }
 
 function jenkins_header {
@@ -266,6 +267,13 @@ EOF
 function platform_stage {
     # Include the platform build stage
     EXPRESSION_CLAUSE=$(compute_expression smartos-live)
+
+    if [[ -n "$optJustSmartos" ]]; then
+        PLATFORM_FLAVOR="choiceParam(name: 'PLATFORM_BUILD_FLAVOR', value: 'smartos')"
+    else
+        PLATFORM_FLAVOR="choiceParam(name: 'PLATFORM_BUILD_FLAVOR', value: 'triton-and-smartos')"
+    fi
+
     cat >>  $JENKINSFILE <<EOF
         stage('platform build') {
             when {
@@ -288,7 +296,8 @@ function platform_stage {
                             'local/kvm: $COMPONENT_BRANCH: origin\n' +
                             'local/mdata-client: $COMPONENT_BRANCH: origin\n' +
                             'local/ur-agent: $COMPONENT_BRANCH: origin'),
-                        booleanParam(name: 'BUILD_STRAP_CACHE', value: false)
+                        booleanParam(name: 'BUILD_STRAP_CACHE', value: false),
+                        $PLATFORM_FLAVOR
                     ])
             }
         }
@@ -334,7 +343,7 @@ EOF
             }
         }
 EOF
-    EXPRESSION_CLAUSE=$(compute_expression agents-installer)
+    EXPRESSION_CLAUSE=$(compute_expression sdc-agents-installer)
     cat >> $JENKINSFILE <<EOF
         stage('agents-installer') {
             when {
@@ -387,7 +396,7 @@ EOF
 function headnode_stage {
     #
     # Note that we always build sdc-headnode, we don't have an EXPRESSION_CLAUSE
-    # for it.
+    # for it. We don't build this if doing a SmartOS-only build.
     #
     cat >> $JENKINSFILE <<EOF
         /*
