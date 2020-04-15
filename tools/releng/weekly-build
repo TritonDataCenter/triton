@@ -182,7 +182,7 @@ function jenkins_header {
  * Copyright $YEAR Joyent, Inc.
  */
 
-@Library('jenkins-joylib@v1.0.4') _
+@Library('jenkins-joylib@v1.0.6') _
 
 pipeline {
 
@@ -326,15 +326,11 @@ EOF
         EXPRESSION_CLAUSE=$(compute_expression $agent)
         cat >> $JENKINSFILE <<EOF
                 stage('$agent') {
-                    when {
-                        branch '$WHEN_BRANCH'
-                        $TRIGGERED_CLAUSE
-                        $EXPRESSION_CLAUSE
-                    }
                     steps {
-                        build(
-                            job: 'joyent-org/$agent/$COMPONENT_BRANCH',
-                            wait: true)
+                        joyTriggerTritonComp(
+                            repo: "$agent",
+                            whenBranch: "$WHEN_BRANCH",
+                            compBranch: "$COMPONENT_BRANCH")
                     }
                 }
 EOF
@@ -346,17 +342,11 @@ EOF
     EXPRESSION_CLAUSE=$(compute_expression sdc-agents-installer)
     cat >> $JENKINSFILE <<EOF
         stage('agents-installer') {
-            when {
-                allOf {
-                    branch '$WHEN_BRANCH'
-                    $TRIGGERED_CLAUSE
-                    $EXPRESSION_CLAUSE
-                }
-            }
             steps {
-                build(
-                    job: 'joyent-org/sdc-agents-installer/$COMPONENT_BRANCH',
-                    wait: true)
+                joyTriggerTritonComp(
+                    repo: "$repo",
+                    whenBranch: "$WHEN_BRANCH",
+                    compBranch: "$COMPONENT_BRANCH")
             }
         }
 EOF
@@ -378,13 +368,11 @@ function component_stage {
         EXPRESSION_CLAUSE=$(compute_expression $repo)
         cat >> $JENKINSFILE <<EOF
         stage('$repo') {
-            when {
-                branch '$WHEN_BRANCH'
-                $TRIGGERED_CLAUSE
-                $EXPRESSION_CLAUSE
-            }
             steps {
-                build(job: 'joyent-org/$repo/$COMPONENT_BRANCH', wait: true)
+                joyTriggerTritonComp(
+                    repo: "$repo",
+                    whenBranch: "$WHEN_BRANCH",
+                    compBranch: "$COMPONENT_BRANCH")
             }
         }
 EOF

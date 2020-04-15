@@ -8,7 +8,7 @@
  * Copyright 2020 Joyent, Inc.
  */
 
-@Library('jenkins-joylib@v1.0.4') _
+@Library('jenkins-joylib@v1.0.6') _
 
 pipeline {
 
@@ -85,563 +85,451 @@ pipeline {
             }
         }
         stage('binder') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*binder.*" }
-            }
             steps {
-                build(job: 'joyent-org/binder/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "binder",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('electric-moray') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*electric-moray.*" }
-            }
             steps {
-                build(job: 'joyent-org/electric-moray/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "electric-moray",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('ipxe') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*ipxe.*" }
-            }
             steps {
-                build(job: 'joyent-org/ipxe/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "ipxe",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('mahi') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*mahi.*" }
-            }
             steps {
-                build(job: 'joyent-org/mahi/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "mahi",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('manta-buckets-api') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*manta-buckets-api.*" }
-            }
             steps {
-                build(job: 'joyent-org/manta-buckets-api/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "manta-buckets-api",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('manta-buckets-mdapi') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*manta-buckets-mdapi.*" }
-            }
             steps {
-                build(job: 'joyent-org/manta-buckets-mdapi/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "manta-buckets-mdapi",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('manta-buckets-mdplacement') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*manta-buckets-mdplacement.*" }
-            }
             steps {
-                build(job: 'joyent-org/manta-buckets-mdplacement/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "manta-buckets-mdplacement",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('manta-garbage-collector') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*manta-garbage-collector.*" }
-            }
             steps {
-                build(job: 'joyent-org/manta-garbage-collector/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "manta-garbage-collector",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('manta-mackerel') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*manta-mackerel.*" }
-            }
             steps {
-                build(job: 'joyent-org/manta-mackerel/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "manta-mackerel",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('manta-madtom') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*manta-madtom.*" }
-            }
             steps {
-                build(job: 'joyent-org/manta-madtom/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "manta-madtom",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('manta-mako') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*manta-mako.*" }
-            }
             steps {
-                build(job: 'joyent-org/manta-mako/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "manta-mako",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('manta-manatee') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*manta-manatee.*" }
-            }
             steps {
-                build(job: 'joyent-org/manta-manatee/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "manta-manatee",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('manta-minnow') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*manta-minnow.*" }
-            }
             steps {
-                build(job: 'joyent-org/manta-minnow/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "manta-minnow",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('manta-mola') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*manta-mola.*" }
-            }
             steps {
-                build(job: 'joyent-org/manta-mola/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "manta-mola",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('manta-muskie') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*manta-muskie.*" }
-            }
             steps {
-                build(job: 'joyent-org/manta-muskie/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "manta-muskie",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('manta-rebalancer') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*manta-rebalancer.*" }
-            }
             steps {
-                build(job: 'joyent-org/manta-rebalancer/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "manta-rebalancer",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('manta-reshard') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*manta-reshard.*" }
-            }
             steps {
-                build(job: 'joyent-org/manta-reshard/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "manta-reshard",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('manta-storinfo') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*manta-storinfo.*" }
-            }
             steps {
-                build(job: 'joyent-org/manta-storinfo/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "manta-storinfo",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('moray') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*moray.*" }
-            }
             steps {
-                build(job: 'joyent-org/moray/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "moray",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('muppet') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*muppet.*" }
-            }
             steps {
-                build(job: 'joyent-org/muppet/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "muppet",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('pgstatsmon') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*pgstatsmon.*" }
-            }
             steps {
-                build(job: 'joyent-org/pgstatsmon/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "pgstatsmon",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('registrar') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*registrar.*" }
-            }
             steps {
-                build(job: 'joyent-org/registrar/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "registrar",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-adminui') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-adminui.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-adminui/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-adminui",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-amonredis') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-amonredis.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-amonredis/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-amonredis",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-assets') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-assets.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-assets/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-assets",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-booter') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-booter.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-booter/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-booter",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-cloudapi') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-cloudapi.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-cloudapi/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-cloudapi",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-cnapi') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-cnapi.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-cnapi/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-cnapi",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-docker') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-docker.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-docker/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-docker",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-dockerlogger') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-dockerlogger.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-dockerlogger/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-dockerlogger",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-fwapi') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-fwapi.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-fwapi/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-fwapi",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-imgapi') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-imgapi.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-imgapi/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-imgapi",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-manatee') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-manatee.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-manatee/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-manatee",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-manta') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-manta.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-manta/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-manta",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-napi') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-napi.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-napi/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-napi",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-nat') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-nat.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-nat/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-nat",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-nfsserver') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-nfsserver.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-nfsserver/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-nfsserver",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-papi') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-papi.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-papi/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-papi",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-portolan') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-portolan.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-portolan/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-portolan",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-rabbitmq') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-rabbitmq.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-rabbitmq/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-rabbitmq",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-sapi') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-sapi.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-sapi/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-sapi",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-sdc') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-sdc.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-sdc/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-sdc",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-system-tests') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-system-tests.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-system-tests/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-system-tests",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-ufds') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-ufds.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-ufds/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-ufds",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-vmapi') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-vmapi.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-vmapi/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-vmapi",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-volapi') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-volapi.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-volapi/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-volapi",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdc-workflow') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-workflow.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdc-workflow/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdc-workflow",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('sdcadm') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdcadm.*" }
-            }
             steps {
-                build(job: 'joyent-org/sdcadm/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "sdcadm",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('triton-cmon') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*triton-cmon.*" }
-            }
             steps {
-                build(job: 'joyent-org/triton-cmon/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "triton-cmon",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('triton-cns') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*triton-cns.*" }
-            }
             steps {
-                build(job: 'joyent-org/triton-cns/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "triton-cns",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('triton-grafana') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*triton-grafana.*" }
-            }
             steps {
-                build(job: 'joyent-org/triton-grafana/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "triton-grafana",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('triton-kbmapi') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*triton-kbmapi.*" }
-            }
             steps {
-                build(job: 'joyent-org/triton-kbmapi/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "triton-kbmapi",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('triton-logarchiver') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*triton-logarchiver.*" }
-            }
             steps {
-                build(job: 'joyent-org/triton-logarchiver/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "triton-logarchiver",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('triton-mockcloud') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*triton-mockcloud.*" }
-            }
             steps {
-                build(job: 'joyent-org/triton-mockcloud/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "triton-mockcloud",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('triton-prometheus') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*triton-prometheus.*" }
-            }
             steps {
-                build(job: 'joyent-org/triton-prometheus/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "triton-prometheus",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         stage('waferlock') {
-            when {
-                branch 'weekly-build'
-                triggeredBy cause: 'UserIdCause'
-                expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*waferlock.*" }
-            }
             steps {
-                build(job: 'joyent-org/waferlock/master', wait: true)
+                joyTriggerTritonComp(
+                    repo: "waferlock",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
             }
@@ -660,139 +548,93 @@ pipeline {
             }
             parallel {
                 stage('sdc-agents-core') {
-                    when {
-                        branch 'weekly-build'
-                        triggeredBy cause: 'UserIdCause'
-                        expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-agents-core.*" }
-                    }
                     steps {
-                        build(
-                            job: 'joyent-org/sdc-agents-core/master',
-                            wait: true)
+                        joyTriggerTritonComp(
+                            repo: "sdc-agents-core",
+                            whenBranch: "weekly-build",
+                            compBranch: "master")
                     }
                 }
                 stage('triton-cmon-agent') {
-                    when {
-                        branch 'weekly-build'
-                        triggeredBy cause: 'UserIdCause'
-                        expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*triton-cmon-agent.*" }
-                    }
                     steps {
-                        build(
-                            job: 'joyent-org/triton-cmon-agent/master',
-                            wait: true)
+                        joyTriggerTritonComp(
+                            repo: "triton-cmon-agent",
+                            whenBranch: "weekly-build",
+                            compBranch: "master")
                     }
                 }
                 stage('sdc-cn-agent') {
-                    when {
-                        branch 'weekly-build'
-                        triggeredBy cause: 'UserIdCause'
-                        expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-cn-agent.*" }
-                    }
                     steps {
-                        build(
-                            job: 'joyent-org/sdc-cn-agent/master',
-                            wait: true)
+                        joyTriggerTritonComp(
+                            repo: "sdc-cn-agent",
+                            whenBranch: "weekly-build",
+                            compBranch: "master")
                     }
                 }
                 stage('sdc-net-agent') {
-                    when {
-                        branch 'weekly-build'
-                        triggeredBy cause: 'UserIdCause'
-                        expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-net-agent.*" }
-                    }
                     steps {
-                        build(
-                            job: 'joyent-org/sdc-net-agent/master',
-                            wait: true)
+                        joyTriggerTritonComp(
+                            repo: "sdc-net-agent",
+                            whenBranch: "weekly-build",
+                            compBranch: "master")
                     }
                 }
                 stage('sdc-vm-agent') {
-                    when {
-                        branch 'weekly-build'
-                        triggeredBy cause: 'UserIdCause'
-                        expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-vm-agent.*" }
-                    }
                     steps {
-                        build(
-                            job: 'joyent-org/sdc-vm-agent/master',
-                            wait: true)
+                        joyTriggerTritonComp(
+                            repo: "sdc-vm-agent",
+                            whenBranch: "weekly-build",
+                            compBranch: "master")
                     }
                 }
                 stage('sdc-hagfish-watcher') {
-                    when {
-                        branch 'weekly-build'
-                        triggeredBy cause: 'UserIdCause'
-                        expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-hagfish-watcher.*" }
-                    }
                     steps {
-                        build(
-                            job: 'joyent-org/sdc-hagfish-watcher/master',
-                            wait: true)
+                        joyTriggerTritonComp(
+                            repo: "sdc-hagfish-watcher",
+                            whenBranch: "weekly-build",
+                            compBranch: "master")
                     }
                 }
                 stage('sdc-smart-login') {
-                    when {
-                        branch 'weekly-build'
-                        triggeredBy cause: 'UserIdCause'
-                        expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-smart-login.*" }
-                    }
                     steps {
-                        build(
-                            job: 'joyent-org/sdc-smart-login/master',
-                            wait: true)
+                        joyTriggerTritonComp(
+                            repo: "sdc-smart-login",
+                            whenBranch: "weekly-build",
+                            compBranch: "master")
                     }
                 }
                 stage('sdc-amon') {
-                    when {
-                        branch 'weekly-build'
-                        triggeredBy cause: 'UserIdCause'
-                        expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-amon.*" }
-                    }
                     steps {
-                        build(
-                            job: 'joyent-org/sdc-amon/master',
-                            wait: true)
+                        joyTriggerTritonComp(
+                            repo: "sdc-amon",
+                            whenBranch: "weekly-build",
+                            compBranch: "master")
                     }
                 }
                 stage('sdc-firewaller-agent') {
-                    when {
-                        branch 'weekly-build'
-                        triggeredBy cause: 'UserIdCause'
-                        expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-firewaller-agent.*" }
-                    }
                     steps {
-                        build(
-                            job: 'joyent-org/sdc-firewaller-agent/master',
-                            wait: true)
+                        joyTriggerTritonComp(
+                            repo: "sdc-firewaller-agent",
+                            whenBranch: "weekly-build",
+                            compBranch: "master")
                     }
                 }
                 stage('sdc-config-agent') {
-                    when {
-                        branch 'weekly-build'
-                        triggeredBy cause: 'UserIdCause'
-                        expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-config-agent.*" }
-                    }
                     steps {
-                        build(
-                            job: 'joyent-org/sdc-config-agent/master',
-                            wait: true)
+                        joyTriggerTritonComp(
+                            repo: "sdc-config-agent",
+                            whenBranch: "weekly-build",
+                            compBranch: "master")
                     }
                 }
             }
         }
         stage('agents-installer') {
-            when {
-                allOf {
-                    branch 'weekly-build'
-                    triggeredBy cause: 'UserIdCause'
-                    expression { params.COMPONENTS == "" || params.COMPONENTS =~ ".*sdc-agents-installer.*" }
-                }
-            }
             steps {
-                build(
-                    job: 'joyent-org/sdc-agents-installer/master',
-                    wait: true)
+                joyTriggerTritonComp(
+                    repo: "waferlock",
+                    whenBranch: "weekly-build",
+                    compBranch: "master")
             }
         }
         /*
