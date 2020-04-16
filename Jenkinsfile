@@ -85,7 +85,7 @@ pipeline {
                             'local/kvm-cmd: ' + env.COMPONENT_BRANCH + ': origin\n' +
                             'local/kvm: ' + env.COMPONENT_BRANCH + ': origin\n' +
                             'local/mdata-client: ' + env.COMPONENT_BRANCH + ': origin\n' +
-                            'local/ur-agent: " + env.COMPONENT_BRANCH + ': origin'),
+                            'local/ur-agent: ' + env.COMPONENT_BRANCH + ': origin'),
                         booleanParam(name: 'BUILD_STRAP_CACHE', value: false),
                         text(name: 'PLATFORM_BUILD_FLAVOR', value: 'triton-and-smartos')
                     ])
