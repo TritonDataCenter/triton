@@ -201,8 +201,9 @@ pipeline {
             description:
                 'A space separated list of the repositories to build. ' +
                 'By default, all components are included, but if any are ' +
-                'specified here, sdc-headnode is automatically added unless ' +
-                'this is a SmartOS only build.'
+                'specified here, <strong>only</strong> those are built.' +
+                'sdc-headnode is automatically built unless this is a ' +
+                'SmartOS-only build.'
             )
     }
 
@@ -269,9 +270,9 @@ function platform_stage {
     EXPRESSION_CLAUSE=$(compute_expression smartos-live)
 
     if [[ -n "$optJustSmartos" ]]; then
-        PLATFORM_FLAVOR="choice(name: 'PLATFORM_BUILD_FLAVOR', value: 'smartos')"
+        PLATFORM_FLAVOR="text(name: 'PLATFORM_BUILD_FLAVOR', value: 'smartos')"
     else
-        PLATFORM_FLAVOR="choice(name: 'PLATFORM_BUILD_FLAVOR', value: 'triton-and-smartos')"
+        PLATFORM_FLAVOR="text(name: 'PLATFORM_BUILD_FLAVOR', value: 'triton-and-smartos')"
     fi
 
     cat >>  $JENKINSFILE <<EOF

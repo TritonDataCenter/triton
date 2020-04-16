@@ -27,8 +27,9 @@ pipeline {
             description:
                 'A space separated list of the repositories to build. ' +
                 'By default, all components are included, but if any are ' +
-                'specified here, sdc-headnode is automatically added unless ' +
-                'this is a SmartOS only build.'
+                'specified here, <strong>only</strong> those are built.' +
+                'sdc-headnode is automatically built unless this is a ' +
+                'SmartOS-only build.'
             )
     }
 
@@ -80,7 +81,7 @@ pipeline {
                             'local/mdata-client: master: origin\n' +
                             'local/ur-agent: master: origin'),
                         booleanParam(name: 'BUILD_STRAP_CACHE', value: false),
-                        choice(name: 'PLATFORM_BUILD_FLAVOR', value: 'triton-and-smartos')
+                        text(name: 'PLATFORM_BUILD_FLAVOR', value: 'triton-and-smartos')
                     ])
             }
         }
