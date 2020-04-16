@@ -643,7 +643,7 @@ pipeline {
         stage('agents-installer') {
             steps {
                 joyTriggerTritonComp(
-                    repo: "waferlock",
+                    repo: "sdc-agents-installer",
                     whenBranch: "weekly-build",
                     compBranch: "master")
             }

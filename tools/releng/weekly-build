@@ -346,7 +346,7 @@ EOF
         stage('agents-installer') {
             steps {
                 joyTriggerTritonComp(
-                    repo: "$repo",
+                    repo: "sdc-agents-installer",
                     whenBranch: "$WHEN_BRANCH",
                     compBranch: "$COMPONENT_BRANCH")
             }
