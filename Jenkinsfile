@@ -31,11 +31,10 @@ pipeline {
             name: 'COMPONENTS',
             defaultValue: '',
             description:
-                'A space separated list of the repositories to build. ' +
-                'By default, all components are included, but if any are ' +
-                'specified here, <strong>only</strong> those are built, ' +
-                'apart from sdc-headnode, which is automatically built ' +
-                'unless this is a SmartOS-only build.'
+                'A space separated list of the repositories to build.<br/>' +
+                'An empty string means that all components are built.<br/>' +
+                'If any agents are included, sdc-agents-installer is built.<br/>' +
+                'Unless this is a smartos-only build, sdc-headnode is always built.'
             )
     }
 
