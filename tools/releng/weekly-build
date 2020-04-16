@@ -269,9 +269,9 @@ function platform_stage {
     EXPRESSION_CLAUSE=$(compute_expression smartos-live)
 
     if [[ -n "$optJustSmartos" ]]; then
-        PLATFORM_FLAVOR="choiceParam(name: 'PLATFORM_BUILD_FLAVOR', value: 'smartos')"
+        PLATFORM_FLAVOR="choice(name: 'PLATFORM_BUILD_FLAVOR', value: 'smartos')"
     else
-        PLATFORM_FLAVOR="choiceParam(name: 'PLATFORM_BUILD_FLAVOR', value: 'triton-and-smartos')"
+        PLATFORM_FLAVOR="choice(name: 'PLATFORM_BUILD_FLAVOR', value: 'triton-and-smartos')"
     fi
 
     cat >>  $JENKINSFILE <<EOF

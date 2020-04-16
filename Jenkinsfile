@@ -80,7 +80,7 @@ pipeline {
                             'local/mdata-client: master: origin\n' +
                             'local/ur-agent: master: origin'),
                         booleanParam(name: 'BUILD_STRAP_CACHE', value: false),
-                        choiceParam(name: 'PLATFORM_BUILD_FLAVOR', value: 'triton-and-smartos')
+                        choice(name: 'PLATFORM_BUILD_FLAVOR', value: 'triton-and-smartos')
                     ])
             }
         }
