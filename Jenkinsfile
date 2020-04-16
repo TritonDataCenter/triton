@@ -27,9 +27,9 @@ pipeline {
             description:
                 'A space separated list of the repositories to build. ' +
                 'By default, all components are included, but if any are ' +
-                'specified here, <strong>only</strong> those are built.' +
-                'sdc-headnode is automatically built unless this is a ' +
-                'SmartOS-only build.'
+                'specified here, <strong>only</strong> those are built, ' +
+                'apart from sdc-headnode, which is automatically built ' +
+                'unless this is a SmartOS-only build.'
             )
     }
 
@@ -553,7 +553,8 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-agents-core",
                             whenBranch: "weekly-build",
-                            compBranch: "master")
+                            compBranch: "master",
+                            isAgentBuild: true)
                     }
                 }
                 stage('triton-cmon-agent') {
@@ -561,7 +562,8 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "triton-cmon-agent",
                             whenBranch: "weekly-build",
-                            compBranch: "master")
+                            compBranch: "master",
+                            isAgentBuild: true)
                     }
                 }
                 stage('sdc-cn-agent') {
@@ -569,7 +571,8 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-cn-agent",
                             whenBranch: "weekly-build",
-                            compBranch: "master")
+                            compBranch: "master",
+                            isAgentBuild: true)
                     }
                 }
                 stage('sdc-net-agent') {
@@ -577,7 +580,8 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-net-agent",
                             whenBranch: "weekly-build",
-                            compBranch: "master")
+                            compBranch: "master",
+                            isAgentBuild: true)
                     }
                 }
                 stage('sdc-vm-agent') {
@@ -585,7 +589,8 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-vm-agent",
                             whenBranch: "weekly-build",
-                            compBranch: "master")
+                            compBranch: "master",
+                            isAgentBuild: true)
                     }
                 }
                 stage('sdc-hagfish-watcher') {
@@ -593,7 +598,8 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-hagfish-watcher",
                             whenBranch: "weekly-build",
-                            compBranch: "master")
+                            compBranch: "master",
+                            isAgentBuild: true)
                     }
                 }
                 stage('sdc-smart-login') {
@@ -601,7 +607,8 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-smart-login",
                             whenBranch: "weekly-build",
-                            compBranch: "master")
+                            compBranch: "master",
+                            isAgentBuild: true)
                     }
                 }
                 stage('sdc-amon') {
@@ -609,7 +616,8 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-amon",
                             whenBranch: "weekly-build",
-                            compBranch: "master")
+                            compBranch: "master",
+                            isAgentBuild: true)
                     }
                 }
                 stage('sdc-firewaller-agent') {
@@ -617,7 +625,8 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-firewaller-agent",
                             whenBranch: "weekly-build",
-                            compBranch: "master")
+                            compBranch: "master",
+                            isAgentBuild: true)
                     }
                 }
                 stage('sdc-config-agent') {
@@ -625,7 +634,8 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-config-agent",
                             whenBranch: "weekly-build",
-                            compBranch: "master")
+                            compBranch: "master",
+                            isAgentBuild: true)
                     }
                 }
             }

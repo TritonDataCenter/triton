@@ -201,9 +201,9 @@ pipeline {
             description:
                 'A space separated list of the repositories to build. ' +
                 'By default, all components are included, but if any are ' +
-                'specified here, <strong>only</strong> those are built.' +
-                'sdc-headnode is automatically built unless this is a ' +
-                'SmartOS-only build.'
+                'specified here, <strong>only</strong> those are built, ' +
+                'apart from sdc-headnode, which is automatically built ' +
+                'unless this is a SmartOS-only build.'
             )
     }
 
@@ -331,7 +331,8 @@ EOF
                         joyTriggerTritonComp(
                             repo: "$agent",
                             whenBranch: "$WHEN_BRANCH",
-                            compBranch: "$COMPONENT_BRANCH")
+                            compBranch: "$COMPONENT_BRANCH",
+                            isAgentBuild: true)
                     }
                 }
 EOF
