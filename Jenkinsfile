@@ -74,17 +74,17 @@ pipeline {
                 }
             }
             steps {
-                build(job: 'joyent-org/smartos-live' + env.COMPONENT_BRANCH,
+                build(job: 'joyent-org/smartos-live/' + env.COMPONENT_BRANCH,
                     wait: true,
                     parameters: [
                         text(name: 'CONFIGURE_PROJECTS',
                             value:
-                            "illumos-extra: " + env.COMPONENT_BRANCH + ': origin\n" +
-                            'illumos: " + env.COMPONENT_BRANCH + ': origin\n' +
-                            'local/kbmd: " + env.COMPONENT_BRANCH + ': origin\n' +
-                            'local/kvm-cmd: " + env.COMPONENT_BRANCH + ': origin\n' +
-                            'local/kvm: " + env.COMPONENT_BRANCH + ': origin\n' +
-                            'local/mdata-client: " + env.COMPONENT_BRANCH + ': origin\n' +
+                            'illumos-extra: ' + env.COMPONENT_BRANCH + ': origin\n' +
+                            'illumos: ' + env.COMPONENT_BRANCH + ': origin\n' +
+                            'local/kbmd: ' + env.COMPONENT_BRANCH + ': origin\n' +
+                            'local/kvm-cmd: ' + env.COMPONENT_BRANCH + ': origin\n' +
+                            'local/kvm: ' + env.COMPONENT_BRANCH + ': origin\n' +
+                            'local/mdata-client: ' + env.COMPONENT_BRANCH + ': origin\n' +
                             'local/ur-agent: " + env.COMPONENT_BRANCH + ': origin'),
                         booleanParam(name: 'BUILD_STRAP_CACHE', value: false),
                         text(name: 'PLATFORM_BUILD_FLAVOR', value: 'triton-and-smartos')
