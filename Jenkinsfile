@@ -22,6 +22,12 @@ pipeline {
     }
     parameters {
         string(
+            name: 'COMPONENT_BRANCH',
+            defaultValue: 'master',
+            description:
+                'The branch of the Triton/Manta components to build.'
+            )
+        string(
             name: 'COMPONENTS',
             defaultValue: '',
             description:
@@ -68,18 +74,18 @@ pipeline {
                 }
             }
             steps {
-                build(job:'joyent-org/smartos-live/master',
+                build(job: 'joyent-org/smartos-live' + env.COMPONENT_BRANCH,
                     wait: true,
                     parameters: [
                         text(name: 'CONFIGURE_PROJECTS',
                             value:
-                            "illumos-extra: master: origin\n" +
-                            'illumos: master: origin\n' +
-                            'local/kbmd: master: origin\n' +
-                            'local/kvm-cmd: master: origin\n' +
-                            'local/kvm: master: origin\n' +
-                            'local/mdata-client: master: origin\n' +
-                            'local/ur-agent: master: origin'),
+                            "illumos-extra: " + env.COMPONENT_BRANCH + ': origin\n" +
+                            'illumos: " + env.COMPONENT_BRANCH + ': origin\n' +
+                            'local/kbmd: " + env.COMPONENT_BRANCH + ': origin\n' +
+                            'local/kvm-cmd: " + env.COMPONENT_BRANCH + ': origin\n' +
+                            'local/kvm: " + env.COMPONENT_BRANCH + ': origin\n' +
+                            'local/mdata-client: " + env.COMPONENT_BRANCH + ': origin\n' +
+                            'local/ur-agent: " + env.COMPONENT_BRANCH + ': origin'),
                         booleanParam(name: 'BUILD_STRAP_CACHE', value: false),
                         text(name: 'PLATFORM_BUILD_FLAVOR', value: 'triton-and-smartos')
                     ])
@@ -90,7 +96,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "binder",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('electric-moray') {
@@ -98,7 +104,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "electric-moray",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('ipxe') {
@@ -106,7 +112,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "ipxe",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('mahi') {
@@ -114,7 +120,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "mahi",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('manta-buckets-api') {
@@ -122,7 +128,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "manta-buckets-api",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('manta-buckets-mdapi') {
@@ -130,7 +136,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "manta-buckets-mdapi",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('manta-buckets-mdplacement') {
@@ -138,7 +144,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "manta-buckets-mdplacement",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('manta-garbage-collector') {
@@ -146,7 +152,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "manta-garbage-collector",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('manta-mackerel') {
@@ -154,7 +160,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "manta-mackerel",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('manta-madtom') {
@@ -162,7 +168,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "manta-madtom",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('manta-mako') {
@@ -170,7 +176,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "manta-mako",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('manta-manatee') {
@@ -178,7 +184,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "manta-manatee",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('manta-minnow') {
@@ -186,7 +192,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "manta-minnow",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('manta-mola') {
@@ -194,7 +200,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "manta-mola",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('manta-muskie') {
@@ -202,7 +208,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "manta-muskie",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('manta-rebalancer') {
@@ -210,7 +216,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "manta-rebalancer",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('manta-reshard') {
@@ -218,7 +224,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "manta-reshard",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('manta-storinfo') {
@@ -226,7 +232,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "manta-storinfo",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('moray') {
@@ -234,7 +240,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "moray",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('muppet') {
@@ -242,7 +248,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "muppet",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('pgstatsmon') {
@@ -250,7 +256,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "pgstatsmon",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('registrar') {
@@ -258,7 +264,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "registrar",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-adminui') {
@@ -266,7 +272,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-adminui",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-amonredis') {
@@ -274,7 +280,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-amonredis",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-assets') {
@@ -282,7 +288,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-assets",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-booter') {
@@ -290,7 +296,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-booter",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-cloudapi') {
@@ -298,7 +304,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-cloudapi",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-cnapi') {
@@ -306,7 +312,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-cnapi",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-docker') {
@@ -314,7 +320,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-docker",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-dockerlogger') {
@@ -322,7 +328,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-dockerlogger",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-fwapi') {
@@ -330,7 +336,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-fwapi",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-imgapi') {
@@ -338,7 +344,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-imgapi",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-manatee') {
@@ -346,7 +352,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-manatee",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-manta') {
@@ -354,7 +360,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-manta",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-napi') {
@@ -362,7 +368,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-napi",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-nat') {
@@ -370,7 +376,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-nat",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-nfsserver') {
@@ -378,7 +384,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-nfsserver",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-papi') {
@@ -386,7 +392,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-papi",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-portolan') {
@@ -394,7 +400,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-portolan",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-rabbitmq') {
@@ -402,7 +408,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-rabbitmq",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-sapi') {
@@ -410,7 +416,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-sapi",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-sdc') {
@@ -418,7 +424,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-sdc",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-system-tests') {
@@ -426,7 +432,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-system-tests",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-ufds') {
@@ -434,7 +440,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-ufds",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-vmapi') {
@@ -442,7 +448,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-vmapi",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-volapi') {
@@ -450,7 +456,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-volapi",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdc-workflow') {
@@ -458,7 +464,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-workflow",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('sdcadm') {
@@ -466,7 +472,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdcadm",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('triton-cmon') {
@@ -474,7 +480,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "triton-cmon",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('triton-cns') {
@@ -482,7 +488,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "triton-cns",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('triton-grafana') {
@@ -490,7 +496,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "triton-grafana",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('triton-kbmapi') {
@@ -498,7 +504,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "triton-kbmapi",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('triton-logarchiver') {
@@ -506,7 +512,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "triton-logarchiver",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('triton-mockcloud') {
@@ -514,7 +520,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "triton-mockcloud",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('triton-prometheus') {
@@ -522,7 +528,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "triton-prometheus",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         stage('waferlock') {
@@ -530,7 +536,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "waferlock",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
             }
@@ -553,7 +559,7 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-agents-core",
                             whenBranch: "weekly-build",
-                            compBranch: "master",
+                            compBranch: env.COMPONENT_BRANCH,
                             isAgentBuild: true)
                     }
                 }
@@ -562,7 +568,7 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "triton-cmon-agent",
                             whenBranch: "weekly-build",
-                            compBranch: "master",
+                            compBranch: env.COMPONENT_BRANCH,
                             isAgentBuild: true)
                     }
                 }
@@ -571,7 +577,7 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-cn-agent",
                             whenBranch: "weekly-build",
-                            compBranch: "master",
+                            compBranch: env.COMPONENT_BRANCH,
                             isAgentBuild: true)
                     }
                 }
@@ -580,7 +586,7 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-net-agent",
                             whenBranch: "weekly-build",
-                            compBranch: "master",
+                            compBranch: env.COMPONENT_BRANCH,
                             isAgentBuild: true)
                     }
                 }
@@ -589,7 +595,7 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-vm-agent",
                             whenBranch: "weekly-build",
-                            compBranch: "master",
+                            compBranch: env.COMPONENT_BRANCH,
                             isAgentBuild: true)
                     }
                 }
@@ -598,7 +604,7 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-hagfish-watcher",
                             whenBranch: "weekly-build",
-                            compBranch: "master",
+                            compBranch: env.COMPONENT_BRANCH,
                             isAgentBuild: true)
                     }
                 }
@@ -607,7 +613,7 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-smart-login",
                             whenBranch: "weekly-build",
-                            compBranch: "master",
+                            compBranch: env.COMPONENT_BRANCH,
                             isAgentBuild: true)
                     }
                 }
@@ -616,7 +622,7 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-amon",
                             whenBranch: "weekly-build",
-                            compBranch: "master",
+                            compBranch: env.COMPONENT_BRANCH,
                             isAgentBuild: true)
                     }
                 }
@@ -625,7 +631,7 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-firewaller-agent",
                             whenBranch: "weekly-build",
-                            compBranch: "master",
+                            compBranch: env.COMPONENT_BRANCH,
                             isAgentBuild: true)
                     }
                 }
@@ -634,7 +640,7 @@ pipeline {
                         joyTriggerTritonComp(
                             repo: "sdc-config-agent",
                             whenBranch: "weekly-build",
-                            compBranch: "master",
+                            compBranch: env.COMPONENT_BRANCH,
                             isAgentBuild: true)
                     }
                 }
@@ -645,7 +651,7 @@ pipeline {
                 joyTriggerTritonComp(
                     repo: "sdc-agents-installer",
                     whenBranch: "weekly-build",
-                    compBranch: "master")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
         /*
@@ -660,12 +666,12 @@ pipeline {
             }
             steps {
                 build(
-                    job: 'joyent-org/sdc-headnode/master',
+                    job: 'joyent-org/sdc-headnode/' + env.COMPONENT_BRANCH,
                     wait: true,
                     parameters: [
                         text(name: 'CONFIGURE_BRANCHES',
                             value:
-                            "bits-branch: master"),
+                            "bits-branch: " + env.COMPONENT_BRANCH),
                         booleanParam(name: 'INCLUDE_DEBUG_STAGE', value: true)
                     ])
             }

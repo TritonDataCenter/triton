@@ -52,9 +52,6 @@ PLATFORM="smartos-live
     mdata-client
     sdc-ur-agent"
 
-# The branch of all components that we build, could be parameterized eventually
-COMPONENT_BRANCH="master"
-
 # Set the branch triton.git needs to be on in order to do one of these builds
 WHEN_BRANCH="weekly-build"
 # Only build if a user has pushed the 'Build now' button (or similar API call)
@@ -161,7 +158,10 @@ fi
 # Generate a Goovy expression that returns true if the 'COMPONENT' build
 # parameter is either empty, or includes the name of the component. We use
 # the resulting expression in a 'when {..}' clause to determine whether to
-# build a given component.
+# build a given component. This is identical to the logic also held in
+# joyTriggerTritonComp, but allows us to include that expression in the
+# generated Jenkinsfile, rather than hiding it in a library and allows the
+# pipeline view to show why a component build was skipped.
 #
 function compute_expression {
     COMPONENT=$1
@@ -195,6 +195,12 @@ pipeline {
         parallelsAlwaysFailFast()
     }
     parameters {
+        string(
+            name: 'COMPONENT_BRANCH',
+            defaultValue: 'master',
+            description:
+                'The branch of the Triton/Manta components to build.'
+            )
         string(
             name: 'COMPONENTS',
             defaultValue: '',
@@ -285,18 +291,18 @@ function platform_stage {
                 }
             }
             steps {
-                build(job:'joyent-org/smartos-live/$COMPONENT_BRANCH',
+                build(job: 'joyent-org/smartos-live' + env.COMPONENT_BRANCH,
                     wait: true,
                     parameters: [
                         text(name: 'CONFIGURE_PROJECTS',
                             value:
-                            "illumos-extra: $COMPONENT_BRANCH: origin\n" +
-                            'illumos: $COMPONENT_BRANCH: origin\n' +
-                            'local/kbmd: $COMPONENT_BRANCH: origin\n' +
-                            'local/kvm-cmd: $COMPONENT_BRANCH: origin\n' +
-                            'local/kvm: $COMPONENT_BRANCH: origin\n' +
-                            'local/mdata-client: $COMPONENT_BRANCH: origin\n' +
-                            'local/ur-agent: $COMPONENT_BRANCH: origin'),
+                            "illumos-extra: " + env.COMPONENT_BRANCH + ': origin\n" +
+                            'illumos: " + env.COMPONENT_BRANCH + ': origin\n' +
+                            'local/kbmd: " + env.COMPONENT_BRANCH + ': origin\n' +
+                            'local/kvm-cmd: " + env.COMPONENT_BRANCH + ': origin\n' +
+                            'local/kvm: " + env.COMPONENT_BRANCH + ': origin\n' +
+                            'local/mdata-client: " + env.COMPONENT_BRANCH + ': origin\n' +
+                            'local/ur-agent: " + env.COMPONENT_BRANCH + ': origin'),
                         booleanParam(name: 'BUILD_STRAP_CACHE', value: false),
                         $PLATFORM_FLAVOR
                     ])
@@ -331,7 +337,7 @@ EOF
                         joyTriggerTritonComp(
                             repo: "$agent",
                             whenBranch: "$WHEN_BRANCH",
-                            compBranch: "$COMPONENT_BRANCH",
+                            compBranch: env.COMPONENT_BRANCH,
                             isAgentBuild: true)
                     }
                 }
@@ -348,7 +354,7 @@ EOF
                 joyTriggerTritonComp(
                     repo: "sdc-agents-installer",
                     whenBranch: "$WHEN_BRANCH",
-                    compBranch: "$COMPONENT_BRANCH")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
 EOF
@@ -374,7 +380,7 @@ function component_stage {
                 joyTriggerTritonComp(
                     repo: "$repo",
                     whenBranch: "$WHEN_BRANCH",
-                    compBranch: "$COMPONENT_BRANCH")
+                    compBranch: env.COMPONENT_BRANCH)
             }
         }
 EOF
@@ -401,12 +407,12 @@ function headnode_stage {
             }
             steps {
                 build(
-                    job: 'joyent-org/sdc-headnode/$COMPONENT_BRANCH',
+                    job: 'joyent-org/sdc-headnode/' + env.COMPONENT_BRANCH,
                     wait: true,
                     parameters: [
                         text(name: 'CONFIGURE_BRANCHES',
                             value:
-                            "bits-branch: $COMPONENT_BRANCH"),
+                            "bits-branch: " + env.COMPONENT_BRANCH),
                         booleanParam(name: 'INCLUDE_DEBUG_STAGE', value: true)
                     ])
             }
