@@ -43,12 +43,12 @@ pipeline {
             when { branch 'weekly-build' }
             steps {
                 /*
-                * This checks that the Jenkinsfile in the checked-out workspace
+                * This checks that the Jenkinsfile in the current workspace
                 * matches the one we'd otherwise generate. Run this first to
                 * prevent wasting time building incorrect components.
                 */
                 nodejs('sdcnode-v8-zone64') {
-                    sh './tools/releng/weekly-build'
+                    sh './tools/releng/generate-jenkins-pipeline weekly-build'
                 }
             }
         }

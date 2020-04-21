@@ -109,7 +109,7 @@ shift $((OPTIND - 1))
 
 WHEN_BRANCH=$1
 
-if [[ -n "$WHEN_BRANCH" ]]; then
+if [[ -z "$WHEN_BRANCH" ]]; then
     usage "Missing branch argument"
 fi
 
