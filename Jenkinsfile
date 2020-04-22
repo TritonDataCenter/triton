@@ -48,7 +48,7 @@ pipeline {
                 * prevent wasting time building incorrect components.
                 */
                 nodejs('sdcnode-v8-zone64') {
-                    sh './tools/releng/generate-jenkins-pipeline weekly-build'
+                    sh './tools/releng/generate-jenkins-pipeline weekly-build master'
                 }
             }
         }

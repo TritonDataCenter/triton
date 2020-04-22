@@ -74,7 +74,16 @@ function usage
         echo ""
     fi
     echo "Usage:"
-    echo "  generate-jenkins-pipeline [<options>] <branch>"
+    echo "  generate-jenkins-pipeline [<options>] <branch> <component branch>"
+    echo ""
+    echo "<branch>      The name of the triton.git branch running the build,"
+    echo "              for example 'weekly', or 'release'"
+    echo "<component branch>"
+    echo "              The branch of the components you wish to build"
+    echo "              for example 'master' or 'release-20200326'. This merely"
+    echo "              sets the default for the Jenkinsfile COMPONENT_BRANCH"
+    echo "              parameter, and can be overridden when starting a"
+    echo "              Jenkins build."
     echo ""
     echo "Options:"
     echo "  -h          Print this help and exit."
@@ -108,9 +117,14 @@ done
 shift $((OPTIND - 1))
 
 WHEN_BRANCH=$1
+COMPONENT_BRANCH=$2
 
 if [[ -z "$WHEN_BRANCH" ]]; then
     usage "Missing branch argument"
+fi
+
+if [[ -z "$COMPONENT_BRANCH" ]]; then
+    usage "Missing component branch argument"
 fi
 
 function ensure_jr {
@@ -175,7 +189,7 @@ function compute_expression {
 
 function jenkins_header {
     # Write the Jenkinsfile header
-    YEAR=$(date +%Y)
+    YEAR=$(/bin/date +%Y)
     cat > $JENKINSFILE <<EOF
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -202,7 +216,7 @@ pipeline {
     parameters {
         string(
             name: 'COMPONENT_BRANCH',
-            defaultValue: 'master',
+            defaultValue: '$COMPONENT_BRANCH',
             description:
                 'The branch of the Triton/Manta components to build.'
             )
@@ -235,7 +249,7 @@ function compare_jenkinsfile_stage {
                 * prevent wasting time building incorrect components.
                 */
                 nodejs('sdcnode-v8-zone64') {
-                    sh './tools/releng/generate-jenkins-pipeline${SMARTOS_OPT} $WHEN_BRANCH'
+                    sh './tools/releng/generate-jenkins-pipeline${SMARTOS_OPT} $WHEN_BRANCH $COMPONENT_BRANCH'
                 }
             }
         }
@@ -336,6 +350,13 @@ function agent_stage {
             }
             parallel {
 EOF
+    #
+    # We use the custom joyTriggerTritonComp function (from jenkins-joylib.git)
+    # here to reduce the overall size of the Jenkinsfile. Technically, all of
+    # the logic there could be inlined here too, but then we run into limits of
+    # the Groovy runtime container.
+    # See https://issues.jenkins-ci.org/browse/JENKINS-37984
+    #
     for agent in $AGENTS; do
         EXPRESSION_CLAUSE=$(compute_expression $agent)
         cat >> $JENKINSFILE <<EOF
