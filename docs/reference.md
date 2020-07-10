@@ -19,7 +19,7 @@ section in the glossary](./glossary.md#service) for details.
 | binder | [binder](https://github.com/joyent/binder) | Triton/Manta DNS server over Apache ZooKeeper |
 | [ca](https://github.com/joyent/sdc-cloud-analytics/blob/master/docs/index.md) | [sdc-cloud-analytics](https://github.com/joyent/sdc-cloud-analytics) | Triton internal API for gathering real-time metrics across the datacenter |
 | [cloudapi](https://github.com/joyent/sdc-cloudapi/blob/master/docs/index.md) | [sdc-cloudapi](https://github.com/joyent/sdc-cloudapi) | Triton Public HTTP API |
-| [cnapi](https://github.com/joyent/sdc-cnapi/blob/master/docs/index.md) | [sdc-cnapi](https://github.com/joyent/sdc-cnapi) | Triton Compute Node API |
+| [cnapi](https://github.com/joyent/sdc-cnapi/blob/master/docs/README.md) | [sdc-cnapi](https://github.com/joyent/sdc-cnapi) | Triton Compute Node API |
 | [cmon](https://github.com/joyent/triton-cmon/blob/master/docs) | [triton-cmon](https://github.com/joyent/triton-cmon) | Triton Container Monitor |
 | [cns](https://github.com/joyent/triton-cns/blob/master/docs/index.md) | [triton-cns](https://github.com/joyent/triton-cns) | Triton Container Naming Service |
 | dhcpd | [sdc-booter](https://github.com/joyent/sdc-booter) | Triton Compute Node DHCP and TFTP server |
@@ -38,7 +38,7 @@ section in the glossary](./glossary.md#service) for details.
 | [sdc](https://github.com/joyent/sdc-sdc/blob/master/docs/index.md) | [sdc-sdc](https://github.com/joyent/sdc-sdc) | Triton internal "sdc" zone with ops tooling |
 | [ufds](https://github.com/joyent/sdc-ufds/blob/master/docs/index.md) | [sdc-ufds](https://github.com/joyent/sdc-ufds) | Triton LDAP directory service. It is used primarily for user management. The deprecated customer API (CAPI) runs in this zone. |
 | [vmapi](https://github.com/joyent/sdc-vmapi/blob/master/docs/index.md) | [sdc-vmapi](https://github.com/joyent/sdc-vmapi) | Triton Virtual Machine API |
-| volapi | [sdc-volapi](https://github.com/joyent/sdc-volapi) | Triton Volumes API |
+| [volapi](https://github.com/joyent/sdc-volapi/blob/master/docs/api/README.md) | [sdc-volapi](https://github.com/joyent/sdc-volapi) | Triton Volumes API |
 | [workflow](https://github.com/joyent/sdc-workflow/blob/master/docs/index.md) | [sdc-workflow](https://github.com/joyent/sdc-workflow) | Triton Workflow API and job runner service |
 
 ## Agents
