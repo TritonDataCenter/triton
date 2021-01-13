@@ -199,6 +199,7 @@ else
 fi
 
 # Confirmation.
+[[ "$optDryRun" == "true" ]] && echo "NOTE: This is a DRY RUN" >&2
 if [[ "$optYes" != "true" ]]; then
     numRepos=$(echo "$repos" | wc -l | awk '{print $1}')
     echo "This will create the '$branch' branch on $numRepos repo(s) as necessary." >&2
