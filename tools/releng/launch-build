@@ -7,7 +7,7 @@
 #
 
 #
-# Copyright 2020 Joyent, Inc.
+# Copyright 2021 Joyent, Inc.
 #
 
 #
@@ -96,7 +96,7 @@ case $PROJECT in
 			BUILD_PARAM="${BUILD_PARAM},{\"name\": \"ONLY_BUILD_STRAP_CACHE\", \"value\": \"false\"}"
 		fi
 		;;
-	"headnode")
+	"sdc-headnode"|"headnode")
 		if [[ -n "$BRANCH" ]]; then
 			BUILD_PARAM="$(printf '{"name": "CONFIGURE_BRANCHES", "value": "bits-branch: %s"}' "${BRANCH}")"
 			BUILD_PARAM="${BUILD_PARAM},{\"name\": \"INCLUDE_DEBUG_STAGE\", \"value\": \"true\"}"
