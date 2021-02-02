@@ -5,7 +5,7 @@
 -->
 
 <!--
-    Copyright 2019, Joyent, Inc.
+    Copyright 2021, Joyent, Inc.
 -->
 
 
@@ -45,7 +45,7 @@ Triton features:
 - Complete operator portal (web app)
 - Robust and observable service oriented architecture (implemented primarily in
   Node.js)
-- Automated USB key installation
+- Automated USB key, ISO, or iPXE installation
 
 Triton consists of the following components:
 
@@ -80,22 +80,40 @@ Community discussion about Triton DataCenter happens in two main places:
 
 ### Cloud on a Laptop (CoaL)
 
-An easy way to try Triton DataCenter is by downloading and installing a Cloud on a Laptop
-(CoaL) build. CoaL is a VMware virtual appliance that provides a full Triton head node for
-development and testing.
+An easy way to try Triton DataCenter is by downloading and installing a Cloud
+on a Laptop (CoaL) build. CoaL is a VMware virtual appliance that provides a
+full Triton head node for development and testing.
 
-The [CoaL Setup document](./docs/developer-guide/coal-setup.md) contains detailed instructions for
-downloading and installing the virtual appliance.
+The [CoaL Setup document](./docs/developer-guide/coal-setup.md) contains
+detailed instructions for downloading and installing the virtual appliance.
+If you use the ISO installer (see below) on a Virtual Machine, the CoaL setup
+instructions post-booting should be followed as well.
 
-If you already have a CoaL and would like to update the installation, follow the instructions
-for [updating a Triton standup using `sdcadm`](https://github.com/joyent/sdcadm/blob/master/docs/update.md).
+If you already have a CoaL and would like to update the installation, follow
+the instructions for [updating a Triton standup using
+`sdcadm`](https://github.com/joyent/sdcadm/blob/master/docs/update.md).
+
+### ISO Installer
+
+The [ISO installer page](./docs/developer-guide/iso-installer.md) contains
+information on the ISO installer. With SmartOS now able to boot off a ZFS
+pool, the Triton Head Node can do the same.
+
+### iPXE installer
+
+Some deployment environments install new hardware using an iPXE boot. An
+[iPXE boot](./docs/developer-guide/ipxe-installer.md) directory for a Triton
+Head Node can install Triton using an iPXE installation.
 
 ### Installing Triton on a Physical Server
 
-A Triton DataCenter server runs SmartOS which is a live image. This means that
-it boots from a USB flash drive (key).
-a physical USB key, inserting the key and booting the server from that key.
-To install Triton, first obtain the latest release USB build.
+A Triton DataCenter server runs SmartOS which is a live image. That live
+image, which generates a ramdisk root with many portions set to read-only,
+can boot from a USB flash drive (a physical USB key), or a ZFS pool.  To
+install a USB-key Triton, first obtain the latest release USB build.
+Otherwise, given the cautions in the [ISO installer
+page](./docs/developer-guide/iso-installer.md), a physical server can boot
+off of its `zones` pool.
 
 
 #### Hardware
@@ -105,11 +123,12 @@ For Triton development only, the minimum server hardware is:
 - 8 GB USB flash drive
 - Intel Processors with VT-x and EPT support (all Xeon since Nehalem)
 - 16 GB RAM
-- 6 GB available storage
+- 20 GB available storage
 
 Hardware RAID is not recommended. Triton will lay down a ZFS ZPOOL across all
-available disks on install. You'll want much more storage if you're working with
-images and instances.
+available disks on install. You'll want much more storage if you're working
+with images and instances.  If you are using an ISO or iPXE installation,
+select a simple layout of disks (e.g. mirrored pair, or single raidz group).
 
 If setting up a Triton DataCenter pilot then you'll want to review
 the [Hardware Selection Requirements](https://docs.joyent.com/private-cloud/install/hardware-selection),
@@ -123,7 +142,7 @@ the [Joyent Manufacturing Database](https://docs.joyent.com/private-cloud/hardwa
 
 #### Install
 
-To install Triton, first download the latest release image:
+To install a USB-key Triton, first download the latest release image:
 
 ```bash
 curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/usb-latest.tgz
@@ -134,6 +153,17 @@ Once you have downloaded the latest release image, you will need to
 boot the head node server using the USB key, and follow the install prompts. All steps necessary
 to plan, install, and configure Triton DataCenter (Triton) are available in the Joyent
 customer documentation [Installing Triton Elastic Container Infrastructure](https://docs.joyent.com/private-cloud/install).
+
+To install using the [ISO
+installer](./docs/developer-guide/iso-installer.md), download the [ISO
+image](https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/iso-latest.iso),
+make sure you be aware of the available disks, and then follow the
+installation instructions above.
+
+To install using the [iPXE
+installer](https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/ipxe-latest.tgz),
+follow the advice on the [iPXE installer
+documentation](./docs/developer-guide/iso-installer.md).
 
 
 ## Building
@@ -148,20 +178,23 @@ Triton is composed of several pre-built components:
   package](https://github.com/joyent/sdc-agents-installer)
   installed into the global zone of each compute node.
 
-Each component is built separately and then all are combined into CoaL and USB
-builds (see the preceding sections) via the [sdc-headnode
-repository](https://github.com/joyent/sdc-headnode). The built components are
-typically stored in a [Manta object store](https://github.com/joyent/manta),
-e.g. [Joyent's public Manta](https://www.joyent.com/products/manta),
-and pulled from there. For example, Joyent's builds push to
+Each component is built separately and then all are combined into
+CoaL, USB, ISO, and iPXE builds (see the preceding sections) via the
+[sdc-headnode repository](https://github.com/joyent/sdc-headnode). The
+built components are typically stored in a [Manta object
+store](https://github.com/joyent/manta), e.g. [Joyent's public
+Manta](https://www.joyent.com/products/manta), and pulled from
+there. For example, Joyent's builds push to
 `/Joyent_Dev/public/builds` in Joyent's public Manta in us-east-1
 (<https://us-east.manta.joyent.com/>).
 
 You can build your own CoaL and USB images on Mac or SmartOS (see the
-[sdc-headnode README](https://github.com/joyent/sdc-headnode#readme)). However,
-all other Triton components must be built using a running Triton
-(e.g. on the [Joyent Cloud](https://www.joyent.com/products/compute-service)
-or in a local CoaL). See [the building document](./docs/developer-guide/building.md)
+[sdc-headnode
+README](https://github.com/joyent/sdc-headnode#readme)). However, ISO
+and iPXE images, as well as all other Triton components must be built
+using a running Triton (e.g. on the [Joyent
+Cloud](https://www.joyent.com/products/compute-service) or in a local
+CoaL). See [the building document](./docs/developer-guide/building.md)
 for details on building each of the Triton components.
 
 

@@ -5,7 +5,7 @@
 -->
 
 <!--
-    Copyright (c) 2019, Joyent, Inc.
+    Copyright 2021, Joyent, Inc.
 -->
 
 # Cloud on a Laptop (CoaL)

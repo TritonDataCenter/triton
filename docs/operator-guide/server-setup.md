@@ -1,3 +1,13 @@
+<!--
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+
+<!--
+    Copyright 2021, Joyent, Inc.
+-->
+
 # Introduction
 
 This document describes the process of setting up a new Triton Compute Node
@@ -28,10 +38,11 @@ the point where the new empty CN first boots.
 
 ## First Boot
 
-When a CN boots (whether by PXE or USB) the first interaction it will have with
-the Triton control plane will be via DHCP. It will do a DHCPDISCOVER in order to
-attempt to learn its own IP address. This DHCPDISCOVER is a broadcast message
-and the booter/dhcpd service (usually dhcpd0 zone on the HN) will see this
+When a CN boots (whether by PXE, USB, or from disk) the first
+interaction it will have with the Triton control plane will be via
+DHCP. It will do a DHCPDISCOVER in order to attempt to learn its own
+IP address. This DHCPDISCOVER is a broadcast message and the
+booter/dhcpd service (usually dhcpd0 zone on the HN) will see this
 message be responsible for handling it.
 
 The [booter daemon](https://github.com/joyent/sdc-booter) takes the MAC address
@@ -420,3 +431,5 @@ Another common failure mode is to have the joysetup.sh script fail due to a
 pre-existing zpool on the disks. When this happens often the server-setup
 plows forward and the agentsetup fails. If you see a failure, it's always a
 good idea to check the status of the zpool early in the debugging process.
+
+XXX KEBE SAYS FILL ME IN WITH BMoaS iPXE CN BOOT ISSUES
