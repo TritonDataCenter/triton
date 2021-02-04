@@ -8,3 +8,6 @@
     Copyright 2021, Joyent, Inc.
 -->
 
+# Triton ISO Installation
+
+If one wishes to boot off a ZFS pool, one can use

@@ -115,6 +115,9 @@ Otherwise, given the cautions in the [ISO installer
 page](./docs/developer-guide/iso-installer.md), a physical server can boot
 off of its `zones` pool.
 
+Both USB-key-boot and ZFS-pool-boot use the same interfaces within Triton,
+with a ZFS bootable filesystem substituting for the USB-key.
+
 
 #### Hardware
 
