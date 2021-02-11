@@ -14,7 +14,7 @@ A Triton Head Node can boot off of a ZFS pool, using its bootable filesystem
 as an on-disk equivalent to the traditional USB-key.  The `sdc-usbkey`
 command works on a disk-booting Triton Head Node nearly-identically to an
 actual USB-key-booting head node.  (The ZFS bootable filesystem is
-case-sensitive.)
+case-sensitive, unlike the USB key.)
 
 A ZFS pool that is bootable SHOULD be created with `zpool create -B`.  You
 can determine if a pool was created this way by querying the `bootsize`
@@ -85,7 +85,8 @@ contents, which cannot fit into an iPXE boot-archive/initrd.
 The [piadm(1M)
 command](https://github.com/joyent/smartos-live/blob/master/man/usr/share/man/man1m/piadm.1m.md)
 can be employed to transfer the current USB-key to a bootable ZFS pool.  It
-can also be used to transfer boot contents from one pool to another.
+can also be used to transfer boot contents from one pool to another.  If a
+pool is not bootable, piadm(1M) will fail.
 
 Select a POOL, and then issuing `piadm bootable -e POOL` will copy the USB
 key contents on to a bootable pool and enable the pool to be bootable (if it
