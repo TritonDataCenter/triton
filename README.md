@@ -124,7 +124,7 @@ with a ZFS bootable filesystem substituting for the USB-key.
 For Triton development only, the minimum server hardware is:
 
 - 8 GB USB flash drive
-- Intel Processors with VT-x and EPT support (all Xeon since Nehalem)
+- Intel Processors with VT-x and EPT support (all Xeon since Nehalem), or AMD Processors no earlier than EPYC or Zen. 
 - 16 GB RAM
 - 20 GB available storage
 

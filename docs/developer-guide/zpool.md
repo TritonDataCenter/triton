@@ -13,8 +13,8 @@
 A Triton Head Node can boot off of a ZFS pool, using its bootable filesystem
 as an on-disk equivalent to the traditional USB-key.  The `sdc-usbkey`
 command works on a disk-booting Triton Head Node nearly-identically to an
-actual USB-key-booting head node.  (The ZFS bootable filesystem is
-case-sensitive, unlike the USB key.)
+actual USB-key-booting head node.  The only difference is that the ZFS
+bootable filesystem is case-sensitive, unlike the USB key.
 
 A ZFS pool that is bootable SHOULD be created with `zpool create -B`.  You
 can determine if a pool was created this way by querying the `bootsize`
@@ -91,3 +91,22 @@ pool is not bootable, piadm(1M) will fail.
 Select a POOL, and then issuing `piadm bootable -e POOL` will copy the USB
 key contents on to a bootable pool and enable the pool to be bootable (if it
 is bootable per the requirements above).
+
+## How Do I Know I'm Booting from a ZFS Pool?
+
+For Triton Head Nodes, we set the boot parameter "triton_bootpool".  The
+piadm(1M) command and other Triton components use that boot parameter to
+determine the booted pool.
+
+```
+[root@headnode (testcloud) ~]# zpool list
+NAME       SIZE  ALOC   FREE  CKPOINT  EXPANDSZ   FRAG    CAP  DEDUP  HEALTH  ALTROOT
+bootpool    74G  3.60G  70.4G        -         -     0%     4%  1.00x  ONLINE  -
+zones      928G   264G   664G        -         -    36%    28%  1.00x  ONLINE  -
+[root@headnode (testcloud) ~]# piadm bootable
+bootpool                       ==> BIOS and UEFI
+zones                          ==> non-bootable 
+[root@headnode (testcloud) ~]# bootparams | grep triton_bootpool
+triton_bootpool=botpool
+[root@headnode (testcloud) ~]# 
+```
