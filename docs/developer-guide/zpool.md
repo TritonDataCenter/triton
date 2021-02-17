@@ -65,8 +65,10 @@ installing a disk-bootable CoaL, you can either follow the CoaL directions to
 setup external and admin network, OR you may configure your own prior to
 booting the ISO installer.
 
-Make sure the Triton installation ISO is in the optical drive
-(virtual or otherwise), and boot it.  Proceed to 
+Make sure the Triton installation ISO is in the optical drive (virtual or
+otherwise), and boot it.  Proceed to follow the installation prompts per
+[Installing Triton Elastic Container
+Infrastructure](https://docs.joyent.com/private-cloud/install).
 
 ### For iPXE Installations
 

@@ -15,7 +15,10 @@ boot once off of DVD-ROM, and on subsequent boots boot off of a bootable
 `zones` ZFS pool.
 
 The ISO installer can be used in a virtual machine environment, in lieu of
-[CoaL](./docs/developer-guide/coal-setup.md), as well.
+[CoaL](./docs/developer-guide/coal-setup.md), as well.  Be sure to download
+the [ISO
+image](https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/iso-latest.iso)
+and follow the main README. 
 
 ## Minimum Requirements
 

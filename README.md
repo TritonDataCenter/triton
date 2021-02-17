@@ -166,7 +166,7 @@ installation instructions above.
 To install using the [iPXE
 installer](https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/ipxe-latest.tgz),
 follow the advice on the [iPXE installer
-documentation](./docs/developer-guide/iso-installer.md).
+documentation](./docs/developer-guide/ipxe-installer.md).
 
 
 ## Building
