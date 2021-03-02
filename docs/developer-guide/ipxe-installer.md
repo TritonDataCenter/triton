@@ -26,3 +26,34 @@ needed network reachability to start in the first place, so configuring the
 head node to reach the iPXE downloads should not be difficult.  The network
 is required to be able to download images that are normally on the ISO DVD
 image for the ISO installer, but cannot fit into an iPXE ramdisk root.
+
+## Configuring an iPXE Server for a Triton Installation
+
+A Triton iPXE server needs to be populated so iPXE can pull via HTTP what it
+needs to boot the Triton installer and actually perform the installation.  We
+provide a [tar
+archive](https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/ipxe-latest.tgz)
+that can be installed on a web server that an iPXE client can reach.
+
+The `triton-installer.ipxe` file will need modifications in its `testdomain`
+and `base-url` variables to match your deployment.  If your iPXE webserver is
+ipxe.example.com, and its directory URL is https://ipxe.example.com/triton,
+you would have these lines in triton-installer.ipxe:
+
+```
+	set testdomain ipxe.example.com
+	set base-url https://ipxe.example.com/triton
+```
+
+**NOTE** - The `testdomain` must allow ICMP echo requests and respond to them
+(aka. pings) so the installer can confirm reachability.
+
+The tar archive also includes a full tar archive of the [ISO
+installer](./docs/developer-guide/iso-installer.md) contents because an iPXE
+ramdisk image is not large enough to hold all of the Triton images required
+for an installation, and the iPXE installer must download the images after it
+has booted.
+
+Using the example server above, once it has been setup, an iPXE client should
+access `https://ipxe.example.com/triton/triton-installer.ipxe` to install the
+Triton head node.

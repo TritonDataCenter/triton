@@ -131,7 +131,8 @@ For Triton development only, the minimum server hardware is:
 Hardware RAID is not recommended. Triton will lay down a ZFS ZPOOL across all
 available disks on install. You'll want much more storage if you're working
 with images and instances.  If you are using an ISO or iPXE installation,
-select a simple layout of disks (e.g. mirrored pair, or single raidz group).
+configure a simple layout of disks (e.g. mirrored pair, or single raidz
+group).
 
 If setting up a Triton DataCenter pilot then you'll want to review
 the [Hardware Selection Requirements](https://docs.joyent.com/private-cloud/install/hardware-selection),
