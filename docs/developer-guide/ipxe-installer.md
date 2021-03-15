@@ -29,9 +29,8 @@ image for the ISO installer, but cannot fit into an iPXE ramdisk root.
 
 ## Configuring an iPXE Server for a Triton Installation
 
-A Triton iPXE server needs to be populated so iPXE can pull via HTTP what it
-needs to boot the Triton installer and actually perform the installation.  We
-provide a [tar
+An iPXE installation needs to pull necessary files via HTTP/HTTPS for
+installation.  We provide a [tar
 archive](https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/ipxe-latest.tgz)
 that can be installed on a web server that an iPXE client can reach.
 

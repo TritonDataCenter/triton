@@ -43,7 +43,7 @@ interaction it will have with the Triton control plane will be via
 DHCP. It will do a DHCPDISCOVER in order to attempt to learn its own
 IP address. This DHCPDISCOVER is a broadcast message and the
 booter/dhcpd service (usually dhcpd0 zone on the HN) will see this
-message be responsible for handling it.
+message and be responsible for handling it.
 
 The [booter daemon](https://github.com/joyent/sdc-booter) takes the MAC address
 from the DHCPDISCOVER request and checks NAPI to determine whether the NIC exists
@@ -435,13 +435,14 @@ good idea to check the status of the zpool early in the debugging process.
 ## iPXE booting Compute Nodes
 
 In some situations, such as a Bare-Metal-as-a-Service (BMaaS) provider, they
-may have instances that by default only network boot on one network
-interface, and it may not be the one a Triton installation has configured as
-the `admin` network.  Often times, these single-network-interfaces default to
-an iPXE boot if it can network boot at all.
+may have instances where by default a system can only network boot on one
+network interface. The network interface might not be the one a Triton
+installation has configured as the `admin` network.  Often times, these
+single-network-interfaces default to an iPXE boot if it can network boot at
+all.
 
 A suggested course of action in these situations is to, if possible, ALWAYS
-boot using iPXE, but chainloading into a Triton Compute Node boot.
+boot using iPXE, but chainload from iPXE into a Triton Compute Node boot.
 
 As mentioned in the [iPXE installer](../developer-guide/iso-installer.md),
 one will need to setup an iPXE server in these situations.  Unlike the triton
@@ -463,24 +464,24 @@ boot
 
 And the URL for the BMaaS iPXE should be, in this example,
 `https://example.com/triton-cn-ipxe/triton-cn.ipxe`.  There are two other
-files mentioned in this, and those are what we need as well.
+files mentioned in this, and those are needed as well.
 
 ### An iPXE binary
 
 In a head node, the file `/opt/smartdc/share/usbkey/contents/boot/ipxe.lkrn`
-exists, and is the Triton-special iPXE binary that a Triton Compute Node
-normally boots into either off of a USB key or off of a BIOS PXE chainload.
-For a BMaaS compute node that can only network-boot from the BMaaS iPXE, it
-will have to chain load into this one.
+exists, and it is the Triton-special iPXE binary that a Triton Compute Node
+normally boots from a USB key or from a BIOS PXE chainload.  For a BMaaS
+compute node that can only network-boot from the BMaaS iPXE, it will have to
+chain load into the Triton-special iPXE binary.
 
 ### The Triton-specific iPXE instruction file
 
-In this example, we name it `default-no0.ipxe`, and it is designed to bypass
-at least the primary NIC on the compute node when trying to reach the Triton
-Head Node DHCP server.
+In this example, we name the iPXE instruction file `default-no0.ipxe`, and it
+is designed to bypass at least the primary NIC on the compute node when
+trying to reach the Triton Head Node DHCP server.
 
 Some BMaaS providers set `net2` as the primary, because of possible
-dissatisfaction with the on-board NICs, and the desire to use a well-tested
+dissatisfaction with the on-board NICs and the desire to use a well-tested
 PCIe NIC instead.  It is important to know which NICs to skip.  In the
 following example `default-no0.ipxe` file we skip both `net0` and `net2`.
 

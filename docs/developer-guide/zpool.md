@@ -38,14 +38,14 @@ ZFS-bootable Head Node.  Such sets include:
 - Two (mirrored) or more (raidz) same-sized disk.
 - Two or more same-sized disk with a single SSD for a log device.
 
-NOTE:  After installation a bootable pool can have log devices or log device
-mirrors added.
+NOTE:  After installation a bootable pool can have log devices, log device
+mirrors, or cache devices added.
 
 ## Installing a ZFS bootable Head Node
 
 In addition to [regular network attachment and
 configuration](https://docs.joyent.com/private-cloud/install/network-layout),
-if you wish to start booting a Head Node from a ZFS pool you should attach
+if you wish to start booting a Head Node from a ZFS pool you should attach a
 set of server disks per the introduction.  You should then use either an ISO
 installation, or if the server is iPXE installable (e.g. a bare-metal cloud
 provider), you should point at the HTTP/HTTPS-served contents of the iPXE
@@ -67,14 +67,14 @@ booting the ISO installer.
 
 Make sure the Triton installation ISO is in the optical drive (virtual or
 otherwise), and boot it.  Proceed to follow the installation prompts per
-[Installing Triton Elastic Container
-Infrastructure](https://docs.joyent.com/private-cloud/install).
+[Installing Triton DataCenter](https://docs.joyent.com/private-cloud/install).
 
 ### For iPXE Installations
 
-As with ISO installations, it is important that the boot order for the server
-be the disks first, but the disks should not be bootable for the initial iPXE
-installation.
+As with ISO installations, it is important that the disks are first in the
+boot order, but the disks themselves should not be bootable at the time for
+the initial iPXE installation.  It may be necessary to clear the disks of a
+usable Master Boot Record or EFI partition prior to installation.
 
 An iPXE installation requires that iPXE web directory that allows a boot into
 the Triton installer also be reachable by the configured-at-installation time
@@ -84,15 +84,16 @@ contents, which cannot fit into an iPXE boot-archive/initrd.
 
 ## Converting from a USB-key (or from one bootable pool to another)
 
-The [piadm(1M)
-command](https://github.com/joyent/smartos-live/blob/master/man/usr/share/man/man1m/piadm.1m.md)
-can be employed to transfer the current USB-key to a bootable ZFS pool.  It
-can also be used to transfer boot contents from one pool to another.  If a
-pool is not bootable, piadm(1M) will fail.
+The
+[piadm](https://github.com/joyent/smartos-live/blob/master/man/usr/share/man/man1m/piadm.1m.md)(1M)
+command can be employed to transfer the current USB-key to a bootable ZFS
+pool.  It can also be used to transfer boot contents from one pool to
+another.  If a pool is not bootable, piadm(1M) will fail.
 
-Select a POOL, and then issuing `piadm bootable -e POOL` will copy the USB
-key contents on to a bootable pool and enable the pool to be bootable (if it
-is bootable per the requirements above).
+Select a POOL, and then issue `piadm bootable -e POOL` to copy the USB key
+contents on to a bootable pool and enable the pool to be bootable. If the
+pool is not bootable per the requirements above, the piadm(1M) command will
+fail.
 
 ## How Do I Know I'm Booting from a ZFS Pool?
 
