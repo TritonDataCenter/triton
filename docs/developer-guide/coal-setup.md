@@ -5,7 +5,7 @@
 -->
 
 <!--
-    Copyright (c) 2019, Joyent, Inc.
+    Copyright 2021, Joyent, Inc.
 -->
 
 # Cloud on a Laptop (CoaL)
@@ -17,6 +17,12 @@ document carefully before installing CoaL.
 
 **Note**: Developers in the community have set up CoaL successfully on Windows and
 on Linux using these instructions as general guidelines, modifying them as needed.
+
+**Additionally**: With the introduction of the [ISO
+Installer](./iso-installer.md) it may be easier to, within the virtual machine
+constraints mentioned below, to install a vitual Triton head node from an ISO
+installer instead.  After installing using an ISO, proceed to [step
+5](#configuring-the-head-node).
 
 **WARNING**: The installation procedure and configuration options in this document
 are not appropriate for production deployments.

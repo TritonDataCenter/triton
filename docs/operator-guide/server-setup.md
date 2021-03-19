@@ -1,3 +1,13 @@
+<!--
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+
+<!--
+    Copyright 2021, Joyent, Inc.
+-->
+
 # Introduction
 
 This document describes the process of setting up a new Triton Compute Node
@@ -28,11 +38,12 @@ the point where the new empty CN first boots.
 
 ## First Boot
 
-When a CN boots (whether by PXE or USB) the first interaction it will have with
-the Triton control plane will be via DHCP. It will do a DHCPDISCOVER in order to
-attempt to learn its own IP address. This DHCPDISCOVER is a broadcast message
-and the booter/dhcpd service (usually dhcpd0 zone on the HN) will see this
-message be responsible for handling it.
+When a CN boots (whether by PXE, USB, or from disk) the first
+interaction it will have with the Triton control plane will be via
+DHCP. It will do a DHCPDISCOVER in order to attempt to learn its own
+IP address. This DHCPDISCOVER is a broadcast message and the
+booter/dhcpd service (usually dhcpd0 zone on the HN) will see this
+message and be responsible for handling it.
 
 The [booter daemon](https://github.com/joyent/sdc-booter) takes the MAC address
 from the DHCPDISCOVER request and checks NAPI to determine whether the NIC exists
@@ -420,3 +431,72 @@ Another common failure mode is to have the joysetup.sh script fail due to a
 pre-existing zpool on the disks. When this happens often the server-setup
 plows forward and the agentsetup fails. If you see a failure, it's always a
 good idea to check the status of the zpool early in the debugging process.
+
+## iPXE booting Compute Nodes
+
+In some situations, such as a Bare-Metal-as-a-Service (BMaaS) provider, they
+may have instances where by default a system can only network boot on one
+network interface. The network interface might not be the one a Triton
+installation has configured as the `admin` network.  Often times, these
+single-network-interfaces default to an iPXE boot if it can network boot at
+all.
+
+A suggested course of action in these situations is to, if possible, ALWAYS
+boot using iPXE, but chainload from iPXE into a Triton Compute Node boot.
+
+As mentioned in the [iPXE installer](../developer-guide/iso-installer.md),
+one will need to setup an iPXE server in these situations.  Unlike the triton
+installer, there is no tar archive readily available.  The directory,
+however, needs only three files.
+
+
+### An initial .ipxe instruction file.
+
+This file should be inserted into `triton-cn.ipxe`:
+
+```
+#!ipxe
+set base-url https://example.com/triton-cn-ipxe
+kernel ${base-url}/ipxe.lkrn
+module ${base-url}/default-no0.ipxe
+boot
+```
+
+And the URL for the BMaaS iPXE should be, in this example,
+`https://example.com/triton-cn-ipxe/triton-cn.ipxe`.  There are two other
+files mentioned in this, and those are needed as well.
+
+### An iPXE binary
+
+In a head node, the file `/opt/smartdc/share/usbkey/contents/boot/ipxe.lkrn`
+exists, and it is the Triton-special iPXE binary that a Triton Compute Node
+normally boots from a USB key or from a BIOS PXE chainload.  For a BMaaS
+compute node that can only network-boot from the BMaaS iPXE, it will have to
+chain load into the Triton-special iPXE binary.
+
+### The Triton-specific iPXE instruction file
+
+In this example, we name the iPXE instruction file `default-no0.ipxe`, and it
+is designed to bypass at least the primary NIC on the compute node when
+trying to reach the Triton Head Node DHCP server.
+
+Some BMaaS providers set `net2` as the primary, because of possible
+dissatisfaction with the on-board NICs and the desire to use a well-tested
+PCIe NIC instead.  It is important to know which NICs to skip.  In the
+following example `default-no0.ipxe` file we skip both `net0` and `net2`.
+
+```
+# Skip BMaaS configuration NICs and instead locate the Triton ADMIN network.
+
+ifstat
+
+# Skip net0 and net2
+dhcp net1 && autoboot net1 ||
+dhcp net3 && autoboot net3 ||
+dhcp net4 && autoboot net4 ||
+dhcp net5 && autoboot net5 ||
+dhcp net6 && autoboot net6 ||
+dhcp net7 && autoboot net7
+```
+
+All three files should be in the iPXE web server directory.

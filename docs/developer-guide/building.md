@@ -1,3 +1,13 @@
+<!--
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+
+<!--
+    Copyright 2021, Joyent, Inc.
+-->
+
 ---
 Building Triton and Manta
 ---
@@ -91,8 +101,10 @@ One exception to the above is the `sdc-headnode` build which can be built on
 OS X and Linux in addition to Triton or SmartOS.
 
 It is also possible to build on virtual machines (vmware, kvm, bhyve, etc.)
-hosting SmartOS, or a
-[Triton "CoaL" ("Cloud on a Laptop")](https://github.com/joyent/triton/blob/master/docs/developer-guide/coal-setup.md) instance, though your virtualization platform will need to allow nested
+hosting SmartOS, or a Triton head node using
+["CoaL" ("Cloud on a
+Laptop")](https://github.com/joyent/triton/blob/master/docs/developer-guide/coal-setup.md)
+or an [ISO installer](./iso-installer.md), though your virtualization platform will need to allow nested
 virtualization in order to host the 'retro' build zones that we talk about later
 in this document.
 
