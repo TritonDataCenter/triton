@@ -85,7 +85,7 @@ default will be used.
 
 | Key                       | Default      |
 | ------------------------- | ------------ |
-| `datacenter_company_name` | Empty string |
+| `company_name`            | Empty string |
 | `datacenter_location`     | Empty string |
 | `region_name`             | Leading alpha characters of `datacenter_name`, which will be the Equnix Metal `facility`  (e.g., `iad`) |
 | `dns_resolver1`           | `8.8.8.8` |
