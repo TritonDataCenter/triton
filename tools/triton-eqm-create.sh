@@ -9,10 +9,6 @@
 # Copyright 2021 Joyent, Inc.
 #
 
-#
-# Boilerplate
-#
-
 # shellcheck disable=SC2154
 if [[ -n "$TRACE" ]]; then
     export PS4='[\D{%FT%TZ}] ${BASH_SOURCE}:${LINENO}: ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
@@ -74,8 +70,8 @@ function usage
 {
     printf 'Create a new Triton Headnode install in Equinix Metal.\n\n'
     printf 'Syntax:\n\n'
-    printf '\t%s project -n project_name -f facility\n' "$0"
-    printf '\t%s headnode -p project_uuid -f facility\n\n' "$0"
+    printf '\t%s project -n project_name\n' "$0"
+    printf '\t%s headnode -p project_uuid -f facility -P hardware_plan -a answer_file\n\n' "$0"
     printf '\t%s computenode -n <cn name> -p project_uuid -f facility\n\n' "$0"
     exit "$1"
 }
@@ -87,7 +83,6 @@ function usage
 #
 
 LOG=./triton-project.$$.log
-hardware_plan=c3.small.x86
 prefix_l='28'
 
 if [[ -z $PACKET_TOKEN ]]; then
@@ -165,9 +160,6 @@ function assign_networks
             call_api "/ports/$eth1_id/assign" -X POST -d '{"vnid":"'"$vnid"'"}'
         done
         call_api "/ports/$eth1_id/native-vlan" -X POST -d '{"vnid":"'"$admin_net"'"}'
-
-        # Now re-bond eth0
-        #call_api "/ports/$eth0_id/bond" -X POST -d ''
     } >> "$LOG"
 
     printf 'done.\n'
@@ -213,7 +205,7 @@ function create_server
 
     if [[ $s_hostname == headnode ]]; then
         always_ipxe=false
-        ipxe_url='https://netboot.smartos.org/tink/triton-installer.ipxe'
+        ipxe_url='https://netboot.smartos.org/triton-installer/packet.ipxe'
     fi
 
     # Create an IP reservation
@@ -246,10 +238,10 @@ function create_server
           "operating_system": "custom_ipxe",
           "always_pxe": %s,
           "ipxe_script_url": "%s",
-          "customdata": %s,
+          "customdata": %s
           %s
-        }' "$facility" "$hardware_plan" "$s_hostname" "$always_ipxe" \
-            "$ipxe_url" "$customdata" "$ip_addresses"
+        }' "$facility" "${hardware_plan:-c3.small.x86}" "$s_hostname" \
+            "$always_ipxe" "$ipxe_url" "$customdata" "$ip_addresses"
     )
 
     out=$(call_api "/projects/$project_uuid/devices" -X POST -d "$create_json")
@@ -262,7 +254,8 @@ function create_subnet_request
     project_uuid="$1"
     facility="$2"
     hostname="$3"
-    packet ip request -f "$facility" -p "$project_uuid" -t public_ipv4 -c "IPs for $hostname" -q 16 >> "$LOG"
+    packet ip request -f "$facility" -p "$project_uuid" -t public_ipv4 \
+        -c "IPs for $hostname" -q 16 >> "$LOG"
 }
 
 function create_vlans
@@ -273,8 +266,13 @@ function create_vlans
         Admin
         Underlay
     )
+    existing_vlans=$(packet virtual-network get -p "$project_uuid" -j | \
+        json virtual_networks | json -a description)
     for net in "${networks[@]}" ; do
-        packet virtual-network create -j -f "$facility" -d "Triton $net" -p "$project_uuid"
+        if ! grep "$net" <<< "$existing_vlans" ; then
+            packet virtual-network create -j -f "$facility" -d "Triton $net" \
+                -p "$project_uuid"
+        fi
     done >> "$LOG"
 }
 
@@ -283,24 +281,20 @@ function do_setup_project
     while getopts "n:f:h" options; do
         case $options in
             n) project_name="$OPTARG" ;;
-            f) facility="$OPTARG" ;;
             h) usage 0 ;;
             *) usage 1 ;;
         esac
     done
 
-    if [[ -z $project_name ]] || [[ -z $facility ]] ; then
+    if [[ -z $project_name ]] ; then
         usage 1
     fi
 
     project_uuid=$(create_project "$project_name")
-    create_vlans "$project_uuid" "$facility"
 
     ## Summary
     printf 'Project Name: %s\n' "$project_name"
     printf 'Project UUID: %s\n' "$project_uuid"
-    printf 'VLANs:\n'
-    packet virtual-network get -p "$project_uuid"
 }
 
 function do_setup_server
@@ -309,11 +303,12 @@ function do_setup_server
 
     customdata='{}'
 
-    while getopts "a:f:p:n:h" options; do
+    while getopts "a:f:p:P:n:h" options; do
         case $options in
             a) answers_file="$OPTARG";;
             f) facility="$OPTARG" ;;
             p) project_uuid="$OPTARG" ;;
+            P) hardware_plan="$OPTARG" ;;
             n) s_hostname="$OPTARG" ;;
             h) usage 0 ;;
             *) usage 1 ;;
@@ -328,6 +323,9 @@ function do_setup_server
         customdata="$(cat "$answers_file")"
     fi
 
+    # This is an idempotent operation.
+    create_vlans "$project_uuid" "$facility"
+
     printf 'Creating server...'
     server=$(create_server "$project_uuid" "$facility" "$s_hostname")
     if [[ -z $server ]]; then
@@ -338,9 +336,6 @@ function do_setup_server
 
     printf 'Watch server progress:\n\n\t'
     printf 'ssh %s@sos.%s.platformequinix.com\n\n' "$server" "$facility"
-
-    # Give it a bit to settle, but not too long.
-    # sleep 5
 
     # wait for server
     printf 'Waiting for server to complete provisioning...'
@@ -380,7 +375,8 @@ function get_provisionable_ip
             ;;
     esac
 
-    printf '%s.%s.%s.%s\n' "${octet[0]}" "${octet[1]}" "${octet[2]}" "${octet[3]}"
+    printf '%s.%s.%s.%s\n' "${octet[0]}" "${octet[1]}" "${octet[2]}" \
+        "${octet[3]}"
 }
 
 function show_napi_commands
@@ -408,7 +404,8 @@ function show_napi_commands
   ],
   "description": "External for %s"}'
 
-    ip_addresses=$(packet server get -i "$server" -j | json ip_addresses | json -o jsony-0 -ac 'this.public==true')
+    ip_addresses=$(packet server get -i "$server" -j | json ip_addresses | \
+        json -o jsony-0 -ac 'this.public==true')
 
     printf 'sdc-napi /nic_tags -X POST -d '
     printf \'
