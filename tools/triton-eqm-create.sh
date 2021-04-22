@@ -91,7 +91,6 @@ if [[ -z $PACKET_TOKEN ]]; then
         export PACKET_TOKEN
     else
         fatal 'PACKET_TOKEN is unset and ~/.packet-cli.json does not exist.'
-        exit
     fi
 fi
 
@@ -286,7 +285,7 @@ function do_setup_project
         esac
     done
 
-    if [[ -z $project_name ]] ; then
+    if [[ -z $project_name ]]; then
         usage 1
     fi
 
