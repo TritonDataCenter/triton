@@ -82,7 +82,7 @@ function usage
 # Global Variables
 #
 
-LOG=./triton-project.$$.log
+LOG=$(mktemp "${TMPDIR:-/tmp}/triton-eqm.XXXXXX")
 prefix_l='28'
 
 if [[ -z $PACKET_TOKEN ]]; then
@@ -202,7 +202,7 @@ function create_server
     local ip_addresses=''
     local ipxe_url='https://netboot.smartos.org/triton-cn/triton-cn.ipxe'
 
-    if [[ $s_hostname == headnode ]]; then
+    if [[ $s_hostname =~ "headnode" ]]; then
         always_ipxe=false
         ipxe_url='https://netboot.smartos.org/triton-installer/packet.ipxe'
     fi
@@ -300,6 +300,8 @@ function do_setup_server
 {
     local facility project_uuid s_hostname server
 
+    printf 'Verbose log is %s\n' "$LOG"
+
     customdata='{}'
 
     while getopts "a:f:p:P:n:h" options; do
@@ -318,7 +320,14 @@ function do_setup_server
         usage 1
     fi
 
-    if [[ $s_hostname == "headnode" ]] && [[ -n $answers_file ]]; then
+    if [[ $s_hostname == "headnode" ]]; then
+        # Make sure Packet hostnames are unique within a single project.
+        # This comes into play when there's a multi-facility UFDS replicated
+        # cloud.
+        s_hostname="headnode-$facility"
+    fi
+
+    if [[ $s_hostname =~ "headnode" ]] && [[ -n $answers_file ]]; then
         customdata="$(cat "$answers_file")"
     fi
 
@@ -342,7 +351,7 @@ function do_setup_server
     printf 'done.\n'
     assign_networks "$project_uuid" "$server"
     printf 'Server provisioning complete.\n'
-    if [[ $hostname != "headnode" ]]; then
+    if ! [[ $s_hostname =~ "headnode" ]]; then
         show_napi_commands "$s_hostname" "$server"
     fi
 }

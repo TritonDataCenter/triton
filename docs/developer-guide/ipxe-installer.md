@@ -108,13 +108,13 @@ following steps to create a new Triton cloud.
 1. Create a project to contain the assets for your Triton Cloud.  This will also
    create the necessary VLANs in the specified facility.
 
-        triton-eqm-create.sh project -n My-Triton-Project -f iad1
+        triton-eqm-create.sh project -n My-Triton-Project
 
 2. After the project has been created, you can create the headnode.  Passing an
    answers file is optional, other values are required.  The hardware plan
    defaults to `c3.small.x86` but can be changed with `-P`.
 
-        triton-eqm-create.sh headnode -p <project_id> -f iad1 -a my-answers.json
+        triton-eqm-create.sh headnode -p <project_id> -f sv15 -a my-answers.json
 
 3. Connect to the Equinix Metal "`sos`" console to watch the progress (the
    correct `ssh` command will be printed for you).  There are some issues that
@@ -127,7 +127,7 @@ following steps to create a new Triton cloud.
 5. Refer to the [Triton Operator Documentation][ops-docs] for post-install
    operation and configuration of your new Triton Cloud.
 
-6. Create additional Compute Nodes.
+6. After post-install tasks are complete, create additional Compute Nodes.
 
         triton-eqm-create.sh computenode -p <project_id> -f iad1
 
