@@ -134,7 +134,7 @@ following steps to create a new Triton cloud.
 <!-- Footnote style links -->
 
 [triton-ipxe]: https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/ipxe-latest.tgz
-[triton-iso-doc]: ./docs/developer-guide/iso-installer.md
+[triton-iso-doc]: ./iso-installer.md
 [eqm]: https://metal.equinix.com/
 [tink]: https://tinkerbell.org
 [eqm-script]: ../../tools/triton-eqm-create.sh
