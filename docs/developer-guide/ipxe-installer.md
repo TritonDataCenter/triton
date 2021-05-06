@@ -13,11 +13,10 @@
 Some deployments, for example on to a Bare-Metal as a Service (BMaaS)
 provider, may use single-shot iPXE boots to install an operating system.
 
-The Triton iPXE installer behaves much like the [ISO
-installer](./docs/developer-guide/iso-installer.md) in that it should boot
-once, and during the reboot mid-installation the on-disk portion should take
-over.  It is important that the iPXE Triton boot happen only once for a head
-node installation.
+The Triton iPXE installer behaves much like the [ISO installer][triton-iso-doc]
+in that it should boot once, and during the reboot mid-installation the on-disk
+portion should take over.  It is important that the iPXE Triton boot happen
+only once for a head node installation.
 
 Unlike the ISO installer, the iPXE installation requires that network
 reachability be enabled DURING the installation process.  The installer
