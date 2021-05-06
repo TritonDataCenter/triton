@@ -137,7 +137,7 @@ following steps to create a new Triton cloud.
 [triton-iso-doc]: ./docs/developer-guide/iso-installer.md
 [eqm]: https://metal.equinix.com/
 [tink]: https://tinkerbell.org
-[eqm-script]: ../tools/triton-eqm-create.sh
+[eqm-script]: ../../tools/triton-eqm-create.sh
 [hn]: https://github.com/joyent/sdc-headnode/
 [p-cli]: https://github.com/packethost/packet-cli
 [ops-docs]: https://docs.joyent.com/private-cloud/
