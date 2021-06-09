@@ -491,5 +491,5 @@ case "$action" in
         show_napi_commands "${hostname:?}" "${uuid:?}"
         ;;
     *)
-        echo 'wut?' ;;
+        usage 1 ;;
 esac
