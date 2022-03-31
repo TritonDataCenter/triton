@@ -6,8 +6,11 @@
 #
 
 #
-# Copyright 2021 Joyent, Inc.
+# Copyright 2022 Joyent, Inc.
 #
+
+set -o errexit
+set -o pipefail
 
 # shellcheck disable=SC2154
 if [[ -n "$TRACE" ]]; then
@@ -72,7 +75,7 @@ function usage
     printf 'Syntax:\n\n'
     printf '\t%s project -n project_name\n' "$0"
     printf '\t%s headnode -p project_uuid -f facility -P hardware_plan -a answer_file\n\n' "$0"
-    printf '\t%s computenode -n <cn name> -p project_uuid -f facility\n\n' "$0"
+    printf '\t%s computenode -n <cn name> -p project_uuid -f facility -P hardware_plan\n\n' "$0"
     exit "$1"
 }
 
@@ -85,9 +88,10 @@ function usage
 LOG=$(mktemp "${TMPDIR:-/tmp}/triton-eqm.XXXXXX")
 prefix_l='28'
 
-if [[ -z $PACKET_TOKEN ]]; then
+config_file=~/.config/equinix/metal.yaml
+if [[ -z $METAL_AUTH_TOKEN ]]; then
     if [[ -f ~/.packet-cli.json ]]; then
-        PACKET_TOKEN=$(json -f ~/.packet-cli.json token)
+        PACKET_TOKEN=$(yaml2json "$config_file" | json token)
         export PACKET_TOKEN
     else
         fatal 'PACKET_TOKEN is unset and ~/.packet-cli.json does not exist.'
@@ -142,10 +146,10 @@ function assign_networks
 
     printf 'Assinging networks...'
 
-    current_network_ports=$(packet server get -j -i "$server" | json network_ports)
+    current_network_ports=$(metal server get -o json -i "$server" | json network_ports)
     eth1_id=$(json -a -c 'this.name.match(/eth1/)' id <<< "$current_network_ports")
 
-    virtual_networks=$(packet virtual-network get -p "$project_uuid" -j | json virtual_networks)
+    virtual_networks=$(metal virtual-network get -p "$project_uuid" -o json | json virtual_networks)
     admin_net=$(json -ac 'this.description.match(/Admin/)' id <<< "$virtual_networks")
     vnids=()
     while IFS='' read -r line; do vnids+=("$line"); done < <(json -a id <<< "$virtual_networks")
@@ -182,7 +186,7 @@ function create_project
     local proj_u;
     project_name="$1"
 
-    out=$(packet project create --name "$project_name" -j)
+    out=$(metal project create --name "$project_name" -o json)
     echo "$out" >> "$LOG"
 
     proj_u="$( json id <<< "$out")"
@@ -253,7 +257,7 @@ function create_subnet_request
     project_uuid="$1"
     facility="$2"
     hostname="$3"
-    packet ip request -f "$facility" -p "$project_uuid" -t public_ipv4 \
+    metal ip request -f "$facility" -p "$project_uuid" -t public_ipv4 \
         -c "IPs for $hostname" -q 16 >> "$LOG"
 }
 
@@ -265,11 +269,12 @@ function create_vlans
         Admin
         Underlay
     )
-    existing_vlans=$(packet virtual-network get -p "$project_uuid" -j | \
-        json virtual_networks | json -a description)
+    existing_vlans=$(metal virtual-network get -p "$project_uuid" -o json | \
+        json virtual_networks | \
+        json -a -c 'this.facility="'$facility'"' description)
     for net in "${networks[@]}" ; do
         if ! grep "$net" <<< "$existing_vlans" ; then
-            packet virtual-network create -j -f "$facility" -d "Triton $net" \
+            metal virtual-network create -o json -f "$facility" -d "Triton $net" \
                 -p "$project_uuid"
         fi
     done >> "$LOG"
@@ -412,7 +417,7 @@ function show_napi_commands
   ],
   "description": "External for %s"}'
 
-    ip_addresses=$(packet server get -i "$server" -j | json ip_addresses | \
+    ip_addresses=$(metal server get -i "$server" -o json | json ip_addresses | \
         json -o jsony-0 -ac 'this.public==true')
 
     printf 'sdc-napi /nic_tags -X POST -d '
@@ -453,7 +458,7 @@ function wait_for_state
     while [[ $current_state != "$desired_state" ]]; do
         # Show some progress while waiting.
         sleep 5 ; printf '.'
-        current_state=$(packet server get -j -i "$server" | json state)
+        current_state=$(metal server get -o json -i "$server" | json state)
     done
 
 }
