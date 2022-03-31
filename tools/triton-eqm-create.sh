@@ -74,7 +74,7 @@ function usage
     printf 'Create a new Triton Headnode install in Equinix Metal.\n\n'
     printf 'Syntax:\n\n'
     printf '\t%s project -n project_name\n' "$0"
-    printf '\t%s headnode -p project_uuid -f facility -f facility -P hardware_plan -a answer_file\n\n' "$0"
+    printf '\t%s headnode -p project_uuid -f facility -P hardware_plan -a answer_file\n\n' "$0"
     printf '\t%s computenode -n <cn name> -p project_uuid -f facility -P hardware_plan\n\n' "$0"
     exit "$1"
 }
