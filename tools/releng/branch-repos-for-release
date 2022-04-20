@@ -5,6 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 # Copyright 2021 Joyent, Inc.
+# Copyright 2022 MNX Cloud, Inc.
 #
 
 #
@@ -85,7 +86,7 @@ function branchRepo {
         # Intentionally show checkout progress for long repos, and to show
         # that a cache dir is being used.
         echo "" >&2
-        git clone git@github.com:joyent/$repoName.git "$repoCloneDir"
+        git clone git@github.com:/TritonDataCenter/$repoName.git "$repoCloneDir"
         echo "" >&2
     fi
 
