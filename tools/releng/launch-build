@@ -8,6 +8,7 @@
 
 #
 # Copyright 2021 Joyent, Inc.
+# Copyright 2022 MNX Cloud, Inc.
 #
 
 #
@@ -76,7 +77,7 @@ if [[ -z $PROJECT ]]; then
 fi
 
 if [[ -z $JENKINS_URL ]]; then
-	JENKINS_URL=https://jenkins.joyent.us
+	JENKINS_URL=https://jenkins.tritondatacenter.com
 fi
 
 if [[ -z $JENKINS_AUTH ]]; then
@@ -87,7 +88,7 @@ if [[ -z $GITREPO ]]; then
 	usage "-g GITREPO must be specified"
 fi
 
-BUILD_URL="$JENKINS_URL/job/joyent-org/job/$GITREPO/job/$BRANCH/build"
+BUILD_URL="$JENKINS_URL/job/TritonDataCenter/job/$GITREPO/job/$BRANCH/build"
 
 case $PROJECT in
 	"platform")
