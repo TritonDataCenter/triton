@@ -11,7 +11,7 @@
 #
 
 #
-# This script configures KVM to use Cloud on a Laptop (CoaL), the SDC development environment.
+# This script configures KVM to use Cloud on a Laptop (CoaL), the Triton development environment.
 # The following things need to be installed in order for this script to work:
 # * libvirt
 # * GNU mktemp
@@ -34,6 +34,7 @@
 # Changelog:
 # 
 # 19-03-2016 Jasper Siepkes - Initial implementation.
+# 13-05-2022 Jasper Siepkes - Added AMD KVM support.
 #
 
 # Fail on any non-zero exit code.
@@ -72,15 +73,40 @@ else
     exit 1
 fi
 
-NESTED_KVM_ENABLED=$(</sys/module/kvm_intel/parameters/nested)
+# Tests if nested KVM support (running VM's inside VM's) is enabled. If it is
+# not enabled it wil try to enable it.
+#
+# Argument 1: The name of the CPU brand. For example 'intel' or 'amd'.
+ensure_nested_kvm_enabled() {
+    BRAND=${1}
 
-# TODO: Add support for AMD.
-if [ ! "${NESTED_KVM_ENABLED}" == "Y" ]; then
-    echo "Nested KVM is not enabled. Enabling."
+    NESTED_KVM_ENABLED=$(</sys/module/kvm_${BRAND}/parameters/nested)      
+        
+    # The 'nested' file can either use 0 / 1 or Y / N as values. Not clear if
+    # this is an Intel / AMD thing or a kernel version thing. Either way we
+    # just support both.
+    if [ "${NESTED_KVM_ENABLED}" == "0" ]; then
+        echo "Nested KVM ${BRAND} is not enabled. Enabling."
 
-    rmmod kvm-intel
-    echo 'options kvm-intel nested=y' >> /etc/modprobe.d/kvm-intel.conf
-    modprobe kvm-intel
+        rmmod kvm-${BRAND}
+        echo "options kvm_${BRAND} nested=1" >> /etc/modprobe.d/kvm-${BRAND}.conf
+        modprobe kvm-${BRAND}
+    elif [ "${NESTED_KVM_ENABLED}" == "N" ]; then
+        echo "Nested KVM ${BRAND} is not enabled. Enabling."
+
+        rmmod kvm-${BRAND}
+        echo "options kvm_${BRAND} nested=Y" >> /etc/modprobe.d/kvm-${BRAND}.conf
+        modprobe kvm-${BRAND}    
+    fi   
+}
+
+if [ -e "/sys/module/kvm_amd/parameters/nested" ]; then
+    ensure_nested_kvm_enabled "amd"
+elif [ -e "/sys/module/kvm_intel/parameters/nested" ]; then 
+    ensure_nested_kvm_enabled "intel"
+else
+    echo "WARNING: Unable to determine if nested KVM is enabled. You might encounter"
+    echo "issues starting VM's inside CoaL."
 fi
 
 # parse argument
@@ -203,7 +229,7 @@ VIRSH_DOMAIN_XML=$(mktemp /tmp/virsh-sdc.XXXXXXXXXXX)
 cat > ${VIRSH_DOMAIN_XML} << EOF
 <domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
     <name>${DOMAIN_NAME}</name>
-    <title>SDC / Triton headnode</title>
+    <title>Triton headnode</title>
     <memory unit='GB'>4</memory>
     <vcpu>2</vcpu>
     <cpu mode='host-passthrough'>
@@ -268,11 +294,11 @@ echo "When you want to use raw image format for better disk performance than def
 echo " # ${0} --use-raw-image"
 echo ""
 echo "Prepare the unpacked VMWare CoaL images:"
-echo " # qemu-img convert -f raw -O ${QEMU_IMAGE_FORMAT} 4gb.img /var/lib/libvirt/images/sdc-headnode-usb.${QEMU_IMAGE_FORMAT}"
+echo " # qemu-img convert -f raw -O ${QEMU_IMAGE_FORMAT} 8gb.img /var/lib/libvirt/images/sdc-headnode-usb.${QEMU_IMAGE_FORMAT}"
 echo " # qemu-img create -f ${QEMU_IMAGE_FORMAT} /var/lib/libvirt/images/sdc-headnode-zpool.${QEMU_IMAGE_FORMAT} 60G"
 echo ""
 echo "When using SELinux make sure the following options are configured:"
 echo " # setsebool -P virt_use_execmem 1"
 echo ""
-echo "You can now use the GUI tool 'virt-manager' (recommended) to start the SDC headnode."
+echo "You can now use the GUI tool 'virt-manager' (recommended) to start the Triton headnode."
 echo ""
