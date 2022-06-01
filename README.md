@@ -147,7 +147,7 @@ the [Triton Manufacturing Database](https://docs.tritondatacenter.com/private-cl
 To install a USB-key Triton, first download the latest release image:
 
 ```bash
-curl -C - -O https://us-east.manta.tritondatacenter.com/Joyent_Dev/public/SmartDataCenter/usb-latest.tgz
+curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/usb-latest.tgz
 ```
 
 Once you have downloaded the latest release image, you will need to
@@ -158,12 +158,12 @@ customer documentation [Installing Triton Elastic Container Infrastructure](http
 
 To install using the [ISO
 installer](./docs/developer-guide/iso-installer.md), download the [ISO
-image](https://us-east.manta.tritondatacenter.com/Joyent_Dev/public/SmartDataCenter/iso-latest.iso),
+image](https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/iso-latest.iso),
 make sure you be aware of the available disks, and then follow the
 installation instructions above.
 
 To install using the [iPXE
-installer](https://us-east.manta.tritondatacenter.com/Joyent_Dev/public/SmartDataCenter/ipxe-latest.tgz),
+installer](https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/ipxe-latest.tgz),
 follow the advice on the [iPXE installer
 documentation](./docs/developer-guide/ipxe-installer.md).
 
@@ -187,7 +187,7 @@ store](https://github.com/TritonDataCenter/manta), e.g. [Joyent's public
 Manta](https://www.tritondatacenter.com/products/manta), and pulled from
 there. For example, Joyent's builds push to
 `/Joyent_Dev/public/builds` in Joyent's public Manta in us-east-1
-(<https://us-east.manta.tritondatacenter.com/>).
+(<https://us-east.manta.joyent.com/>).
 
 You can build your own CoaL and USB images on Mac or SmartOS (see the
 [sdc-headnode
