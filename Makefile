@@ -6,6 +6,7 @@
 
 #
 # Copyright (c) 2018, Joyent, Inc.
+# Copyright 2022 MNX Cloud, Inc.
 #
 
 #
@@ -39,7 +40,7 @@ docs/developer-guide/repos.md: $(RAMSEY) docs/developer-guide/repos.md.in build/
 
 JSON_SCRIPT = 'var self = this; \
 	this.name = /([^:/]+).git$$/.exec(this.git)[1]; \
-	this.url = "https://github.com/joyent/" + this.name; \
+	this.url = "https://github.com/TritonDataCenter/" + this.name; \
 	(this.tags || ["none"]).forEach(function (t) { self[t] = true; });'
 
 build/repos.json: build etc/repos.json

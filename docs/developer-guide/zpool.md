@@ -6,6 +6,7 @@
 
 <!--
     Copyright 2021, Joyent, Inc.
+    Copyright 2022 MNX Cloud, Inc.
 -->
 
 # Booting the Head Node from a ZFS Pool
@@ -24,7 +25,7 @@ parameter on the pool:
 [root@headnode ~]# zpool get bootsize zones
 NAME   PROPERTY  VALUE     SOURCE
 zones  bootsize  256M      local
-[root@headnode ~]# 
+[root@headnode ~]#
 ```
 
 If a pool was not created with -B, it can still be bootable IF AND ONLY IF
@@ -85,7 +86,7 @@ contents, which cannot fit into an iPXE boot-archive/initrd.
 ## Converting from a USB-key (or from one bootable pool to another)
 
 The
-[piadm](https://github.com/joyent/smartos-live/blob/master/man/usr/share/man/man1m/piadm.1m.md)(1M)
+[piadm](https://github.com/TritonDataCenter/smartos-live/blob/master/man/usr/share/man/man1m/piadm.1m.md)(1M)
 command can be employed to transfer the current USB-key to a bootable ZFS
 pool.  It can also be used to transfer boot contents from one pool to
 another.  If a pool is not bootable, piadm(1M) will fail.
@@ -108,8 +109,8 @@ bootpool    74G  3.60G  70.4G        -         -     0%     4%  1.00x  ONLINE  -
 zones      928G   264G   664G        -         -    36%    28%  1.00x  ONLINE  -
 [root@headnode (testcloud) ~]# piadm bootable
 bootpool                       ==> BIOS and UEFI
-zones                          ==> non-bootable 
+zones                          ==> non-bootable
 [root@headnode (testcloud) ~]# bootparams | grep triton_bootpool
 triton_bootpool=botpool
-[root@headnode (testcloud) ~]# 
+[root@headnode (testcloud) ~]#
 ```

@@ -6,6 +6,7 @@
 
 <!--
     Copyright 2021, Joyent, Inc.
+    Copyright 2022 MNX Cloud, Inc.
 -->
 
 # Introduction
@@ -45,7 +46,7 @@ IP address. This DHCPDISCOVER is a broadcast message and the
 booter/dhcpd service (usually dhcpd0 zone on the HN) will see this
 message and be responsible for handling it.
 
-The [booter daemon](https://github.com/joyent/sdc-booter) takes the MAC address
+The [booter daemon](https://github.com/TritonDataCenter/sdc-booter) takes the MAC address
 from the DHCPDISCOVER request and checks NAPI to determine whether the NIC exists
 yet or not. In this case on first boot of a new CN there will be no entry, so the
 next step for booter is to create a record in NAPI. It creates a new "nic" object
@@ -270,12 +271,12 @@ using the cmdline option specified in this boot.ipxe.01<MAC> file.
 At that point the CN will boot up SmartOS and configure its network to match
 the settings that it has been passed.
 
-When SmartOS boots, the [Ur Agent](https://github.com/joyent/sdc-ur-agent) is
-started. This agent [sends a message](https://github.com/joyent/sdc-ur-agent/blob/release-20160526/ur-agent#L211-L238)
+When SmartOS boots, the [Ur Agent](https://github.com/TritonDataCenter/sdc-ur-agent) is
+started. This agent [sends a message](https://github.com/TritonDataCenter/sdc-ur-agent/blob/release-20160526/ur-agent#L211-L238)
 that includes its sysinfo to a rabbitmq queue. The CNAPI service listens for
 these rabbitmq messages and when it sees a new CN it adds a record to its
 moray bucket and starts a new ['server-sysinfo' workflow
-job](https://github.com/joyent/sdc-cnapi/blob/release-20160526/lib/workflows/server-sysinfo.js)
+job](https://github.com/TritonDataCenter/sdc-cnapi/blob/release-20160526/lib/workflows/server-sysinfo.js)
 targeted at that server. This workflow ensures that NAPI's NIC information is up-to-date.
 As of 2016-05-31 a job server-sysinfo workflow will be run every minute until
 that CN is setup.
@@ -310,7 +311,7 @@ false
 ```
 
 In order to setup a server, the operator must execute the
-[ServerSetup](https://github.com/joyent/sdc-cnapi/blob/release-20160526/docs/index.md#serversetup-put-serversserver_uuidsetup)
+[ServerSetup](https://github.com/TritonDataCenter/sdc-cnapi/blob/release-20160526/docs/index.md#serversetup-put-serversserver_uuidsetup)
 endpoint in CNAPI. Mechanisms that calling this include:
 
  * adminui
@@ -327,25 +328,25 @@ Job(14896857-1cd1-404f-8fd0-ba34d3da30a6) - 322.1s - completed successfully
 ```
 
 What happens behind the scenes here is that the CNAPI endpoint is called which
-then creates a [server-setup job](https://github.com/joyent/sdc-cnapi/blob/release-20160526/lib/workflows/server-setup.js).
+then creates a [server-setup job](https://github.com/TritonDataCenter/sdc-cnapi/blob/release-20160526/lib/workflows/server-setup.js).
 This job then:
 
  * grabs the NICs from NAPI
  * sets up nic tags
  * marks the server as setting_up: true
- * downloads: node.config, [joysetup.sh](https://github.com/joyent/sdc-headnode/blob/release-20160526/scripts/joysetup.sh), [agentsetup.sh](https://github.com/joyent/sdc-headnode/blob/release-20160526/scripts/agentsetup.sh) on the CN from <ASSETS>
+ * downloads: node.config, [joysetup.sh](https://github.com/TritonDataCenter/sdc-headnode/blob/release-20160526/scripts/joysetup.sh), [agentsetup.sh](https://github.com/TritonDataCenter/sdc-headnode/blob/release-20160526/scripts/agentsetup.sh) on the CN from <ASSETS>
 
 where <ASSETS> is the admin IP of the assets zone. The files at this point are
 downloaded using a small shell script:
 
- https://github.com/joyent/sdc-cnapi/blob/release-20160526/lib/workflows/server-setup.js#L86-L98
+ https://github.com/TritonDataCenter/sdc-cnapi/blob/release-20160526/lib/workflows/server-setup.js#L86-L98
 
-that is executed via the CNAPI [CommandExecute endpoint](https://github.com/joyent/sdc-cnapi/blob/release-20160526/docs/index.md#commandexecute-post-serversserver_uuidexecute)
+that is executed via the CNAPI [CommandExecute endpoint](https://github.com/TritonDataCenter/sdc-cnapi/blob/release-20160526/docs/index.md#commandexecute-post-serversserver_uuidexecute)
 which talks to the Ur Agent on this CN. The downloaded scripts are also executed
 through this CommandExecute endpoint in CNAPI (from /var/tmp). First joysetup.sh
 then the agentsetup.sh.
 
-On a CN the [joysetup.sh script](https://github.com/joyent/sdc-headnode/blob/release-20160526/scripts/joysetup.sh) is responsible for:
+On a CN the [joysetup.sh script](https://github.com/TritonDataCenter/sdc-headnode/blob/release-20160526/scripts/joysetup.sh) is responsible for:
 
  * setting up ntp
  * using /usr/bin/disklayout to generate a layout for the zpool
@@ -357,7 +358,7 @@ On a CN the [joysetup.sh script](https://github.com/joyent/sdc-headnode/blob/rel
  * setting up imgadm to use the DC's imgapi
 
 Once that's complete, the server-setup job will run the [agents setup
-script](https://github.com/joyent/sdc-headnode/blob/release-20160526/scripts/agentsetup.sh)
+script](https://github.com/TritonDataCenter/sdc-headnode/blob/release-20160526/scripts/agentsetup.sh)
 which:
 
  * downloads and installs /extra/joysetup/cn_tools.tar.gz from assets

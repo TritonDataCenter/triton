@@ -5,7 +5,7 @@ This is intended to be a crash course/1000 foot view of vminfod, see the RFD
 below or the vminfod source code itself for more in-depth information.
 
 [RFD 39 VM Attribute Cache
-(vminfod)](https://github.com/joyent/rfd/blob/master/rfd/0039/README.md)
+(vminfod)](https://github.com/TritonDataCenter/rfd/blob/master/rfd/0039/README.md)
 
 What It Is
 ----------

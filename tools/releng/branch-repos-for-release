@@ -191,7 +191,7 @@ if [[ -n "$OUTDATED_REPOS" ]]; then
 fi
 set -o errexit
 
-# Use Joyent repo metadata (https://github.com/joyent/joyent-repos) to list
+# Use Joyent repo metadata (https://github.com/TritonDataCenter/joyent-repos) to list
 # (a) public and (b) release repositories to branch.
 if [[ "$optJustSmartos" == "true" ]]; then
     repos=$(jr list -l smartos,release,public -Ho name)

@@ -6,6 +6,7 @@
 
 <!--
     Copyright 2021, Joyent, Inc.
+    Copyright 2022 MNX Cloud, Inc.
 -->
 
 # Triton ISO Installation
@@ -18,25 +19,25 @@ The ISO installer can be used in a virtual machine environment, in lieu of
 [CoaL](./docs/developer-guide/coal-setup.md), as well.  Be sure to download
 the [ISO
 image](https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/iso-latest.iso)
-and follow the main README. 
+and follow the main README.
 
 ## Minimum Requirements
 
 The ISO installer requires more disk space than a USB-key Triton deployment,
 but is otherwise the same.
 
-- Intel Processors with VT-x and EPT support (all Xeon since Nehalem), or AMD Processors no earlier than EPYC or Zen. 
+- Intel Processors with VT-x and EPT support (all Xeon since Nehalem), or AMD Processors no earlier than EPYC or Zen.
 - 16 GB RAM
 - 60 GB available storage
 
 See the [main README's Physical Server
-section](https://github.com/joyent/triton/tree/TRITON-2202#installing-triton-on-a-physical-server)
+section](https://github.com/TritonDataCenter/triton/tree/TRITON-2202#installing-triton-on-a-physical-server)
 for more details
 
 ## Disk/Pool Requirements
 
 See [Booting the Head Node from a ZFS
-Pool](https://github.com/joyent/triton/blob/TRITON-2202/docs/developer-guide/zpool.md)
+Pool](https://github.com/TritonDataCenter/triton/blob/TRITON-2202/docs/developer-guide/zpool.md)
 for details about how to properly set up a ZFS pool that is bootable.
 
 ## Boot-device Requirements

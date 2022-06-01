@@ -6,6 +6,7 @@
 
 <!--
     Copyright (c) 2015, Joyent, Inc.
+    Copyright 2022 MNX Cloud, Inc.
 -->
 
 # CoaL post-setup: fabrics
@@ -26,7 +27,7 @@ First an overview is given, then an example run of each command is shown.
 4. Setup the *"portolan" and "nat" SAPI services* and *set the fabric config*.
 5. Add `sdc_underlay` to the headnode's physical external nic tags.
    (See [Nic Tag
-   Concepts](https://github.com/joyent/sdc-napi/blob/master/docs/index.md#nic-tag-concepts)
+   Concepts](https://github.com/TritonDataCenter/sdc-napi/blob/master/docs/index.md#nic-tag-concepts)
    for background.)) for background.)
 6. Create an underlay nic for the headnode.
 7. Setup the headnode with a boot-time networking file.

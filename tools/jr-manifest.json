@@ -2,7 +2,7 @@
     "jrVersion": 1,
     "description": "Triton Data Center public repositories",
     "repoCandidateSearch": {
-        "description": "public github.com/joyent repos directly relevant to development of TritonDC",
+        "description": "public github.com/TritonDataCenter repos directly relevant to development of TritonDC",
         "type": "public",
         "includeArchived": false
     },

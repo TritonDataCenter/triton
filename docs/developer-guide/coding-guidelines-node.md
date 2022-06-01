@@ -6,10 +6,10 @@ avoid common pitfalls.
 
 See also the following more general guideline docs:
 
-- [Joyent Engineering Guidelines](https://github.com/joyent/eng/blob/master/docs/index.md)
-- [RFD 105 Engineering Guide - Node.js Best Practices](https://github.com/joyent/rfd/blob/master/rfd/0105/README.md)
-- [RFD 139 Node.js test frameworks and Triton guidelines](https://github.com/joyent/rfd/blob/master/rfd/0139/README.md)
-- [specific node module notes for upgrading to Node.js v4](https://github.com/joyent/rfd/blob/master/rfd/0059/README.md#node-modules)
+- [Joyent Engineering Guidelines](https://github.com/TritonDataCenter/eng/blob/master/docs/index.md)
+- [RFD 105 Engineering Guide - Node.js Best Practices](https://github.com/TritonDataCenter/rfd/blob/master/rfd/0105/README.md)
+- [RFD 139 Node.js test frameworks and Triton guidelines](https://github.com/TritonDataCenter/rfd/blob/master/rfd/0139/README.md)
+- [specific node module notes for upgrading to Node.js v4](https://github.com/TritonDataCenter/rfd/blob/master/rfd/0059/README.md#node-modules)
 
 
 ## restify-clients `contentMd5` option

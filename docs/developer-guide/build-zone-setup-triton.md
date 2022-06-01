@@ -22,7 +22,7 @@ cloudapi0 zone created
 
 We also want to add external access to the adminui and imgapi services
 so that we can access the adminui remotely and so that the imgapi service
-can download the build zone images from updates.joyent.com:
+can download the build zone images from updates.tritondatacenter.com:
 
 ```
 [root@headnode (coal-1) ~]# sdcadm post-setup common-external-nics
@@ -124,7 +124,7 @@ To retrieve an image on Triton, connect to the headnode and use
 `sdc-imgadm import`. For example:
 
 ```
-[root@headnode (coal-1) ~]# sdc-imgadm import -S 'https://updates.joyent.com?channel=experimental' 1356e735-456e-4886-aebd-d6677921694c
+[root@headnode (coal-1) ~]# sdc-imgadm import -S 'https://updates.tritondatacenter.com?channel=experimental' 1356e735-456e-4886-aebd-d6677921694c
 ```
 
 You should then modify the image to mark it `public` so that it available for

@@ -4,7 +4,7 @@ This document describes how to update a SmartDataCenter.
 
 The primary tool for SDC updates is `sdcadm`. At the time of writing the
 `sdcadm` tool is still under heavy development and is not yet ready for updating
-in production. See [the sdcadm repo](https://github.com/joyent/sdcadm#readme)
+in production. See [the sdcadm repo](https://github.com/TritonDataCenter/sdcadm#readme)
 for status and the current documentation on doing a full upgrade of SDC.
 
 
