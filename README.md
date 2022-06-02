@@ -26,7 +26,7 @@ See the [repository list](./docs/developer-guide/repos.md).
 
 Report bugs and request features using [GitHub Issues](https://github.com/TritonDataCenter/triton/issues).
 For additional resources, you can visit the
-[Joyent Developer Center](https://www.tritondatacenter.com/developers).
+[Triton Developer Center](https://www.tritondatacenter.com/developers).
 
 ## Overview
 
@@ -153,8 +153,8 @@ curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/
 Once you have downloaded the latest release image, you will need to
 [write it to a USB key](https://docs.tritondatacenter.com/private-cloud/install/installation-media)
 boot the head node server using the USB key, and follow the install prompts. All steps necessary
-to plan, install, and configure Triton DataCenter (Triton) are available in the Joyent
-customer documentation [Installing Triton Elastic Container Infrastructure](https://docs.tritondatacenter.com/private-cloud/install).
+to plan, install, and configure Triton DataCenter (Triton) are available in the
+customer documentation [Installing Triton Data Center](https://docs.tritondatacenter.com/private-cloud/install).
 
 To install using the [ISO
 installer](./docs/developer-guide/iso-installer.md), download the [ISO
@@ -183,28 +183,26 @@ Each component is built separately and then all are combined into
 CoaL, USB, ISO, and iPXE builds (see the preceding sections) via the
 [sdc-headnode repository](https://github.com/TritonDataCenter/sdc-headnode). The
 built components are typically stored in a [Manta object
-store](https://github.com/TritonDataCenter/manta), e.g. [Joyent's public
-Manta](https://www.tritondatacenter.com/products/manta), and pulled from
-there. For example, Joyent's builds push to
-`/Joyent_Dev/public/builds` in Joyent's public Manta in us-east-1
+store](https://github.com/TritonDataCenter/manta), and pulled from
+there. For example, Triton builds push to
+`/Joyent_Dev/public/builds` in our public Manta in us-east-1
 (<https://us-east.manta.joyent.com/>).
 
 You can build your own CoaL and USB images on Mac or SmartOS (see the
 [sdc-headnode
 README](https://github.com/TritonDataCenter/sdc-headnode#readme)). However, ISO
 and iPXE images, as well as all other Triton components must be built
-using a running Triton (e.g. on the [Joyent
-Cloud](https://www.tritondatacenter.com/products/compute-service) or in a local
-CoaL). See [the building document](./docs/developer-guide/building.md)
-for details on building each of the Triton components.
+using a running Triton or in a local CoaL). See
+[the building document](./docs/developer-guide/building.md) for details on
+building each of the Triton components.
 
 ## Contributing
 
 To report bugs or request features, submit issues here on
-GitHub, [joyent/triton/issues](https://github.com/TritonDataCenter/triton/issues)
+GitHub, [TritonDataCenter/triton/issues](https://github.com/TritonDataCenter/triton/issues)
 (or on the GitHub issue tracker for the relevant project).
-For support of Joyent products and services, please contact [Joyent customer
-support](https://help.tritondatacenter.com/home) instead.
+For support of Triton products and services, please contact [MNX Solutions customer
+support](https://www.mnxsolutions.com/triton-contact-us) instead.
 
 See the [Contribution Guidelines](CONTRIBUTING.md) for information about
 contributing changes to the project.
@@ -213,8 +211,8 @@ contributing changes to the project.
 
 Triton DataCenter is very opinionated about how to architect a cloud. These
 opinions are the result of many years of deploying and debugging
-the [Joyent public cloud](https://www.tritondatacenter.com/public-cloud).
-Design principles include the following:
+[Triton as a public cloud service](https://www.tritondatacenter.com/public-cloud)
+in production. Design principles include the following:
 
 * A VM's primary storage should be local disk, not over the network -- this
   avoids difficult to debug performance pathologies.
@@ -246,7 +244,7 @@ Triton DataCenter uses [SmartOS](http://smartos.org) as the host operating
 system. The SmartOS hypervisor provides both SmartOS zone (container) and
 KVM virtualization.
 
-Joyent's open-source [Manta project](https://github.com/TritonDataCenter/manta)
+Triton's open-source [Manta project](https://github.com/TritonDataCenter/manta)
 is an HTTP-based object store with built-in support to run arbitrary
 programs on data at rest (i.e., without copying data out of the object store).
 Manta runs on and integrates with Triton DataCenter.

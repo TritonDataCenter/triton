@@ -15,7 +15,7 @@ Thanks for using Triton and for considering contributing to it!
 
 ## Code
 
-All changes to Manta project repositories go through code review via a GitHub
+All changes to Triton project repositories go through code review via a GitHub
 pull request.
 
 If you're making a substantial change, you probably want to contact developers
