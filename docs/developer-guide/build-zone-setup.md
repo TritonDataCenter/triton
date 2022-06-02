@@ -7,7 +7,7 @@ Build Zone Setup For Manta and Triton
 Most Triton/Manta components can build in build zones running on either of two
 platforms:
 
- * Triton - [a full Triton install](https://github.com/joyent/triton#getting-started)
+ * Triton - [a full Triton install](https://github.com/TritonDataCenter/triton#getting-started)
    contains everything you need to install the build zones for building
    components.
    Triton is a little more resource-intensive than SmartOS, but can be scaled
@@ -97,7 +97,7 @@ before attempting to build any component:
    mentioned by `make validate-buildenv` (manta-client tools, updates-imgadm)
 
    ```
-   $ /opt/tools/bin/npm install manta git+https://github.com/joyent/sdc-imgapi-cli.git
+   $ /opt/tools/bin/npm install manta git+https://github.com/TritonDataCenter/sdc-imgapi-cli.git
    ```
 
    These are needed by the `bits-upload` target mentioned in the
@@ -139,14 +139,14 @@ In order to exactly replicate the build environment used for our production
 builds, and produce images that can be installed on any supported platform,
 we install build zones on `joyent-retro` VMs, which are bhyve (or KVM) SmartOS
 instances that boot that old platform image.
-(See [https://github.com/joyent/joyent-retro/blob/master/README.md](https://github.com/joyent/joyent-retro/blob/master/README.md))
+(See [https://github.com/TritonDataCenter/joyent-retro/blob/master/README.md](https://github.com/TritonDataCenter/joyent-retro/blob/master/README.md))
 
 At the time of writing, our `min_platform` is set to `20151126T062538Z`
 
 That image is available as `joyent-retro-20151126T062538Z`,
 uuid `bd83a9b3-65cd-4160-be2e-f7c4c56e0606`
 
-See: [https://updates.joyent.com/images/bd83a9b3-65cd-4160-be2e-f7c4c56e0606?channel=experimental](https://updates.joyent.com/images/bd83a9b3-65cd-4160-be2e-f7c4c56e0606?channel=experimental)
+See: [https://updates.tritondatacenter.com/images/bd83a9b3-65cd-4160-be2e-f7c4c56e0606?channel=experimental](https://updates.tritondatacenter.com/images/bd83a9b3-65cd-4160-be2e-f7c4c56e0606?channel=experimental)
 
 The retro image does not itself contain any devzone images, so those will have
 to be imported by hand.

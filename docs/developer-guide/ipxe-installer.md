@@ -6,6 +6,7 @@
 
 <!--
     Copyright 2021, Joyent, Inc.
+    Copyright 2022 MNX Cloud, Inc.
 -->
 
 # Triton iPXE Installation
@@ -137,6 +138,6 @@ following steps to create a new Triton cloud.
 [eqm]: https://metal.equinix.com/
 [tink]: https://tinkerbell.org
 [eqm-script]: ../../tools/triton-eqm-create.sh
-[hn]: https://github.com/joyent/sdc-headnode/
+[hn]: https://github.com/TritonDataCenter/sdc-headnode/
 [p-cli]: https://github.com/packethost/packet-cli
 [ops-docs]: https://docs.joyent.com/private-cloud/

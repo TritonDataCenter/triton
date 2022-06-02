@@ -5,7 +5,7 @@ aspects of SmartDataCenter (SDC).
 
 ### adminui
 
-The [repository](https://github.com/joyent/sdc-adminui) and SDC
+The [repository](https://github.com/TritonDataCenter/sdc-adminui) and SDC
 core service name for the operator portal is "adminui". See [Operator
 Portal](#operator-portal).
 
@@ -37,7 +37,7 @@ See [compute node](#compute-node).
 
 "Cloud on a Laptop" is a VMware virtual appliance providing a full SDC headnode
 for development and testing. See [the
-README](https://github.com/joyent/sdc#cloud-on-a-laptop-coal) for getting start
+README](https://github.com/TritonDataCenter/sdc#cloud-on-a-laptop-coal) for getting start
 with SDC using a recent CoaL build.
 
 ### Compute Node
@@ -87,7 +87,7 @@ nodes are referred to as [compute nodes](#compute-node).
 ### Operator Portal
 
 The Operator Portal (a.k.a. adminui) is the Web UI for administering SmartDataCenter.
-Its repository is [sdc-admin.git](https://github.com/joyent/sdc-adminui).
+Its repository is [sdc-admin.git](https://github.com/TritonDataCenter/sdc-adminui).
 
 ### Service
 

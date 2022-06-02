@@ -6,6 +6,7 @@
 
 <!--
     Copyright (c) 2014, Joyent, Inc.
+    Copyright 2022 MNX Cloud, Inc.
 -->
 
 # SmartDataCenter Architecture
@@ -15,7 +16,7 @@ datacenter should be organized. The overall architecture diagram is as
 follows:
 
 <map name="GraffleExport">
-	<area shape=rect coords="76,112,174,142" href="https://github.com/joyent/sdc-cloudapi/blob/master/docs/index.md">
+	<area shape=rect coords="76,112,174,142" href="https://github.com/TritonDataCenter/sdc-cloudapi/blob/master/docs/index.md">
 	<area shape=rect coords="182,112,280,142" href="https://docs.joyent.com/sdc7/operations-portal-walkthrough">
 </map>
 <img border=0 src="../img/arch.png" usemap="#GraffleExport">
@@ -55,7 +56,7 @@ SDC communicates with the Compute Nodes through [agents](../glossary.md#agent)
 that run in the [Global Zone](../glossary.md#global-zone) on each compute node.
 These agents serve a variety of functions including control operations for
 customer VMs, monitoring and log collection. The
-[ur agent](https://github.com/joyent/sdc-ur-agent) is the initial agent used
+[ur agent](https://github.com/TritonDataCenter/sdc-ur-agent) is the initial agent used
 for bootstrapping all other agents.
 
 See the [reference](../reference.md#agents) for more information about
@@ -72,10 +73,10 @@ on this network. For security reasons, this network should not be routable.
 The other required network is the **external network**. This is used for SDC
 VMs that require access to the internet. For example, the Global Zone may
 require internet access for NTP, and
-[IMGAPI](https://github.com/joyent/sdc-imgapi) can be configured to fetch
+[IMGAPI](https://github.com/TritonDataCenter/sdc-imgapi) can be configured to fetch
 images from Joyent image servers. This is also the network that administrative
-endpoints ([Admin UI](https://github.com/joyent/sdc-adminui) and
-[cloudapi](https://github.com/joyent/sdc-cloudapi)) can be configured to listen
+endpoints ([Admin UI](https://github.com/TritonDataCenter/sdc-adminui) and
+[cloudapi](https://github.com/TritonDataCenter/sdc-cloudapi)) can be configured to listen
 on to avoid giving their users access to the admin network.
 
 Customer networks are separate from the two standard SDC networks -- the number
@@ -103,9 +104,9 @@ services.
 ### External facing services
 
 The external facing services are the administrative endpoints for SDC.
-[CloudAPI](https://github.com/joyent/sdc-cloudapi) provides an API for
+[CloudAPI](https://github.com/TritonDataCenter/sdc-cloudapi) provides an API for
 customers to administer their VMs, and
-[Admin UI](https://github.com/joyent/sdc-adminui) provides a web API for
+[Admin UI](https://github.com/TritonDataCenter/sdc-adminui) provides a web API for
 operators to administer SDC. They both communicate with the internal services
 to perform administrative actions.
 
@@ -120,11 +121,11 @@ of SDC. The external facing services and APIs communicate with them to perform
 tasks, and they in turn communicate with the agents on the Compute Nodes. Most
 of the services are REST-based, though notable exceptions include:
 
-- [dhcpd](https://github.com/joyent/sdc-booter): used to TFTP boot Compute
+- [dhcpd](https://github.com/TritonDataCenter/sdc-booter): used to TFTP boot Compute
   Nodes and assign them IP addresses
-- [rabbitmq](https://github.com/joyent/sdc-rabbitmq): provides an AMQP message
+- [rabbitmq](https://github.com/TritonDataCenter/sdc-rabbitmq): provides an AMQP message
   queue for communicating with Compute Node agents
-- [sdc](https://github.com/joyent/sdc-sdc): provides CLI tooling and
+- [sdc](https://github.com/TritonDataCenter/sdc-sdc): provides CLI tooling and
   miscellaneous administrative services
 
 See the [reference](../reference.md#services) and
@@ -139,9 +140,9 @@ persistence.
 The data tier services offer storage for the internal and external facing
 services:
 
-- [UFDS](https://github.com/joyent/sdc-ufds): LDAP Server
-- [mahi](https://github.com/joyent/mahi): User authentication cache for UFDS
-- [moray](https://github.com/joyent/moray): key/value store
+- [UFDS](https://github.com/TritonDataCenter/sdc-ufds): LDAP Server
+- [mahi](https://github.com/TritonDataCenter/mahi): User authentication cache for UFDS
+- [moray](https://github.com/TritonDataCenter/moray): key/value store
 
-These services use [manatee](https://github.com/joyent/manatee), a Highly
+These services use [manatee](https://github.com/TritonDataCenter/manatee), a Highly
 Available PostgreSQL service, for their storage.

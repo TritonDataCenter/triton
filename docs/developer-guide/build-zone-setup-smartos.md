@@ -17,7 +17,7 @@ In this example, we're going to use an example build zone image
 On a SmartOS system, use the following to download the image:
 
 ```
-imgadm import -S 'https://updates.joyent.com?channel=experimental' 1356e735-456e-4886-aebd-d6677921694c
+imgadm import -S 'https://updates.tritondatacenter.com?channel=experimental' 1356e735-456e-4886-aebd-d6677921694c
 ```
 
 or if that doesn't work (some versions of SmartOS don't have support for channels
@@ -25,8 +25,8 @@ without the fix for OS-7601) download the image manifest and image file and
 import by hand, with:
 
 ```
-curl -o img.manifest 'https://updates.joyent.com/images/1356e735-456e-4886-aebd-d6677921694c?channel=experimental'
-curl -o img.gz 'https://updates.joyent.com/images/1356e735-456e-4886-aebd-d6677921694c/file?channel=experimental'
+curl -o img.manifest 'https://updates.tritondatacenter.com/images/1356e735-456e-4886-aebd-d6677921694c?channel=experimental'
+curl -o img.gz 'https://updates.tritondatacenter.com/images/1356e735-456e-4886-aebd-d6677921694c/file?channel=experimental'
 ```
 
 then do the following to add the image to your SmartOS instance:

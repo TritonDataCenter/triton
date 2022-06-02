@@ -4,7 +4,7 @@ This document describes the various knobs with which an operator can configure
 a SmartDataCenter. There are two main different groups of configuration:
 headnode configuration (stored in "[/mnt]/usbkey/config") and service
 configuration (stored as "metadata" on applications, services and instance in
-[SAPI](https://github.com/joyent/sdc-sapi)).
+[SAPI](https://github.com/TritonDataCenter/sdc-sapi)).
 
 
 ## Headnode configuration
@@ -81,7 +81,7 @@ intention is to eventually reduce that overlap.
 | account_allowed_dcs | Boolean | Whether to consider 'allowed_dcs' field on UFDS account entries for cloudapi and sdc-docker authz in this datacenter. See [DOCKER-166](https://smartos.org/bugview/DOCKER-166). |
 | account_allowed_dcs_msg | String | Optional message to include in the "403 Forbidden" response body due to cloudapi or sdc-docker authz failure due to 'allowed_dcs'. |
 | no_rabbit | Boolean | This is a transitional config var. Set to true to switch to the "new" agents (vm-agent, cn-agent) that don't use RabbitMQ for transport -- away from the "old" agents (provisioner, heartbeater) that do. Note: for a clean transition one should ensure no active workflows (`sdcadm experimental dc-maint`) and that configuration has propagated to agents (`sdc-oneachnode -a 'svcadm restart config-agent'`). |
-| http_proxy | String | An HTTP proxy host (including the 'http://'), e.g. 'http://myproxy.example.com:8080', for SDC services to use for external access. This can be useful for a firewalled-off SDC. Facilities using the proxy include: IMGAPI's downloading of SDC and Docker images, `sdcadm`'s usage of https://updates.joyent.com for updates. |
+| http_proxy | String | An HTTP proxy host (including the 'http://'), e.g. 'http://myproxy.example.com:8080', for SDC services to use for external access. This can be useful for a firewalled-off SDC. Facilities using the proxy include: IMGAPI's downloading of SDC and Docker images, `sdcadm`'s usage of https://updates.tritondatacenter.com for updates. |
 | docker_registry_insecure | Boolean | Set to true to allow access to Docker registries with self-signed certificates. **Warning: this shouldn't be used in production.**. |
 
 
@@ -112,7 +112,7 @@ provides links to the relevant documentation for each.
 
 | Service |
 | ------- |
-| [cloudapi](https://github.com/joyent/sdc-cloudapi/blob/master/docs/admin.md#sapi-configuration) |
-| [cnapi](https://github.com/joyent/sdc-cnapi/blob/master/docs/index.md#sapi-configuration) |
-| [papi](https://github.com/joyent/sdc-papi/blob/master/docs/index.md#sapi-configuration) |
-| [docker](https://github.com/joyent/sdc-docker/tree/master/docs/guide#service-configuration) |
+| [cloudapi](https://github.com/TritonDataCenter/sdc-cloudapi/blob/master/docs/admin.md#sapi-configuration) |
+| [cnapi](https://github.com/TritonDataCenter/sdc-cnapi/blob/master/docs/index.md#sapi-configuration) |
+| [papi](https://github.com/TritonDataCenter/sdc-papi/blob/master/docs/index.md#sapi-configuration) |
+| [docker](https://github.com/TritonDataCenter/sdc-docker/tree/master/docs/guide#service-configuration) |

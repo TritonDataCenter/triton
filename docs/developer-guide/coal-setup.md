@@ -6,6 +6,7 @@
 
 <!--
     Copyright 2021, Joyent, Inc.
+    Copyright 2022 MNX Cloud, Inc.
 -->
 
 # Cloud on a Laptop (CoaL)
@@ -63,7 +64,7 @@ install VMware.
 Most Joyent team members run CoaL from VMware Fusion. We recommend VMware
 version 8.5.3, but users have had success with v5 and v8.
 
-1. Download [VMware Fusion](http://www.vmware.com/products/fusion).  
+1. Download [VMware Fusion](http://www.vmware.com/products/fusion).
 **Note**: For Windows or Linux, download VMware Workstation from
 [VMware Workstation](http://www.vmware.com/products/workstation).
 1. Install VMware.
@@ -105,7 +106,7 @@ x coal-master-20190122T132623Z-g1a445f5-4gb.vmwarevm/4gb.img
 To load the CoaL appliance:
 1. Launch **VMware Fusion**.
 1. Select **File** and then click **Open**.
-1. Navigate to and select the `.vmwarevm` file that contains the CoaL build.  
+1. Navigate to and select the `.vmwarevm` file that contains the CoaL build.
    **Note**: If you are working from the command line instead of the GUI, run:
    ```
    open coal-<branch>-<build_date_time>-<git_sha1_hash>-4gb.vmwarevm
@@ -113,9 +114,9 @@ To load the CoaL appliance:
 
 To configure memory:
 
-1. Select **Virtual Machine** and then click **Settings**.  
+1. Select **Virtual Machine** and then click **Settings**.
    The **USB-headnode Settings** dialog displays.
-2. Click **Processes & Memory**. Change the memory settings, if needed.  
+2. Click **Processes & Memory**. Change the memory settings, if needed.
    **Note**: The default memory is set to 8192 MB. You can change this setting,
    but be sure to leave Mac OS X with at least 8 GB to avoid resource allocation
    problems. If you are not using the VMware GUI, you can change the default
@@ -371,7 +372,7 @@ To update `sdcadm`:
    sdcadm 1.4.4 (release-20150205-20150205T060457Z-g7d76790)
    [root@headnode (coal-1) ~]# sdcadm self-update --latest
    Update to sdcadm 1.5.0 (master-20150211T134112Z-gef31015)
-   Download update from https://updates.joyent.com
+   Download update from https://updates.tritondatacenter.com
    Run sdcadm installer (log at /var/sdcadm/self-updates/20150217T234531Z/install.log)
    Updated to sdcadm 1.5.0 (master-20150211T134112Z-gef31015, elapsed 7s)
    ```
@@ -528,6 +529,6 @@ away.
 
 ## Related Documentation
 
- For more information on updating Triton, see [Updating a Triton standup using sdcadm](https://github.com/joyent/sdcadm/blob/master/docs/update.md)
- 
+ For more information on updating Triton, see [Updating a Triton standup using sdcadm](https://github.com/TritonDataCenter/sdcadm/blob/master/docs/update.md)
+
  For general Joyent customer information, see [Joyent customer documentation](https://docs.joyent.com/public-cloud).

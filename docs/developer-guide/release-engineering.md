@@ -6,6 +6,7 @@
 
 <!--
     Copyright 2019 Joyent, Inc.
+    Copyright 2022 MNX Cloud, Inc.
 -->
 
 # Release Engineering
@@ -15,7 +16,7 @@ for Triton and Manta. Over time, we expect to include more information here
 on how to produce a full release.
 
 Developer documentation on
-[building Manta and Triton is also available.](https://github.com/joyent/triton/blob/master/docs/developer-guide/building.md)
+[building Manta and Triton is also available.](https://github.com/TritonDataCenter/triton/blob/master/docs/developer-guide/building.md)
 
 
 # Bits directory structure
@@ -23,7 +24,7 @@ Developer documentation on
 Joyent engineering builds upload build bits to a controlled directory structure at
 `/Joyent_Dev/stor/builds` in Manta. The `sdc-headnode` and `agents-installer`
 rely on this structure, as do the Triton
-[release engineering scripts.](https://github.com/joyent/triton/blob/master/tools/releng)
+[release engineering scripts.](https://github.com/TritonDataCenter/triton/blob/master/tools/releng)
 
     /Joyent_Dev/stor/builds/
         $job/                   # Typically $job === Jenkins job name

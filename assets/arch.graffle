@@ -2949,7 +2949,7 @@
 			<key>Link</key>
 			<dict>
 				<key>url</key>
-				<string>https://github.com/joyent/sdc-cloudapi/blob/master/docs/index.md</string>
+				<string>https://github.com/TritonDataCenter/sdc-cloudapi/blob/master/docs/index.md</string>
 			</dict>
 			<key>Magnets</key>
 			<array>
@@ -2995,7 +2995,7 @@
 			<key>Link</key>
 			<dict>
 				<key>url</key>
-				<string>https://docs.joyent.com/sdc7/operations-portal-walkthrough</string>
+				<string>https://docs.tritondatacenter.com/sdc7/operations-portal-walkthrough</string>
 			</dict>
 			<key>Magnets</key>
 			<array>

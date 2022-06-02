@@ -1,8 +1,8 @@
 {
-  "name": "sdc",
-  "description": "SmartDataCenter",
+  "name": "triton",
+  "description": "Triotn Data Center",
   "version": "1.0.0",
-  "author": "Joyent",
+  "author": "MNX Cloud, Inc.",
   "private": true,
   "dependencies": {
     "ramsey": "0.1.3"

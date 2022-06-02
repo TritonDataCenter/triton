@@ -7,6 +7,7 @@
 
 #
 # Copyright 2019 Joyent, Inc.
+# Copyright 2022 MNX Cloud, Inc.
 #
 
 #
@@ -21,7 +22,7 @@
 # take up ever increasing space. This script knows how to remove Joyent eng
 # builds from a given Manta dir. This script encodes retention policy for
 # Joyent builds per
-# [RFD 47](https://github.com/joyent/rfd/blob/master/rfd/0047/README.md#builds).
+# [RFD 47](https://github.com/TritonDataCenter/rfd/blob/master/rfd/0047/README.md#builds).
 #
 # Here "eng builds" means the typical build dir layout used by tooling in
 # eng.git (and some others) for Joyent engineering builds:
@@ -73,7 +74,7 @@ export PATH=$TOP/node_modules/.bin:$PATH
 # A mapping from build name to the number of days' builds to keep.
 #
 # TTL (Time To Live) values are from RFD 47
-# (https://github.com/joyent/rfd/blob/master/rfd/0047/README.md#builds).
+# (https://github.com/TritonDataCenter/rfd/blob/master/rfd/0047/README.md#builds).
 #
 # Deliberately excluded build names for now (and the reason why):
 #    agentsshar-upgrade             paranoia
