@@ -739,13 +739,7 @@
             "name": "sdc-nfs"
         },
         {
-            "name": "sdc-nfsserver",
-            "labels": {
-                "release": true,
-                "image": "nfsserver",
-                "mg": "nfsserver",
-                "vm": true
-            }
+            "name": "sdc-nfsserver"
         },
         {
             "name": "sdc-papi",
