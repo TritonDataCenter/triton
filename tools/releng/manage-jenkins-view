@@ -8,6 +8,7 @@
 
 #
 # Copyright 2020 Joyent, Inc.
+# Copyright 2022 MNX Cloud, Inc.
 #
 
 #
@@ -69,7 +70,7 @@ if [[ -z "$CREATE" && -z "$DESTROY" ]]; then
 fi
 
 if [[ -z $JENKINS_URL ]]; then
-    JENKINS_URL=https://jenkins.joyent.us
+    JENKINS_URL=https://jenkins.tritondatacenter.com
 fi
 
 if [[ -z $JENKINS_AUTH ]]; then
