@@ -739,7 +739,7 @@
             "name": "sdc-nfs"
         },
         {
-            "name": "sdc-nfsserver",
+            "name": "sdc-nfsserver"
         },
         {
             "name": "sdc-papi",
