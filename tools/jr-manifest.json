@@ -85,6 +85,7 @@
         {
             "name": "firewall-logger-agent",
             "labels": {
+                "release": true,
                 "tritonservice": "firewall-logger-agent",
                 "mg": "firewall-logger-agent",
                 "agent": true
