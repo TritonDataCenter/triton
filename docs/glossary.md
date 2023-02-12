@@ -37,7 +37,7 @@ See [compute node](#compute-node).
 
 "Cloud on a Laptop" is a VMware virtual appliance providing a full SDC headnode
 for development and testing. See [the
-README](https://github.com/TritonDataCenter/sdc#cloud-on-a-laptop-coal) for getting start
+README](/README.md#cloud-on-a-laptop-coal) for getting started
 with SDC using a recent CoaL build.
 
 ### Compute Node

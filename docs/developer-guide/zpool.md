@@ -86,7 +86,7 @@ contents, which cannot fit into an iPXE boot-archive/initrd.
 ## Converting from a USB-key (or from one bootable pool to another)
 
 The
-[piadm](https://github.com/TritonDataCenter/smartos-live/blob/master/man/usr/share/man/man1m/piadm.1m.md)(1M)
+[piadm](https://github.com/TritonDataCenter/smartos-live/blob/master/man/usr/share/man/man8/piadm.8.md)(8)
 command can be employed to transfer the current USB-key to a bootable ZFS
 pool.  It can also be used to transfer boot contents from one pool to
 another.  If a pool is not bootable, piadm(1M) will fail.
