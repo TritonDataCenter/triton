@@ -135,7 +135,7 @@ The other repos are used by one of the other repos above:
 * [node-png-joyent](https://github.com/TritonDataCenter/node-png-joyent): An ancient branch of node-png
 * [node-amqp-joyent](https://github.com/TritonDataCenter/node-amqp-joyent): An ancient branch of node-amqp
 * [node-imgmanifest](https://github.com/TritonDataCenter/node-imgmanifest): Node.js library for working with SmartOS image manifests
-* [node-fast-stream](https://github.com/TritonDataCenter/node-fast-messages): Stream event messages via node-fast.
+* [node-fast-messages](https://github.com/TritonDataCenter/node-fast-messages): Stream event messages via node-fast.
 * [sdc-fwrule](https://github.com/TritonDataCenter/sdc-fwrule): SmartDataCenter firewall rule parser and object.
 * [aperture-config](https://github.com/TritonDataCenter/aperture-config): Common aperture config for SDC/Manta
 * [node-workflow-moray-backend](https://github.com/TritonDataCenter/node-workflow-moray-backend): A backend for node-workflow built over Moray

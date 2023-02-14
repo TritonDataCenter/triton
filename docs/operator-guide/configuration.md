@@ -113,6 +113,6 @@ provides links to the relevant documentation for each.
 | Service |
 | ------- |
 | [cloudapi](https://github.com/TritonDataCenter/sdc-cloudapi/blob/master/docs/admin.md#sapi-configuration) |
-| [cnapi](https://github.com/TritonDataCenter/sdc-cnapi/tree/master/docs#sapi-configuration) |
+| [cnapi](https://github.com/TritonDataCenter/sdc-cnapi/blob/master/docs#sapi-configuration) |
 | [papi](https://github.com/TritonDataCenter/sdc-papi/blob/master/docs/index.md#sapi-configuration) |
 | [docker](https://github.com/TritonDataCenter/sdc-docker/tree/master/docs/guide#service-configuration) |
