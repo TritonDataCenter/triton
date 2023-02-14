@@ -7,7 +7,8 @@ If you have a question, please ask on any of
 ([subscribe](https://www.listbox.com/subscribe/?list_id=247449),
 [archives](http://www.listbox.com/member/archive/247449/=now)),
 **#smartos** on the [Libera.chat IRC network](https://libera.chat),
-or in a [joyent/sdc issue](https://github.com/TritonDataCenter/sdc/issues).
+or in a [TritonDataCenter/triton
+issue](https://github.com/TritonDataCenter/triton/issues).
 
 
 ## Q: I already have SmartOS on my system; how do I upgrade to SDC?

@@ -16,7 +16,7 @@ boot once off of DVD-ROM, and on subsequent boots, boot off of a bootable
 `zones` ZFS pool.
 
 The ISO installer can be used in a virtual machine environment, in lieu of
-[CoaL](./docs/developer-guide/coal-setup.md), as well.  Be sure to download
+[CoaL](coal-setup.md), as well.  Be sure to download
 the [ISO
 image](https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/iso-latest.iso)
 and follow the main README.
@@ -31,13 +31,13 @@ but is otherwise the same.
 - 60 GB available storage
 
 See the [main README's Physical Server
-section](https://github.com/TritonDataCenter/triton/tree/TRITON-2202#installing-triton-on-a-physical-server)
+section](/README.md#installing-triton-on-a-physical-server)
 for more details
 
 ## Disk/Pool Requirements
 
 See [Booting the Head Node from a ZFS
-Pool](https://github.com/TritonDataCenter/triton/blob/TRITON-2202/docs/developer-guide/zpool.md)
+Pool](zpool.md)
 for details about how to properly set up a ZFS pool that is bootable.
 
 ## Boot-device Requirements
