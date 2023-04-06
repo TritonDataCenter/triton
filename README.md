@@ -16,8 +16,8 @@ Triton DataCenter (just "Triton" for short, formerly "SmartDataCenter" and
 generation, container-based, service-oriented infrastructure across one or more
 data centers. With an emphasis on ease of installation and operation, Triton is
 proven at scale: Triton powers the [Triton
-Cloud](https://www.tritondatacenter.com/datacenter/docs/cloud) and private data centers
-([Triton Enterprise]( https://www.tritondatacenter.com/datacenter/docs/enterprise))
+Cloud](https://www.tritondatacenter.com/triton/managed-hardware-cloud) and private data centers
+([Triton Enterprise](https://www.tritondatacenter.com/triton/on-premises))
 worldwide.
 
 This repository provides documentation for the overall Triton project and
@@ -26,7 +26,7 @@ See the [repository list](./docs/developer-guide/repos.md).
 
 Report bugs and request features using [GitHub Issues](https://github.com/TritonDataCenter/triton/issues).
 For additional resources, you can visit the
-[Triton Developer Center](https://www.tritondatacenter.com/developers).
+[Triton Developer Center](https://www.tritondatacenter.com/getting-started).
 
 ## Overview
 
@@ -147,7 +147,7 @@ the [Triton Manufacturing Database](https://docs.tritondatacenter.com/private-cl
 To install a USB-key Triton, first download the latest release image:
 
 ```bash
-curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/usb-latest.tgz
+curl -C - -O https://us-central.manta.mnx.io/Joyent_Dev/public/SmartDataCenter/usb-latest.tgz
 ```
 
 Once you have downloaded the latest release image, you will need to
@@ -158,12 +158,12 @@ customer documentation [Installing Triton Data Center](https://docs.tritondatace
 
 To install using the [ISO
 installer](./docs/developer-guide/iso-installer.md), download the [ISO
-image](https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/iso-latest.iso),
+image](https://us-central.manta.mnx.io/Joyent_Dev/public/SmartDataCenter/iso-latest.iso),
 make sure you be aware of the available disks, and then follow the
 installation instructions above.
 
 To install using the [iPXE
-installer](https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/ipxe-latest.tgz),
+installer](https://us-central.manta.mnx.io/Joyent_Dev/public/SmartDataCenter/ipxe-latest.tgz),
 follow the advice on the [iPXE installer
 documentation](./docs/developer-guide/ipxe-installer.md).
 
@@ -185,8 +185,8 @@ CoaL, USB, ISO, and iPXE builds (see the preceding sections) via the
 built components are typically stored in a [Manta object
 store](https://github.com/TritonDataCenter/manta), and pulled from
 there. For example, Triton builds push to
-`/Joyent_Dev/public/builds` in our public Manta in us-east-1
-(<https://us-east.manta.joyent.com/>).
+`/Joyent_Dev/public/builds` in our public Manta in us-central-1
+(<https://us-central.manta.mnx.io/>).
 
 You can build your own CoaL and USB images on Mac or SmartOS (see the
 [sdc-headnode
@@ -202,7 +202,7 @@ To report bugs or request features, submit issues here on
 GitHub, [TritonDataCenter/triton/issues](https://github.com/TritonDataCenter/triton/issues)
 (or on the GitHub issue tracker for the relevant project).
 For support of Triton products and services, please contact [MNX Solutions customer
-support](https://www.mnxsolutions.com/triton-contact-us) instead.
+support](https://www.tritondatacenter.com/contact) instead.
 
 See the [Contribution Guidelines](CONTRIBUTING.md) for information about
 contributing changes to the project.
@@ -211,7 +211,7 @@ contributing changes to the project.
 
 Triton DataCenter is very opinionated about how to architect a cloud. These
 opinions are the result of many years of deploying and debugging
-[Triton as a public cloud service](https://www.tritondatacenter.com/public-cloud)
+[Triton as a public cloud service](https://www.tritondatacenter.com/triton/compute)
 in production. Design principles include the following:
 
 * A VM's primary storage should be local disk, not over the network -- this
