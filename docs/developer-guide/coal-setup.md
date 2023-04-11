@@ -11,8 +11,8 @@
 
 # Cloud on a Laptop (CoaL)
 
-CoaL is a VMware appliance that is a full [Triton](https://docs.joyent.com/private-cloud)
-head node for development and testing. Because most Joyent developers work on Macs,
+CoaL is a VMware appliance that is a full [Triton](https://docs.tritondatacenter.com/private-cloud)
+head node for development and testing. Because most Triton developers work on Macs,
 this document walks through the process of setting up CoaL on a Mac. Read this
 document carefully before installing CoaL.
 
@@ -53,7 +53,7 @@ The CoaL tarball is approximately 3 GB and will take some time to download.
 To download the latest CoaL build:
 
 ```
-curl -C - -O https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/coal-latest.tgz
+curl -C - -O https://us-central.manta.mnx.io/Joyent_Dev/public/SmartDataCenter/coal-latest.tgz
 ```
 
 While you wait for the tarball download to complete, you can configure and
@@ -61,7 +61,7 @@ install VMware.
 
 ## Downloading, installing, and configuring VMware
 
-Most Joyent team members run CoaL from VMware Fusion. We recommend VMware
+Most Triton team members run CoaL from VMware Fusion. We recommend VMware
 version 8.5.3, but users have had success with v5 and v8.
 
 1. Download [VMware Fusion](http://www.vmware.com/products/fusion).
@@ -531,4 +531,4 @@ away.
 
  For more information on updating Triton, see [Updating a Triton standup using sdcadm](https://github.com/TritonDataCenter/sdcadm/blob/master/docs/update.md)
 
- For general Joyent customer information, see [Joyent customer documentation](https://docs.joyent.com/public-cloud).
+ For general Triton customer information, see [Triton customer documentation](https://docs.tritondatacenter.com/public-cloud).
