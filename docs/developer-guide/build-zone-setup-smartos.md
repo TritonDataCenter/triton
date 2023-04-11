@@ -4,9 +4,9 @@ Setting up SmartOS-based build zones for Manta and Triton development
 
 # SmartOS-based build zones
 
-This document assumes you have access to a [SmartOS](https://www.joyent.com/smartos)
+This document assumes you have access to a [SmartOS](https://www.tritondatacenter.com/smartos)
 installation. You can download the latest ISO, USB or vmware images at
-https://us-east.manta.joyent.com/Joyent_Dev/public/SmartOS/latest.html
+https://us-central.manta.mnx.io/Joyent_Dev/public/SmartOS/latest.html
 
 
 ## Obtaining the build zone image
