@@ -45,7 +45,7 @@ mirrors, or cache devices added.
 ## Installing a ZFS bootable Head Node
 
 In addition to [regular network attachment and
-configuration](https://docs.joyent.com/private-cloud/install/network-layout),
+configuration](https://docs.tritondatacenter.com/private-cloud/install/network-layout),
 if you wish to start booting a Head Node from a ZFS pool you should attach a
 set of server disks per the introduction.  You should then use either an ISO
 installation, or if the server is iPXE installable (e.g. a bare-metal cloud
@@ -68,7 +68,7 @@ booting the ISO installer.
 
 Make sure the Triton installation ISO is in the optical drive (virtual or
 otherwise), and boot it.  Proceed to follow the installation prompts per
-[Installing Triton DataCenter](https://docs.joyent.com/private-cloud/install).
+[Installing Triton DataCenter](https://docs.tritondatacenter.com/private-cloud/install).
 
 ### For iPXE Installations
 
@@ -86,7 +86,7 @@ contents, which cannot fit into an iPXE boot-archive/initrd.
 ## Converting from a USB-key (or from one bootable pool to another)
 
 The
-[piadm](https://github.com/TritonDataCenter/smartos-live/blob/master/man/usr/share/man/man1m/piadm.1m.md)(1M)
+[piadm](https://github.com/TritonDataCenter/smartos-live/blob/master/man/usr/share/man/man8/piadm.8.md)(8)
 command can be employed to transfer the current USB-key to a bootable ZFS
 pool.  It can also be used to transfer boot contents from one pool to
 another.  If a pool is not bootable, piadm(1M) will fail.

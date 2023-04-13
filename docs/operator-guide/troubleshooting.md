@@ -3,7 +3,7 @@
 This document tries to capture some of the less known SmartDataCenter
 troubleshooting steps and fixes. A more comprehensive troubleshooting guide
 can be found here:
-[Troubleshooting](https://docs.joyent.com/private-cloud/troubleshooting)
+[Troubleshooting](https://docs.tritondatacenter.com/private-cloud/troubleshooting)
 
 ## Upgrade
 

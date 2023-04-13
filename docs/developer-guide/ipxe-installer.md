@@ -133,11 +133,11 @@ following steps to create a new Triton cloud.
 
 <!-- Footnote style links -->
 
-[triton-ipxe]: https://us-east.manta.joyent.com/Joyent_Dev/public/SmartDataCenter/ipxe-latest.tgz
+[triton-ipxe]: https://us-central.manta.mnx.io/Joyent_Dev/public/SmartDataCenter/ipxe-latest.tgz
 [triton-iso-doc]: ./iso-installer.md
 [eqm]: https://metal.equinix.com/
 [tink]: https://tinkerbell.org
 [eqm-script]: ../../tools/triton-eqm-create.sh
 [hn]: https://github.com/TritonDataCenter/sdc-headnode/
 [p-cli]: https://github.com/packethost/packet-cli
-[ops-docs]: https://docs.joyent.com/private-cloud/
+[ops-docs]: https://docs.tritondatacenter.com/private-cloud/
