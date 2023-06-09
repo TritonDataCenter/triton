@@ -7,6 +7,7 @@
 
 #
 # Copyright 2022 Joyent, Inc.
+# Copyright 2023 MNX Cloud, Inc.
 #
 
 set -o errexit
@@ -74,8 +75,8 @@ function usage
     printf 'Create a new Triton Headnode install in Equinix Metal.\n\n'
     printf 'Syntax:\n\n'
     printf '\t%s project -n project_name\n' "$0"
-    printf '\t%s headnode -p project_uuid -f facility -P hardware_plan -a answer_file\n\n' "$0"
-    printf '\t%s computenode -n <cn name> -p project_uuid -f facility -P hardware_plan\n\n' "$0"
+    printf '\t%s headnode -p project_uuid -m metro -P hardware_plan -a answer_file\n\n' "$0"
+    printf '\t%s computenode -p project_uuid -m metro -P hardware_plan\n\n' "$0"
     exit "$1"
 }
 
@@ -198,7 +199,7 @@ function create_server
     local reservation create_json out
 
     local project_uuid="$1"
-    local facility="$2"
+    local metro="$2"
     local s_hostname="$3"
 
     # Defaults for CNs
@@ -212,7 +213,7 @@ function create_server
     fi
 
     # Create an IP reservation
-    create_subnet_request "$project_uuid" "$facility" "$s_hostname"
+    create_subnet_request "$project_uuid" "$metro" "$s_hostname"
     # Take the first reservation with no assignments.
     reservation=$(call_api "/projects/$project_uuid/ips" | json -H ip_addresses | json -ac 'this.address_family==4 && this.public==true && this.assignments.length==0' id | head -1)
 
@@ -235,7 +236,7 @@ function create_server
 
     create_json=$( printf '
         {
-          "facility": "%s",
+          "metro": "%s",
           "plan": "%s",
           "hostname": "%s",
           "operating_system": "custom_ipxe",
@@ -243,7 +244,7 @@ function create_server
           "ipxe_script_url": "%s",
           "customdata": %s
           %s
-        }' "$facility" "${hardware_plan:-c3.small.x86}" "$s_hostname" \
+        }' "$metro" "${hardware_plan:-c3.small.x86}" "$s_hostname" \
             "$always_ipxe" "$ipxe_url" "$customdata" "$ip_addresses"
     )
 
@@ -255,29 +256,34 @@ function create_server
 function create_subnet_request
 {
     project_uuid="$1"
-    facility="$2"
+    metro="$2"
     hostname="$3"
-    metal ip request -f "$facility" -p "$project_uuid" -t public_ipv4 \
+    metal ip request -m "$metro" -p "$project_uuid" -t public_ipv4 \
         -c "IPs for $hostname" -q 16 >> "$LOG"
 }
 
 function create_vlans
 {
     project_uuid="$1"
-    facility="$2"
+    metro="$2"
     local networks=(
         Admin
         Underlay
     )
     existing_vlans=$(metal virtual-network get -p "$project_uuid" -o json | \
         json virtual_networks | \
-        json -a -c 'this.facility="'$facility'"' description)
+        json -a -c 'this.metro="'"$metro"'"' description)
     for net in "${networks[@]}" ; do
         if ! grep "$net" <<< "$existing_vlans" ; then
-            metal virtual-network create -o json -f "$facility" -d "Triton $net" \
+            metal virtual-network create -o json -m "$metro" -d "Triton $net" \
                 -p "$project_uuid"
         fi
     done >> "$LOG"
+}
+
+function get_server_facility_code
+{
+    metal server get -i "$1" -o json | json facility.code
 }
 
 function do_setup_project
@@ -303,16 +309,16 @@ function do_setup_project
 
 function do_setup_server
 {
-    local facility project_uuid s_hostname server
+    local metro project_uuid s_hostname server
 
     printf 'Verbose log is %s\n' "$LOG"
 
     customdata='{}'
 
-    while getopts "a:f:p:P:n:h" options; do
+    while getopts "a:m:p:P:n:h" options; do
         case $options in
             a) answers_file="$OPTARG";;
-            f) facility="$OPTARG" ;;
+            m) metro="$OPTARG" ;;
             p) project_uuid="$OPTARG" ;;
             P) hardware_plan="$OPTARG" ;;
             n) s_hostname="$OPTARG" ;;
@@ -321,15 +327,17 @@ function do_setup_server
         esac
     done
 
-    if [[ -z $project_uuid ]] || [[ -z $facility ]] ; then
+    if [[ -z $project_uuid ]] || [[ -z $metro ]] ; then
         usage 1
     fi
 
     if [[ $s_hostname == "headnode" ]]; then
         # Make sure Packet hostnames are unique within a single project.
-        # This comes into play when there's a multi-facility UFDS replicated
+        # This comes into play when there's a multi-installation UFDS replicated
         # cloud.
-        s_hostname="headnode-$facility"
+        # Currently, this means that there's a limit of one Triton Data Center
+        # per metro per project.
+        s_hostname="headnode-$metro"
     fi
 
     if [[ $s_hostname =~ "headnode" ]] && [[ -n $answers_file ]]; then
@@ -337,15 +345,17 @@ function do_setup_server
     fi
 
     # This is an idempotent operation.
-    create_vlans "$project_uuid" "$facility"
+    create_vlans "$project_uuid" "$metro"
 
     printf 'Creating server...'
-    server=$(create_server "$project_uuid" "$facility" "$s_hostname")
+    server=$(create_server "$project_uuid" "$metro" "$s_hostname")
     if [[ -z $server ]]; then
         # Trigger errexit if we don't have a server UUID
         false
     fi
     printf 'done.\n'
+
+    facility=$(get_server_facility_code "$server")
 
     printf 'Watch server progress:\n\n\t'
     printf 'ssh %s@sos.%s.platformequinix.com\n\n' "$server" "$facility"
