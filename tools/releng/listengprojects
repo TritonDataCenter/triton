@@ -7,10 +7,11 @@
 
 #
 # Copyright (c) 2017, Joyent, Inc.
+# Copyright 2023 MNX Cloud, Inc.
 #
 
 #
-# List the Joyent Engineering Jira projects. This is defined as the set of
+# List the Triton Engineering Jira projects. This is defined as the set of
 # Jira projects on which we want the bi-weekly engineering release versions.
 # E.g., these ones:
 #
@@ -39,8 +40,6 @@ MANATEE
 MANTA
 MORAY
 OS
-RICHMOND
-ROGUE
 TOOLS
 TRITON"
 
