@@ -5,6 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 # Copyright 2020 Joyent, Inc.
+# Copyright 2024 MNX Cloud, Inc.
 #
 
 #
@@ -30,7 +31,7 @@ set -o errexit
 # This URL is hardcoded in eng.git:tools/download_go. If it changes, be sure
 # to modify there too.
 #
-GO_MANTA_URL=https://us-east.manta.joyent.com/Joyent_Dev/public/releng/go/adhoc/
+GO_MANTA_URL=https://us-central.manta.mnx.io/Joyent_Dev/public/releng/go/adhoc/
 
 #
 # The Golang source distribution download page
