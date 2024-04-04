@@ -40,12 +40,12 @@ There are two separate issue trackers that are relevant for Triton code:
 
 * An internal JIRA instance.
 
-  A JIRA ticket has an ID like `IMGAPI-536`, where "IMGAPI" is the JIRA project
+  A JIRA ticket has an ID like `TRITON-206`, where "TRITON-206" is the JIRA project
   name -- in this case used by the
-  [sdc-imgapi](https://github.com/TritonDataCenter/sdc-imgapi) and related
+  [sdc-vmapi](https://github.com/TritonDataCenter/sdc-vmapi) and related
   repos. A read-only view of most JIRA tickets is made available at
   <https://smartos.org/bugview/> (e.g.
-  <https://smartos.org/bugview/IMGAPI-536>).
+  <https://smartos.org/bugview/TRITON-206>).
 * GitHub issues for the relevant repo, e.g.
   <https://github.com/TritonDataCenter/triton/issues>.
 
