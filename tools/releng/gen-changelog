@@ -1,0 +1,119 @@
+#!/bin/bash
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Copyright 2024 MNX Cloud, Inc.
+#
+# Generate a changelog for an Triton release. Now using branch-repos-for-release
+# and jr.
+#
+# Usage:
+# - Make sure "jr" is in your path. Easy way to do this is to know that
+#   branch-repos-for-release works.
+# - Make sure you invoke this from $PATH_TO/triton/tools/releng/triton-changelog
+# - Generate away
+#
+# TODO:
+# - HTML version of this with links to commits and tickets?
+# - Integration with hand written highlights in triton.git.
+#
+
+if [[ -n "$TRACE" ]]; then
+    export PS4='[\D{%FT%TZ}] ${BASH_SOURCE}:${LINENO}: ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+    set -o xtrace
+fi
+set -o errexit
+set -o pipefail
+
+RELENG_DIR=$(cd $(dirname $0); pwd)
+
+
+#---- support stuff
+
+function fatal
+{
+    echo "$0: fatal error: $*"
+    exit 1
+}
+
+function errexit
+{
+    [[ $1 -ne 0 ]] || exit 0
+    fatal "error exit status $1"
+}
+
+trap 'errexit $?' EXIT
+
+
+#---- mainline
+
+LASTBRANCH=$1
+BRANCH=$2
+if [[ -z "$BRANCH" || -z "$LASTBRANCH" ]]; then
+    echo "gen-changelog: error: incorrect usage" >&2
+    echo "" >&2
+    echo "usage:" >&2
+    echo "      gen-changelog <last-branch> <this-branch>" >&2
+    echo "" >&2
+    echo "example:" >&2
+    echo "      gen-changelog release-20150219 release-20150305" >&2
+    exit 1
+fi
+
+BSTART=origin/$LASTBRANCH
+BEND=origin/$BRANCH
+CHANGELOG=`pwd`/changelog.txt
+
+# Exploit the /var/tmp/branch-repos-for-release.d that branch-repos-for-release
+# uses.  Assume -n (dryrun) updates the repos but does NOT do anything else,
+# including create the branch name specified on the CLI.  Since it does need
+# to be in the form `release-YYYYMMDD`, we use $BRANCH to be safe.
+
+echo "Updating repos..."
+$RELENG_DIR/branch-repos-for-release -n -y $LASTBRANCH
+cd /var/tmp/branch-repos-for-release.d
+
+echo "# Triton changes ($BRANCH)" >$CHANGELOG
+echo >>$CHANGELOG
+
+# Keep the commit view brief at one line. jr(1) can keep out the platform repos,
+# and sorts output automatically.
+jr list -l release,mg\!=platform -H -o name | while read dir; do \
+    echo "" >&2; \
+    echo $dir >&2; \
+    (cd $dir; git fetch -a origin; \
+        [[ -z "$(git log $BSTART..$BEND)" ]] \
+        || (echo; echo; echo "## $dir"; echo; \
+            git log --pretty=format:'%h - %s <%an>' $BSTART..$BEND \
+                | sed -e 's/Reviewed by: .* \(<.*>\)$/\1/')); \
+done >>$CHANGELOG
+
+echo >>$CHANGELOG
+echo >>$CHANGELOG
+echo >>$CHANGELOG
+echo "# Platform changes ($BRANCH)" >>$CHANGELOG
+
+# Like above, keep commits brief.
+jr list -l mg=platform -H -o name | while read dir; do \
+    echo "" >&2; \
+    echo $dir >&2; \
+    (cd $dir; git fetch -a origin; \
+        [[ -z "$(git log $BSTART..$BEND)" ]] \
+        || (echo; echo; echo "## $dir"; echo; \
+            git log --pretty=format:'%h - %s <%an>' $BSTART..$BEND \
+                | sed -e 's/Reviewed by: .* \(<.*>\)$/\1/')); \
+done >>$CHANGELOG
+
+
+
+echo "wrote $CHANGELOG"
+echo "Suggest you do this:"
+RELDIR=$(mls /Joyent_Dev/public/SmartDataCenter | grep $BRANCH | tail -n1 || true)
+if [[ -z "$RELDIR" ]]; then
+    RELDIR=/Joyent_Dev/public/SmartDataCenter/release-XXX-XXX/
+else
+    RELDIR=/Joyent_Dev/public/SmartDataCenter/$RELDIR
+fi
+echo "   mput -f changelog.txt -H \"Content-Type:text/plain\" ${RELDIR}changelog.txt"
