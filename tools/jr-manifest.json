@@ -972,6 +972,15 @@
             "name": "triton-mockcloud-common"
         },
         {
+            "name": "triton-moirai",
+            "labels": {
+                "release": true,
+                "image": "cloud-load-balancer",
+                "mg": "cloud-load-balancer",
+                "vm": true
+            }
+        },
+        {
             "name": "triton-origin-image"
         },
         {
