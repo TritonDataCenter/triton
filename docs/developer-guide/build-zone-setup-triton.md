@@ -178,8 +178,15 @@ So, the two ways of creating build zones are:
  * Choose a CN to provision to (selecting "headnode" will ensure the build zone
    is provisioned on that headnode)
  * Choose the "external" network
- * Add the following Customer metadata, `{"user-script": "/usr/sbin/mdata-get root_authorized_keys > ~root/.ssh/authorized_keys ; /usr/sbin/mdata-get root_authorized_keys > ~admin/.ssh/authorized_keys; svcadm enable manifest-import"}`
+ * Add the following Customer metadata, `{"user-script": "/usr/sbin/mdata-get root_authorized_keys > ~root/.ssh/authorized_keys ; /usr/sbin/mdata-get root_authorized_keys > ~admin/.ssh/authorized_keys; svcadm enable manifest-import"}` along with supplying your public ssh key.
  * Click "Provision machine"
+ * If you encounter any problems while sshing to your build zone, zlogin into it and verify that the `manifest-import` service is online by doing this:
+```
+svcs -p manifest-import
+STATE          STIME    FMRI
+online         20:42:28 svc:/system/manifest-import:default
+```
+
 
 ### To create a zone directly from the headnode
 
