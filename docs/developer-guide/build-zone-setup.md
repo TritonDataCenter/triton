@@ -57,6 +57,8 @@ names and their corresponding uuids:
   |2018Q1         | minimal-multiarch@18.1.0                                      | 8b297456-1619-4583-8a5a-727082323f77
   |2018Q4         | triton-origin-x86\_64-18.4.0@master-20190410T193647Z-g982b0cea | 29b70133-1e97-47d9-a4c1-e4b2ee1a1451
   |2019Q1         | triton-origin-x86\_64-19.1.0@master-20190417T143547Z-g119675b  | fb751f94-3202-461d-b98d-4465560945ec
+  |2021Q4         | triton-origin-x86\_64-21.4.1@master-20220322T012137Z-g9382491  | 85d0f826-0131-11ed-973d-2bfeef68011c
+  |2024Q4         | triton-origin-x86\_64-24.4.1@master-20250116T175211Z-gb17eb8e  | 2f1dc911-6401-4fa4-8e9d-67ea2e39c271
 
 These build zone image uuids are exactly what we build components on in Joyent's
 Jenkins infrastructure (when you examine the images, you'll find that they're
