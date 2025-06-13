@@ -62,7 +62,7 @@ names and their corresponding uuids:
 
 These build zone image uuids are exactly what we build components on in Joyent's
 Jenkins infrastructure (when you examine the images, you'll find that they're
-named `base-64-lts`.
+named with `jenkins-agent-...` prefixes)
 
 For any component, you can find the suggested image\_uuid that the component
 should build on by running the `make show-buildenv` command from the top-level
